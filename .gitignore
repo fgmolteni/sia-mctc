@@ -1,0 +1,46 @@
+# entornos virtuales
+.env/
+.venv/
+
+
+# gemini
+GEMINI.md
+.gemini/
+
+
+# python
+__pycache__/
+
+
+# node
+node_modules/
+
+#bases de datos
+data/
+
+# IDE/Editor configurations
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Python generated files
+*.pyc
+*.pyo
+*.pyd
+
+# Build and distribution directories
+build/
+dist/
+*.egg-info/
+
+# Log files
+*.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Reports
+report/
