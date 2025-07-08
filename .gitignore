@@ -1,5 +1,5 @@
 # entornos virtuales
-.env/
+.env
 .venv/
 
 
@@ -44,3 +44,6 @@ dist/
 
 # Reports
 report/
+
+# Archivos PDF
+*.pdf

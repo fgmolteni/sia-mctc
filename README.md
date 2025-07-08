@@ -25,7 +25,7 @@ Sigue estos pasos para configurar el entorno de desarrollo local.
 
 1.  **Clona el repositorio (si aplica):**
     ```bash
-    git clone <url-del-repositorio>
+    git clone https://github.com/fgmolteni/sia-mctc.git
     cd SIA
     ```
 

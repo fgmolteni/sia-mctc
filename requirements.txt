@@ -5,3 +5,6 @@ streamlit
 geopy
 requests
 reportlab
+num2words
+psycopg2-binary
+python-dotenv

@@ -1,37 +1,58 @@
-# Release [0.1]
+# Historial de Releases
 
-**Fecha de Release:** [3/7/2025]
+---
+
+# Release v0.2.0
+
+**Fecha de Release:** 2025-07-08
 
 ## Resumen
 
-<!-- 
-  Proporciona un resumen claro y conciso de los cambios en esta release. 
-  Describe el propósito principal y los puntos más destacados.
--->
+Esta release se centra en la transición del almacenamiento de datos basado en archivos CSV a una base de datos PostgreSQL robusta, gestionada a través de Docker. Se ha establecido la infraestructura de base de datos y el conector inicial, sentando las bases para migrar la lógica de la aplicación.
 
 ## Cambios Principales
 
 ### ✨ Nuevas Características
 
-- **[Nombre de la Característica 1]:** Breve descripción de la nueva funcionalidad y su impacto para el usuario. (Issue/Ticket: #[Número])
-- **[Nombre de la Característica 2]:** Breve descripción de la nueva funcionalidad.
+- **Conector de Base de Datos:** Se ha creado un nuevo módulo `components/db_connector.py` que gestiona la conexión a la base de datos PostgreSQL. Utiliza `python-dotenv` para cargar las credenciales de forma segura desde un archivo `.env`.
+
+### ⚙️ Infraestructura
+
+- **Base de Datos PostgreSQL con Docker:** Se ha añadido un archivo `docker-compose.yml` para desplegar un contenedor de PostgreSQL. Esto asegura un entorno de desarrollo y producción consistente y aislado.
+- **Inicialización de la Base de Datos:** La base de datos se inicializa automáticamente al arrancar el contenedor, utilizando el esquema definido en `data/database.sql`.
+- **Gestión de Dependencias:** Se han añadido `psycopg2-binary` y `python-dotenv` al archivo `requirements.txt` para permitir la interacción con PostgreSQL y la gestión de variables de entorno.
+
+---
+
+# Release v0.1.0
+
+**Fecha de Release:** 2025-07-03
+
+## Resumen
+
+Esta es la primera release oficial del Sistema Interno de Administración (SIA). Introduce la funcionalidad principal para el cálculo de viáticos, la generación de reportes en PDF y una estructura de proyecto documentada y robusta.
+
+## Cambios Principales
+
+### ✨ Nuevas Características
+
+- **Generación de Reportes en PDF:** Se añadió un nuevo módulo (`components/pdf_generator.py`) que utiliza `reportlab` para crear un reporte en PDF con los detalles del viaje. La aplicación ahora muestra un botón para generar y descargar este reporte después de un cálculo exitoso.
+- **Documentación del Proyecto:** Se creó una base de documentación completa para facilitar el mantenimiento y la colaboración futura. Esto incluye:
+    - Un `README.md` mejorado con instrucciones de instalación y uso.
+    - Documentos de `ARQUITECTURA.md` y `REFERENCIA_COMPONENTES.md`.
+    - Una guía de contribución (`CONTRIBUTING.md`) y una plantilla de release.
 
 ### 🐛 Corrección de Errores
 
-- **[Descripción del Bug 1]:** Se corrigió un problema donde [describir el comportamiento del error]. Ahora el sistema [describir el comportamiento esperado]. (Issue/Ticket: #[Número])
-- **[Descripción del Bug 2]:** Se solucionó un error que causaba [describir el problema].
+- **Error de Cálculo al Inicio:** Se solucionó un error que ocurría al iniciar la aplicación, donde se intentaba calcular la distancia con campos de entrada vacíos. El cálculo ahora solo se activa cuando el usuario ingresa un origen y un destino.
+- **Error de Importación de Dependencias:** Se corrigió un `ImportError` con la biblioteca `reportlab` asegurando que todas las dependencias se instalen correctamente dentro del entorno virtual del proyecto.
+- **Nombres de Columnas en `cars.csv`:** Se actualizó el código en `app.py` para usar los nombres de columna correctos (`brand`, `model`) al leer el archivo de vehículos.
 
 ### 🚀 Mejoras
 
-- **[Mejora 1]:** Se optimizó el rendimiento de [mencionar el área o componente].
-- **[Mejora 2]:** Se actualizó la interfaz de usuario en [mencionar la sección] para mejorar la usabilidad.
+- **Refactorización de Constantes:** Las constantes del proyecto se movieron a `Enums` en el archivo `components/constants.py`. Esto mejora la legibilidad y reduce el riesgo de errores.
+- **Aislamiento de Lógica:** La lógica de negocio (cálculos, generación de PDF) está ahora completamente encapsulada en los módulos de la carpeta `components`, separándola de la interfaz de usuario en `app.py`.
 
-### 📄 Documentación
+### ⚙️ Infraestructura
 
-- Se añadió documentación para [describir la nueva sección de la documentación].
-- Se actualizaron los ejemplos en [mencionar la guía o tutorial].
-
-## Notas Adicionales
-
-- **[Nota 1]:** Cualquier otra información relevante, como cambios que rompen la compatibilidad, pasos de migración necesarios, o agradecimientos a contribuidores.
-- **[Nota 2]:** ...
+- **Base de Datos con Docker:** Se ha añadido un archivo `docker-compose.yml` y un archivo de entorno `.env` para configurar y levantar una base de datos PostgreSQL usando Docker. Esto facilita un entorno de desarrollo consistente y reproducible. La base de datos se inicializa con el esquema definido en `data/database.sql`.
