@@ -8,6 +8,7 @@ from components.date_calculator import calculate_travel_expenses as cte
 from components.pdf_generator import create_pdf
 from components.formulario_generator import generar_anticipo_viatico as anticipo_viaticos
 from components.converter import number_to_text, number_to_currency
+from components.db_connector import get_agentes, get_db_engine
 
 # Initialize session state
 if 'calculation_done' not in st.session_state:
@@ -17,22 +18,34 @@ if 'calculation_done' not in st.session_state:
 st.title("Sistema Interno de Administración")
 
 # Load data and set index for easy lookup
-df_class_amount = pd.read_csv(r"data/amounts.csv").set_index('class')
+engine = get_db_engine()
+if engine:
+    df_class_amount = pd.read_sql_query("SELECT class, amounts FROM public.montos_viaticos;", engine).set_index('class')
+    engine.dispose()
+else:
+    st.error("No se pudo conectar a la base de datos para cargar los montos de viáticos.")
+    df_class_amount = pd.DataFrame() # Asegura que df_class_amount sea un DataFrame vacío en caso de error
 
 # numero de expediente
 number_file = st.text_input("Numero de Expediente")
 
 # seleccion de agente
-option_agent = pd.read_csv(r"data/agent.csv")
-option_agent_last_name = option_agent["last_name"]
+option_agent = get_agentes()
 
-# Nombre de Agente
-last_name_agent = st.selectbox(
-    "Seleccione el agente.",
-    option_agent_last_name
-)
+if not option_agent.empty:
+    option_agent_last_name = option_agent["apellido"]
 
-data_agent = option_agent[option_agent["last_name"] == last_name_agent]
+    # Nombre de Agente
+    last_name_agent = st.selectbox(
+        "Seleccione el agente.",
+        option_agent_last_name
+    )
+    data_agent = option_agent[option_agent["apellido"] == last_name_agent]
+else:
+    st.warning("No se encontraron agentes en la base de datos.")
+    option_agent_last_name = []
+    last_name_agent = None
+    data_agent = pd.DataFrame()
 
 #muesta informacion de agente
 st.table(data_agent)
@@ -70,13 +83,13 @@ if st.button("Confirmar", icon="🆗", use_container_width=True, type="primary")
             days_travel_expenses = cte(date_start, date_end, time_start, time_end, distance)
 
             # Get agent class and calculate expenses
-            agent_class = data_agent['class'].values[0]
+            agent_class = data_agent['clase'].values[0]
             amount_per_day = df_class_amount.loc[agent_class, 'amounts']
             total_expenses = days_travel_expenses * amount_per_day
 
             # Extraer el nombre y apellido de forma segura
-            agent_first_name = data_agent['first_name'].values[0]
-            agent_last_name = data_agent['last_name'].values[0]
+            agent_first_name = data_agent['nombre'].values[0]
+            agent_last_name = data_agent['apellido'].values[0]
             full_name = f"{agent_last_name}, {agent_first_name}"
 
             # Guardar los resultados en el estado de la sesión
@@ -131,7 +144,7 @@ if st.session_state.calculation_done:
             f"Total de viáticos: {number_to_currency(report_data['total_expenses'])}",
         ]
         
-        pdf_file_path = f"reporte_{report_data['number_file']}.pdf"
+        pdf_file_path = r"report/" + f"reporte_{report_data['number_file']}.pdf"
 
         if create_pdf(pdf_file_path, report_content):
             st.success(f"Reporte generado: {pdf_file_path}")
@@ -176,7 +189,7 @@ if st.session_state.calculation_done:
             "mi_nro": "12.345.678"
         }
         
-        pdf_file_path = f"anticipo_{report_data['number_file']}.pdf"
+        pdf_file_path = r"report/" + f"anticipo_{report_data['number_file']}.pdf"
 
         if anticipo_viaticos(pdf_file_path, report_content):
             st.success(f"Reporte generado: {pdf_file_path}")
