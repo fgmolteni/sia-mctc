@@ -1,3 +1,30 @@
+# Release v0.3.0
+
+**Fecha de Release:** 2025-07-08
+
+## Resumen
+
+Esta release migra la carga de datos de la aplicación de archivos CSV a una base de datos PostgreSQL, mejorando la gestión y escalabilidad de los datos.
+
+## Cambios Principales
+
+### ✨ Nuevas Características
+
+- **Carga de Datos desde PostgreSQL:** `app.py` ahora obtiene los datos de agentes y montos de viáticos directamente de las tablas de PostgreSQL (`agentes` y `montos_viaticos`).
+- **Población de Datos Inicial:** Las tablas de la base de datos (`agentes`, `vehiculo`, `montos_viaticos`) ahora se pueblan con datos iniciales.
+
+### 🚀 Mejoras
+
+- **Conexión a Base de Datos con SQLAlchemy:** `components/db_connector.py` ha sido refactorizado para utilizar SQLAlchemy, proporcionando una conexión a la base de datos más robusta y eficiente.
+
+### ⚙️ Infraestructura
+
+- **Actualización de Imagen PostgreSQL:** `docker-compose.yml` ahora utiliza la imagen `pgvector/pgvector:pg16` para el servicio de base de datos, lo que permite el soporte de extensiones de vectores y asegura la compatibilidad.
+- **Nueva Dependencia:** Se añadió `SQLAlchemy` a `requirements.txt`.
+- **Documentación de Instalación de Docker:** `README.md` ha sido actualizado con instrucciones completas para la configuración de Docker para la base de datos, y el archivo redundante `INSTRUCCIONES_DOCKER.md` ha sido eliminado.
+
+---
+
 # Historial de Releases
 
 ---
