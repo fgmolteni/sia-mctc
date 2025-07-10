@@ -1,3 +1,17 @@
+# Release v0.4.0
+
+**Fecha de Release:** 2025-07-10
+
+## Resumen
+
+Esta release introduce una nueva tabla para la gestión de anticipos de viáticos, mejorando el control y seguimiento de los fondos asignados a los agentes.
+
+## Cambios Principales
+
+### ✨ Nuevas Características
+
+- **Nueva Tabla `anticipos`:** Se ha añadido una nueva tabla a la base de datos para registrar los anticipos de viáticos. La tabla incluye campos para el `id_agente`, `monto`, `fecha_anticipo`, `estado` y `id_expediente`.
+
 # Release v0.3.0
 
 **Fecha de Release:** 2025-07-08
@@ -23,11 +37,6 @@ Esta release migra la carga de datos de la aplicación de archivos CSV a una bas
 - **Nueva Dependencia:** Se añadió `SQLAlchemy` a `requirements.txt`.
 - **Documentación de Instalación de Docker:** `README.md` ha sido actualizado con instrucciones completas para la configuración de Docker para la base de datos, y el archivo redundante `INSTRUCCIONES_DOCKER.md` ha sido eliminado.
 
----
-
-# Historial de Releases
-
----
 
 # Release v0.2.0
 
