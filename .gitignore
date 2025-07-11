@@ -1,3 +1,8 @@
+*.py[cod]
+assets/external/
+.states
+.web
+*.db
 # entornos virtuales
 .env
 .venv/
@@ -47,3 +52,6 @@ report/
 
 # Archivos PDF
 *.pdf
+
+# reflex
+.web/
