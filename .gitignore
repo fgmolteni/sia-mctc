@@ -3,6 +3,7 @@ assets/external/
 .states
 .web
 *.db
+
 # entornos virtuales
 .env
 .venv/

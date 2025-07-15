@@ -1,3 +1,17 @@
+# Release v0.4.1
+
+**Fecha de Release:** 2025-07-15
+
+## Resumen
+
+Esta release se enfoca en corregir un problema de alineación en la interfaz de usuario de la página de inicio de sesión construida con Reflex.
+
+## Cambios Principales
+
+### 🐛 Corrección de Errores
+
+- **Centrado de Tarjeta de Login:** Se ha corregido el componente `rx.box` en la página de login (`sia/pages/login.py`) añadiendo la propiedad `display="flex"`. Esto asegura que la tarjeta de inicio de sesión se muestre correctamente centrada tanto vertical como horizontalmente en la pantalla.
+
 # Release v0.4.0
 
 **Fecha de Release:** 2025-07-10
