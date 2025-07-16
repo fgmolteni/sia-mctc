@@ -81,7 +81,6 @@ def login_default_icons() -> rx.Component:
         ),
         display="flex",
         flex_direction="column",
-        #background_color=rx.color("orange"),
         align="center",
         justify_content="center",   
     )

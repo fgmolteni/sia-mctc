@@ -2,6 +2,7 @@ import reflex as rx
 from sia.views.login_views import login_default_icons
 from sia.components.navbar_login import navbar_user
 from sia.components.topbanner import top_banner_gradient
+from sia.views.footer_login import footer_login
 
 class LoginTransitionState(rx.State):
     opacity: str = "0"
@@ -31,15 +32,9 @@ def spline_demo(**kwargs):
 def login() -> rx.Component:
     return rx.box(
         rx.vstack(
-        rx.box(
             navbar_user(),
-            
-        ),
-        rx.box(
             top_banner_gradient(),
-            z_index="1",
-            width="100%",
-            position="relative"
+            align_items="center",
         ),
         # Fondo Spline
         rx.cond(
@@ -47,14 +42,14 @@ def login() -> rx.Component:
             spline_demo(
                 style={
                     "position": "absolute",
-                    "top": "10em",
-                    "left": "0em",
+                    #"top": "10em",
+                    #"left": "0em",
                     "width": "100%",
                     "height": "100vh",
-                    "zIndex": 0,
-                    "scale": 1.25,
-                    "transition": "opacity 4s ease-in-out",
+                    #"zIndex": 0,
+                    "scale": 1,
                     "opacity": LoginTransitionState.opacity,
+                    "transition": "opacity 5s ease-in-out"
                 },
                 on_mount=LoginTransitionState.set_opacity,
             ),
@@ -69,6 +64,7 @@ def login() -> rx.Component:
                     display="flex",
                     align_items="center",
                     justify_content="center",
+                    z_index="1",
                 ),
                 width="800px",
                 
@@ -80,12 +76,9 @@ def login() -> rx.Component:
             justify_content="flex-end",
             align_items="center",
         ),
+        footer_login(),
         position="relative",
         width="100vw",
         height="100vh",
-        overflow="hidden",
-        
-    ),
-    background_color="black",
-
+        overflow="hidden", 
     )

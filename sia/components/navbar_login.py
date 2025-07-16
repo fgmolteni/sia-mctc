@@ -1,5 +1,8 @@
+from fastapi import background
 import reflex as rx
 from components.imagen_open import open_image
+
+from sia.styles.colors import Color
 
 def navbar_link(text: str, url: str) -> rx.Component:
     return rx.link(
@@ -15,17 +18,23 @@ def navbar_user() -> rx.Component:
                 rx.hstack(
                     rx.image(
                         src=img,
-                        width="2.5em",
+                        width="2em",
                         height="auto",
                         border_radius="50%",
                         background_color="white",
                     ),
-                    rx.heading(
-                        "SIA", size="8", weight="bold"
+                    rx.text(
+                        "SIA", 
+                        size="8", 
+                        #weight="200", 
+                        font_family="Inter",
+                        
                     ),
                     align_items="center",
                     margin_left="10em",
+                    padding="0.2em",
                 ),
+                #background="blue",
             )
         ),
         rx.mobile_and_tablet(
@@ -63,10 +72,10 @@ def navbar_user() -> rx.Component:
                 align_items="center",
             ),
         ),
-        bg=rx.color("black", 3),
+        background="black",
         padding="1em",
         position="fixed",
         top="0px",
-        z_index="5",
+        z_index="1",
         width="100%",
     )

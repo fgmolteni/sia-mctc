@@ -9,9 +9,12 @@ from sia.pages.login import login
 class State(rx.State):
     """The app state."""
 
+app = rx.App(
+    stylesheets=[
+        'https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap',
+    ],
+)
 
-
-app = rx.App()
 app.add_page(index, route="/")
 app.add_page(login, route="/login")
 
