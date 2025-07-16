@@ -1,4 +1,7 @@
 import reflex as rx
+from components.imagen_open import open_image
+
+img = open_image("/home/subco/project/sia-mctc/assets/logo.png")
 
 def login_default_icons() -> rx.Component:
     return rx.box(
@@ -6,12 +9,7 @@ def login_default_icons() -> rx.Component:
         rx.vstack(
             # Logo and title
             rx.center(
-                rx.icon(
-                    "folder-open",
-                    width="2.5em",
-                    height="auto",
-                    border_radius="25%",
-                ),
+                
                 rx.heading(
                     "Bienvenido",
                     size="6",
@@ -31,6 +29,7 @@ def login_default_icons() -> rx.Component:
                     weight="medium",
                     text_align="left",
                     width="100%",
+                    color="white",
                 ),
                 rx.input(
                     rx.input.slot(rx.icon("user")),
@@ -49,6 +48,7 @@ def login_default_icons() -> rx.Component:
                         "Contraseña",
                         size="3",
                         weight="medium",
+                        color="white",
                     ),
                 ),
                 rx.input(
@@ -72,10 +72,12 @@ def login_default_icons() -> rx.Component:
                 width="100%",
             ),
             rx.button("Sign in", size="3", width="100%"),
+            
         ),
         max_width="28em",
         size="5",
         width="100%",
+        
         ),
         display="flex",
         flex_direction="column",

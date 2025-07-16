@@ -1,3 +1,18 @@
+# Release v0.4.2
+
+**Fecha de Release:** 2025-07-16
+
+## Resumen
+
+Esta release mejora la experiencia visual de la página de inicio de sesión al agregar una transición de fundido (fade-in)a la animación de fondo de Spline y estilos.
+
+## Cambios Principales
+
+### ✨ Nuevas Características
+-**Pagina de login:**estilos definitivos de pagina de logeo.
+-**Agregado de Escenas de fondo:** se agregaron escenas de fondo conectado con spline.
+- **Transición de Fundido en Fondo de Login:** Se ha implementado una transición suave para la escena de fondo en la página de login (`sia/pages/login.py`). La animación ahora aparece gradualmente, mejorando la estética visual de la carga inicial.
+
 # Release v0.4.1
 
 **Fecha de Release:** 2025-07-15
