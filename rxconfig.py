@@ -1,10 +1,9 @@
 import reflex as rx
+import sia.styles.styles as styles
 
 config = rx.Config(
     app_name="sia",
-    stylesheets=[
-        "https://fonts.googleapis.com/css2?family=Lexend+Tera&display=swap",
-    ],
+    stylesheets=styles.STYLESHEETS,
     plugins=[
         rx.plugins.SitemapPlugin(),
         rx.plugins.TailwindV4Plugin(),

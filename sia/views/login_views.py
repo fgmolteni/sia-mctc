@@ -1,6 +1,11 @@
 import reflex as rx
 from components.imagen_open import open_image
 
+from sia.components.buttons import button_general
+from sia.styles.colors import ColorText
+from sia.styles.sizes import SizeText
+from sia.styles.fonts import FontWeight
+
 img = open_image("/home/subco/project/sia-mctc/assets/logo.png")
 
 def login_default_icons() -> rx.Component:
@@ -12,10 +17,12 @@ def login_default_icons() -> rx.Component:
                 
                 rx.heading(
                     "Bienvenido",
-                    size="6",
+                    font_size=SizeText.X_LARGE.value,
                     as_="h2",
                     text_align="center",
                     width="100%",
+                    font_weight=FontWeight.BOLD.value,
+                    color=ColorText.PRIMARY.value,
                 ),
                 direction="column",
                 spacing="5",
@@ -25,11 +32,11 @@ def login_default_icons() -> rx.Component:
             rx.vstack(
                 rx.text(
                     "Usuario/Email",
-                    size="3",
-                    weight="medium",
+                    font_size=SizeText.MEDIUM.value,
+                    font_weight=FontWeight.MEDIUM.value,
                     text_align="left",
                     width="100%",
-                    color="white",
+                    color=ColorText.PRIMARY.value,
                 ),
                 rx.input(
                     rx.input.slot(rx.icon("user")),
@@ -46,9 +53,9 @@ def login_default_icons() -> rx.Component:
                 rx.hstack(
                     rx.text(
                         "Contraseña",
-                        size="3",
-                        weight="medium",
-                        color="white",
+                        font_size=SizeText.MEDIUM.value,
+                        font_weight=FontWeight.MEDIUM.value,
+                        color=ColorText.PRIMARY.value,
                     ),
                 ),
                 rx.input(
@@ -63,7 +70,8 @@ def login_default_icons() -> rx.Component:
                     rx.link(
                         "Olvide mi contraseña",
                         href="#",
-                        size="3",
+                        font_size=SizeText.SMALL.value,
+                        color=ColorText.ACCENT.value,
                     ),
                     justify="between",
                     width="100%",
@@ -71,7 +79,7 @@ def login_default_icons() -> rx.Component:
                 spacing="2",
                 width="100%",
             ),
-            rx.button("Sign in", size="3", width="100%"),
+            button_general("Sign in"),
             
         ),
         max_width="28em",

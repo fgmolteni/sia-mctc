@@ -1,12 +1,13 @@
-from fastapi import background
 import reflex as rx
 from components.imagen_open import open_image
 
 from sia.styles.colors import Color
+from sia.styles.sizes import SizeLogo, SizeText
+from sia.styles.fonts import FontFamily, FontWeight
 
 def navbar_link(text: str, url: str) -> rx.Component:
     return rx.link(
-        rx.text(text, size="4", weight="medium"), href=url
+        rx.text(text, font_size=SizeText.MEDIUM.value, font_weight=FontWeight.MEDIUM.value), href=url
     )
 
 img = open_image(r"./assets/logo.png")
@@ -18,17 +19,16 @@ def navbar_user() -> rx.Component:
                 rx.hstack(
                     rx.image(
                         src=img,
-                        width="2em",
+                        width=SizeLogo.MEDIUM.value,
                         height="auto",
                         border_radius="50%",
                         background_color="white",
                     ),
                     rx.text(
-                        "SIA", 
-                        size="8", 
-                        #weight="200", 
-                        font_family="Inter",
-                        
+                        "SIA",
+                        font_size=SizeText.X_LARGE.value,
+                        font_family=FontFamily.INTER.value,
+                        font_weight= FontWeight.MEDIUM.value,
                     ),
                     align_items="center",
                     margin_left="10em",
@@ -42,15 +42,17 @@ def navbar_user() -> rx.Component:
                 rx.hstack(
                     rx.image(
                         src=r"/assets/logo1.svg",
-                        width="2.5em",
+                        width=SizeLogo.MEDIUM.value,
                         height="auto",
                         border_radius="full",
                         background_color="white",
                     ),
                     rx.heading(
-                        "Reflex", size="6", weight="bold",
+                        "Reflex", font_size=SizeText.X_LARGE.value, 
+                        font_weight=FontWeight.BOLD.value,
                     ),
                     align_items="center",
+
                 ),
                 rx.menu.root(
                     rx.menu.trigger(
@@ -72,10 +74,11 @@ def navbar_user() -> rx.Component:
                 align_items="center",
             ),
         ),
-        background="black",
+        background=Color.background.value,
         padding="1em",
         position="fixed",
         top="0px",
         z_index="1",
         width="100%",
+        opacity="0.8",
     )

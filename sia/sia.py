@@ -12,6 +12,8 @@ class State(rx.State):
 app = rx.App(
     stylesheets=[
         'https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap',
+        'https://fonts.googleapis.com/css2?family=Inconsolata:wdth,wght@50..200,200..900&display=swap'
+
     ],
 )
 

@@ -1,3 +1,31 @@
+# Release v0.4.3
+
+**Fecha de Release:** 2025-07-17
+
+## Resumen
+
+Esta release se enfoca en la estandarización de los estilos de la aplicación, introduciendo un sistema de diseño (design system) para los colores, tamaños y fuentes. Esto mejora la consistencia visual, la mantenibilidad del código y la legibilidad de la interfaz.
+
+## Cambios Principales
+
+### ✨ Nuevas Características
+
+- **Estándares de Estilo:** Se han creado enumeraciones (Enums) para gestionar los estilos de forma centralizada en la carpeta `sia/styles`:
+    - **Colores:** Se han definido paletas de colores para la interfaz y los textos en `sia/styles/colors.py`.
+    - **Tamaños:** Se han estandarizado los tamaños para botones, logos, texto, padding y márgenes en `sia/styles/sizes.py`.
+    - **Fuentes:** Se han definido las familias y grosores de fuente en `sia/styles/fonts.py`.
+
+### 🚀 Mejoras
+
+- **Refactorización de Componentes:** Se han refactorizado los componentes `navbar_login` y `login_default_icons` para utilizar los nuevos estándares de estilo, eliminando los valores de estilo definidos como texto plano.
+- **Consistencia Visual:** Se ha mejorado la consistencia visual de la aplicación al asegurar que todos los componentes utilicen los mismos estilos base.
+- **Legibilidad:** Se ha mejorado la legibilidad del texto en la aplicación al ajustar los colores para que tengan un mejor contraste con el fondo.
+
+### 🐛 Corrección de Errores
+
+- **Visualización de Texto en Botones:** Se ha corregido un error que impedía que el texto de los botones se mostrara correctamente debido a la falta de contraste entre el color del texto y el fondo.
+- **Importación de Fuentes:** Se ha corregido la importación de la fuente "Inter" en la configuración de la aplicación para asegurar que se cargue correctamente.
+
 # Release v0.4.2
 
 **Fecha de Release:** 2025-07-16
