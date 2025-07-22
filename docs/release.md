@@ -1,3 +1,25 @@
+# Release v0.4.4
+
+**Fecha de Release:** 2025-07-22
+
+## Resumen
+
+Esta release introduce mejoras significativas en la gestión de formularios, incluyendo la refactorización de componentes, la implementación de un botón de reseteo y la corrección de problemas de reactividad del estado.
+
+## Cambios Principales
+
+### ✨ Nuevas Características
+
+- **Componentes de Formulario Refactorizados:** El archivo `sia/components/forms.py` ha sido renombrado a `sia/components/form_components.py` y se han creado componentes básicos (`form_input`, `form_button`) para la construcción de formularios.
+- **Vista de Formulario Dedicada:** Se ha creado `sia/views/forms_views.py` para centralizar la lógica y la presentación de los formularios.
+- **Botón de Reseteo de Formulario:** Se ha añadido un nuevo componente `form_reset_button` que permite limpiar los campos del formulario de forma nativa.
+
+### 🚀 Mejoras
+
+- **Manejo de Estado Reactivo:** Se ha corregido el problema de reactividad del estado en los formularios, asegurando que los datos ingresados se muestren correctamente en la interfaz de usuario.
+- **Integración de Formularios:** Los componentes de formulario han sido integrados en la vista principal de la aplicación a través de `sia/views/playground.py`.
+- **Corrección de Eventos de Formulario:** Se ha solucionado el problema de activación del evento `on_submit` en los formularios.
+
 # Release v0.4.3
 
 **Fecha de Release:** 2025-07-17
