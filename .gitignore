@@ -57,3 +57,4 @@ report/
 # reflex
 .web/
 .states/
+.env

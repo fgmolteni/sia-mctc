@@ -1,5 +1,4 @@
 import reflex as rx
-from components.imagen_open import open_image
 
 from sia.styles.colors import Color
 from sia.styles.sizes import SizeLogo, SizeText
@@ -10,15 +9,13 @@ def navbar_link(text: str, url: str) -> rx.Component:
         rx.text(text, font_size=SizeText.MEDIUM.value, font_weight=FontWeight.MEDIUM.value), href=url
     )
 
-img = open_image(r"./assets/logo.png")
-
 def navbar_user() -> rx.Component:
     return rx.box(
         rx.desktop_only(
             rx.hstack(
                 rx.hstack(
                     rx.image(
-                        src=img,
+                        src="/logo.png",
                         width=SizeLogo.MEDIUM.value,
                         height="auto",
                         border_radius="50%",
@@ -27,7 +24,7 @@ def navbar_user() -> rx.Component:
                     rx.text(
                         "SIA",
                         font_size=SizeText.X_LARGE.value,
-                        font_family=FontFamily.INTER.value,
+                        font_family=FontFamily.DEFAULT.value,
                         font_weight= FontWeight.MEDIUM.value,
                     ),
                     align_items="center",

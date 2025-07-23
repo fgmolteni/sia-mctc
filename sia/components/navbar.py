@@ -1,92 +1,55 @@
+from fastapi import background
 import reflex as rx
-from sia.styles.sizes import SizeLogo, SizeText, SizeButton
+from sia.styles.sizes import SizeLogo, SizeSpace, SizeText, SizeButton
 from sia.styles.fonts import FontFamily, FontWeight
 from sia.styles.colors import Color
 
-from sia.components.headers import name_app_wth_logo
+from sia.components.buttons import button_redondo
+
+from sia.components.headers import name_app_wth_logo, only_isologo
+
+from sia.components.menu_user import menu_user
 
 
-from components.imagen_open import open_image
-
-img = open_image(r"./assets/logo.png")
-
-
-def navbar_link(text: str, url: str) -> rx.Component:
-    return rx.link(
-        rx.text(text, size="4", weight="medium"), href=url
-    )
-
-
-def navbar_user() -> rx.Component:
+def navbar() -> rx.Component:
     return rx.box(
-        rx.desktop_only(
+        rx.hstack(
+            only_isologo(theme="Dark",),
+            rx.spacer(),
             rx.hstack(
-                name_app_wth_logo(),
-                rx.hstack(
-                    navbar_link("Home", "/#"),
-                    navbar_link("About", "/#"),
-                    navbar_link("Pricing", "/#"),
-                    navbar_link("Contact", "/#"),
-                    spacing="5",
+                rx.box(
+                    width="8px",
+                    height="8px",
+                    bg="#8A2BE2",
+                    border_radius="50%",
                 ),
-                rx.menu.root(
-                    rx.menu.trigger(
-                        rx.icon_button(
-                            rx.icon("user"),
-                            size="2",
-                            radius="full",
-                        )
-                    ),
-                    rx.menu.content(
-                        rx.menu.item("Settings"),
-                        rx.menu.item("Earnings"),
-                        rx.menu.separator(),
-                        rx.menu.item("Log out"),
-                    ),
-                    justify="end",
-                ),
-                justify="between",
-                align_items="center",
+                rx.hstack(rx.text("Personal", font_weight="medium",
+                                  color="white", font_size="14px"),
+                          rx.badge("adm", var="solid"),
+                          ),
+
+                align="center",
+                justify="start",
+                spacing="3",
+                width="100%",
+                padding="4px",
             ),
+
+            rx.spacer(),
+            # Botones del lado derecho
+
+            menu_user(),
+            align_items="center",
+            padding_x=SizeSpace.X_LARGE.value,
         ),
-        rx.mobile_and_tablet(
-            rx.hstack(
-                rx.hstack(
-                    rx.image(
-                        src="/logo.jpg",
-                        width="2em",
-                        height="auto",
-                        border_radius="25%",
-                    ),
-                    rx.heading(
-                        "Reflex", size="6", weight="bold"
-                    ),
-                    align_items="center",
-                ),
-                rx.menu.root(
-                    rx.menu.trigger(
-                        rx.icon_button(
-                            rx.icon("user"),
-                            size="2",
-                            radius="full",
-                        )
-                    ),
-                    rx.menu.content(
-                        rx.menu.item("Settings"),
-                        rx.menu.item("Earnings"),
-                        rx.menu.separator(),
-                        rx.menu.item("Log out"),
-                    ),
-                    justify="end",
-                ),
-                justify="between",
-                align_items="center",
-            ),
-        ),
-        bg=rx.color("accent", 3),
-        padding="1em",
-        # position="fixed",
-        # top="0px",
-        # z_index="5",
-        width="100%",
-    )
+        align="center",
+        justify="center",
+        width="100%",  # Fuerza a ocupar todo el viewport
+        left="0",
+        right="0",
+        position="sticky",  # O "sticky" si prefieres
+        top="0",
+        z_index=50,
+        background=Color.background.value,
+        # Elimina paddings laterales si no los necesitas
+    ),

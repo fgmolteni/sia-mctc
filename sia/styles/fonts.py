@@ -1,11 +1,14 @@
 from enum import Enum
 
 class FontFamily(Enum):
-    DEFAULT = "sans-serif"
-    INTER = "Inter, sans-serif"
-
+    DEFAULT = "Inter, sans-serif"
+    SPACE_MONO = "Space Mono, monospace"
+    MAJOR_MONO_DISPLAY = "Major Mono Display, monospace"
+    PLASTER = "Plaster, system-ui"
+    INCOSOLATA = "Inconsolata, monospace"
+    
 class FontWeight(Enum):
-    LIGHT = "200"
+    LIGHT = "300"
     NORMAL = "400"
-    MEDIUM = "600"
-    BOLD = "800"
+    MEDIUM = "500"
+    BOLD = "700"

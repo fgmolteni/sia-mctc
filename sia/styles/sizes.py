@@ -28,4 +28,8 @@ class SizeGeneral(Enum):
     HALF = "50%"
     AUTO = "auto"
 
+class BorderRadius(Enum):
+    SMALL = "5px"
+    DEFAULT = "25px"
+
 

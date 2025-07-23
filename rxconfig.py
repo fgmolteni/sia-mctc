@@ -5,7 +5,9 @@ config = rx.Config(
     app_name="sia",
     stylesheets=styles.STYLESHEETS,
     plugins=[
-        rx.plugins.SitemapPlugin(),
+        rx.plugins.SitemapPlugin(),  # ← Remove or comment out this line
         rx.plugins.TailwindV4Plugin(),
     ],
+    assets_dir="assets",
+    frontend_packages=[],
 )

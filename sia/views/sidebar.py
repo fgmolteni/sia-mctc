@@ -1,135 +1,43 @@
 import reflex as rx
 from sia.components.siderbar_componentes import sidebar_item, sidebar_items
+from sia.components.ant_breadcrumb import breadcrumb, breadcrumb_item
 
+from sia.components.buttons import button_sin_fondo_icon, button_icon_text_border
 
-def sidebar_top_profile() -> rx.Component:
+from sia.styles.colors import Color,ColorText
+from sia.styles.fonts import FontFamily,FontWeight
+from sia.styles.sizes import SizeSpace, SizeText, BorderRadius
+
+def sidebar_main() -> rx.Component:
     return rx.box(
-        rx.desktop_only(
+        rx.vstack(
+            button_icon_text_border(text="Nuevo Documento", icon="plus"),
+            rx.spacer(size=4),
+
+            # Navigation Links
             rx.vstack(
-                rx.hstack(
-                    rx.icon_button(
-                        rx.icon("user"),
-                        size="3",
-                        radius="full",
-                    ),
-                    rx.vstack(
-                        rx.box(
-                            rx.text(
-                                "My account",
-                                size="3",
-                                weight="bold",
-                            ),
-                            rx.text(
-                                "user@reflex.dev",
-                                size="2",
-                                weight="medium",
-                            ),
-                            width="100%",
-                        ),
-                        spacing="0",
-                        justify="start",
-                        width="100%",
-                    ),
-                    rx.spacer(),
-                    rx.icon_button(
-                        rx.icon("settings"),
-                        size="2",
-                        variant="ghost",
-                        color_scheme="gray",
-                    ),
-                    padding_x="0.5rem",
-                    align="center",
-                    width="100%",
-                ),
-                sidebar_items(),
-                rx.spacer(),
-                sidebar_item(
-                    "Help & Support", "life-buoy", "/#"
-                ),
-                spacing="5",
-                position="fixed",
-                left="0px",
-                top="0px",
-                z_index="5",
-                padding_x="1em",
-                padding_y="1.5em",
-                bg=rx.color("accent", 3),
+                button_sin_fondo_icon("Buscar", "search", "#", color=ColorText.PRIMARY.value, hover_bg=Color.primary.value),
+                button_sin_fondo_icon("Expedientes", "folder", "#", color=ColorText.PRIMARY.value, hover_bg=Color.primary.value),
+                button_sin_fondo_icon("Recentes", "Clock", "#", color=ColorText.PRIMARY.value, hover_bg=Color.primary.value),
+                button_sin_fondo_icon("Agentes", "users", "#", color=ColorText.PRIMARY.value, hover_bg=Color.primary.value),
                 align="start",
-                height="100%",
-                #height="650px",
-                #width="16em",
+                spacing="3",
+                width="100%",
+                margin_top=SizeSpace.SMALL.value,
             ),
+            rx.spacer(),
+            align="center",
+            spacing="3",
+            width="100%",
+            padding_x="16px",  # Add horizontal padding here
         ),
-        rx.mobile_and_tablet(
-            rx.drawer.root(
-                rx.drawer.trigger(
-                    rx.icon("align-justify", size=30)
-                ),
-                rx.drawer.overlay(z_index="5"),
-                rx.drawer.portal(
-                    rx.drawer.content(
-                        rx.vstack(
-                            rx.box(
-                                rx.drawer.close(
-                                    rx.icon("x", size=30)
-                                ),
-                                width="100%",
-                            ),
-                            sidebar_items(),
-                            rx.spacer(),
-                            rx.vstack(
-                                sidebar_item(
-                                    "Help & Support",
-                                    "life-buoy",
-                                    "/#",
-                                ),
-                                rx.divider(margin="0"),
-                                rx.hstack(
-                                    rx.icon_button(
-                                        rx.icon("user"),
-                                        size="3",
-                                        radius="full",
-                                    ),
-                                    rx.vstack(
-                                        rx.box(
-                                            rx.text(
-                                                "My account",
-                                                size="3",
-                                                weight="bold",
-                                            ),
-                                            rx.text(
-                                                "user@reflex.dev",
-                                                size="2",
-                                                weight="medium",
-                                            ),
-                                            width="100%",
-                                        ),
-                                        spacing="0",
-                                        justify="start",
-                                        width="100%",
-                                    ),
-                                    padding_x="0.5rem",
-                                    align="center",
-                                    justify="start",
-                                    width="100%",
-                                ),
-                                width="100%",
-                                spacing="5",
-                            ),
-                            spacing="5",
-                            width="100%",
-                        ),
-                        top="auto",
-                        right="auto",
-                        height="100%",
-                        width="20em",
-                        padding="1.5em",
-                        bg=rx.color("accent", 2),
-                    ),
-                    width="100%",
-                ),
-                direction="left",
-            ),
-            padding="1em",
-        ),
+        min_width="250px",
+        height="calc(100vh - 60px)",
+        position="fixed",
+        left="0",
+        top="60px",
+        bg=Color.background.value,
+        padding_y=SizeSpace.LARGE.value,
     )
+
+            
