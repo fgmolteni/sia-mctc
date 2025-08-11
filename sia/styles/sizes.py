@@ -28,6 +28,18 @@ class SizeGeneral(Enum):
     HALF = "50%"
     AUTO = "auto"
 
+class SizeAvatar(Enum):
+    SMALL = "2"
+    DEFAULT = "3"
+    LARGE = "6"
+
+class SizeIcon(Enum):
+    X_SMALL = 12
+    SMALL = 16
+    MEDIUM = 20
+    LARGE = 24
+    X_LARGE = 30
+
 class BorderRadius(Enum):
     SMALL = "5px"
     DEFAULT = "25px"

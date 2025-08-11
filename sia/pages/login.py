@@ -1,5 +1,5 @@
 import reflex as rx
-from sia.views.login_views import login_default_icons
+from sia.views.login_views import login_default_icons, LoginState
 from sia.components.navbar_login import navbar_user
 from sia.components.topbanner import top_banner_gradient
 from sia.views.footer_login import footer_login
@@ -28,7 +28,6 @@ def spline_demo(**kwargs):
     return spline(scene=scene_3, **kwargs)
 
 
-
 def login() -> rx.Component:
     return rx.box(
         rx.vstack(
@@ -37,22 +36,16 @@ def login() -> rx.Component:
             align_items="center",
         ),
         # Fondo Spline
-        rx.cond(
-            rx.State.is_hydrated,
-            spline_demo(
-                style={
-                    "position": "absolute",
-                    #"top": "10em",
-                    #"left": "0em",
-                    "width": "100%",
-                    "height": "100vh",
-                    #"zIndex": 0,
-                    "scale": 1,
-                    "opacity": LoginTransitionState.opacity,
-                    "transition": "opacity 5s ease-in-out"
-                },
-                on_mount=LoginTransitionState.set_opacity,
-            ),
+        spline_demo(
+            style={
+                "position": "absolute",
+                "width": "100%",
+                "height": "100vh",
+                "scale": 1,
+                "opacity": LoginTransitionState.opacity,
+                "transition": "opacity 5s ease-in-out"
+            },
+            on_mount=LoginTransitionState.set_opacity,
         ),
         # Tarjeta de login centrada
         rx.hstack(

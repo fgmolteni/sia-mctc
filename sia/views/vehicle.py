@@ -1,6 +1,6 @@
 import reflex as rx
 from sia.components.form_components import form_input, form_button, form_select
-from components.db_connector import add_vehicle, get_all_vehicles
+from components.db_vehicles import add_vehicle, get_all_vehicles
 import pandas as pd
 
 class VehicleState(rx.State):

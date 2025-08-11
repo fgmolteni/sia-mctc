@@ -54,7 +54,7 @@ def navbar_user() -> rx.Component:
                 rx.menu.root(
                     rx.menu.trigger(
                         rx.icon_button(
-                            rx.icon("user"),
+                            rx.icon(tag="user"),
                             size="2",
                             radius="full",
                         )

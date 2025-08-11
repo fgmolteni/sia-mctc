@@ -6,15 +6,13 @@ from sia.styles.fonts import FontFamily, FontWeight
 from sia.styles.sizes import BorderRadius, SizeSpace, SizeText
 
 
-def button_general(text: str) -> rx.Component:
-    return rx.button(
-        rx.text(
-            text, size="3", color=ColorText.PRIMARY.value
-        ),
-        width="100%",
-        bg=Color.primary.value,
-    )
+from typing import Callable
 
+def button_general(text: str, on_click: Callable = None) -> rx.Component:
+    return rx.button(
+        text,
+        on_click=on_click,
+    )
 
 def button_curve(text: str) -> rx.Component:
     return rx.link(

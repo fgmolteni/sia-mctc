@@ -5,9 +5,9 @@ config = rx.Config(
     app_name="sia",
     stylesheets=styles.STYLESHEETS,
     plugins=[
-        rx.plugins.SitemapPlugin(),  # ← Remove or comment out this line
+        rx.plugins.SitemapPlugin(),
         rx.plugins.TailwindV4Plugin(),
     ],
     assets_dir="assets",
-    frontend_packages=[],
+    #frontend_packages=["lucide-react@^0.263.1",],
 )

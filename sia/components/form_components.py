@@ -1,9 +1,18 @@
 import reflex as rx
 
+
 def form_input(label: str, placeholder: str, type: str, name: str, on_change=None, value=None) -> rx.Component:
     return rx.vstack(
-        rx.text(label),
-        rx.input(placeholder=placeholder, type=type, name=name, on_change=on_change, value=value),
+        rx.text(label, weight="bold"),
+        rx.input(
+            placeholder=placeholder,
+            type=type,
+            name=name,
+            on_change=on_change,
+            value=value,
+            variant="surface",
+            radius="large",
+        ),
         align_items="start",
     )
 
@@ -29,12 +38,14 @@ def form_time_input(label: str, name: str, default_value: str = None) -> rx.Comp
 
 def form_select(label: str, name: str, options: list[str], placeholder: str = "Seleccione una opción", on_change=None, value=None) -> rx.Component:
     return rx.vstack(
-        rx.text(label),
+        rx.text(label, weight="bold"),
         rx.select(
             options,
             placeholder=placeholder,
             name=name,
             on_change=on_change,
+            variant="surface",
+            radius="large",
             value=value,
             width="100%",
         ),

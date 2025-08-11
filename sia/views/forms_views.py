@@ -8,7 +8,10 @@ from components.date_calculator import calculate_travel_expenses as cte
 from components.converter import number_to_text, number_to_currency
 from components.pdf_generator import create_pdf
 from components.formulario_generator import generar_anticipo_viatico as anticipo_viaticos
-from components.db_connector import get_agentes, get_vehiculos, get_fuel_price, add_expediente, add_expediente_agent, add_expediente_destination
+from components.db_agents import get_agentes
+from components.db_vehicles import get_vehiculos
+from components.db_fuel_prices import get_fuel_price
+from components.db_expedientes import add_expediente, add_expediente_agent, add_expediente_destination
 
 
 class FormState(rx.State):

@@ -36,6 +36,10 @@ def only_isologo(theme: str) -> rx.Component:
     if theme=="Dark":
         background=Color.background.value
         text_color=ColorText.PRIMARY.value
+    else:
+        background=Color.background.value
+        text_color=ColorText.TERCEARY.value
+    
     return rx.box(rx.hstack(
         rx.text(
             "S",
@@ -51,23 +55,18 @@ def only_isologo(theme: str) -> rx.Component:
             font_weight=FontWeight.BOLD.value,
             font_style="italic",
             color=ColorText.ACCENT.value,
-
         ),
         rx.text(
             "A",
             font_family=FontFamily.SPACE_MONO.value,
             font_size=SizeText.X_LARGE.value,
             font_weight=FontWeight.BOLD.value,
-            #color=ColorText.PRIMARY.value,
-            # font_style="italic",
             color=text_color,
-
         ),
         spacing="0",
         align_items="center",
         margin_left=SizeSpace.SMALL.value,
         padding=SizeSpace.SMALL.value,
-
     ),
         align="center",
         background=background,

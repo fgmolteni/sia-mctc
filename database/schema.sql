@@ -5,6 +5,8 @@
 -- Tabla para almacenar los usuarios del sistema y sus roles
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
     nombre_usuario VARCHAR(50) UNIQUE NOT NULL,
     hash_contrasena VARCHAR(255) NOT NULL,
     rol VARCHAR(50) DEFAULT 'usuario' NOT NULL,

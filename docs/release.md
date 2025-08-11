@@ -1,3 +1,76 @@
+# Release v0.5.1
+
+**Fecha de Release:** 2025-07-23
+
+## Resumen
+
+Esta release se enfoca en la refactorización de la gestión de usuarios, la mejora de la modularidad del código y la corrección de errores de sintaxis e importación.
+
+## Cambios Principales
+
+### ✨ Nuevas Características
+
+- **Página de Control de Usuarios:**
+    - Se eliminó el botón de registro de la página de login.
+    - Se creó una nueva página dedicada para el registro de usuarios (`/register`) en `sia/pages/user_control.py`.
+    - La página de registro incluye campos para `nombre`, `apellido`, `email`, `contraseña` y `rol` (con valor por defecto 'usuario').
+- **Refactorización de Módulos de Base de Datos:**
+    - El archivo `components/db_connector.py` ha sido refactorizado y dividido en módulos más pequeños y específicos para una mejor organización y mantenibilidad:
+        - `components/db_common.py`: Funciones comunes de conexión a la base de datos.
+        - `components/db_users.py`: Operaciones CRUD para usuarios.
+        - `components/db_agents.py`: Operaciones CRUD para agentes.
+        - `components/db_vehicles.py`: Operaciones CRUD para vehículos.
+        - `components/db_expedientes.py`: Operaciones CRUD para expedientes.
+        - `components/db_fuel_prices.py`: Operaciones para precios de combustible.
+
+### 🚀 Mejoras
+
+- **Modularidad del Código:** La refactorización de los módulos de la base de datos mejora significativamente la estructura y la claridad del código.
+- **Separación de Responsabilidades:** La lógica de registro de usuarios ahora reside en su propia página y estado, separada de la lógica de inicio de sesión.
+
+### 🐛 Corrección de Errores
+
+- **`TypeError` en `button_general()`:** Se corrigió el error `TypeError: button_general() got an unexpected keyword argument 'on_click'` añadiendo el parámetro `on_click` a la definición de la función `button_general` en `sia/components/buttons.py`.
+- **`SyntaxError` en `sia/components/buttons.py`:** Se corrigió un `SyntaxError` (paréntesis no cerrado) en `sia/components/buttons.py`.
+- **`ImportError` después de refactorización:** Se corrigieron los errores de importación en `sia/pages/user_control.py`, `sia/views/agent.py`, `sia/views/forms_views.py`, `sia/views/login_views.py` y `sia/views/vehicle.py` para que apunten a los nuevos módulos de la base de datos.
+- **Duplicación de `playground()`:** Se eliminó la función `playground()` duplicada de `sia/views/cars.py`, dejando `sia/views/playground.py` como la única fuente.
+
+### ⚙️ Infraestructura
+
+- **Actualización de Esquema de Base de Datos:** Se modificó `database/schema.sql` para incluir las columnas `nombre` y `apellido` en la tabla `usuarios`. (Requiere migración manual o recreación de la tabla para aplicar los cambios en la base de datos).
+
+# Release v0.5.0
+
+**Fecha de Release:** 2025-07-23
+
+## Resumen
+
+Esta release introduce la funcionalidad completa para la gestión de expedientes y vehículos, mejorando la interacción con la base de datos y la usabilidad de los formularios.
+
+## Cambios Principales
+
+### ✨ Nuevas Características
+
+- **Gestión de Expedientes:**
+    - Implementación de la lógica para guardar expedientes en las tablas `expedientes`, `expediente_agentes` y `expediente_destinos`.
+    - Cálculo del costo de combustible basado en el consumo del vehículo y el precio por litro.
+    - Integración del guardado de expedientes en el formulario principal.
+- **Gestión de Vehículos:**
+    - Nueva página dedicada para añadir y visualizar vehículos (`/vehiculos`).
+    - Formulario para registrar nuevos vehículos con sus características (marca, modelo, patente, consumo, combustible, condición).
+    - Tabla interactiva para listar todos los vehículos registrados.
+
+### 🚀 Mejoras
+
+- **Conectividad de Base de Datos:** Ampliación de `components/db_connector.py` con funciones para interactuar con las tablas de expedientes y vehículos.
+- **Manejo de Formularios:** Refactorización de los componentes `form_input` y `form_button` en `sia/components/form_components.py` para soportar `on_change`, `value` y `on_click`, mejorando la reactividad y el control de los campos.
+
+### 🐛 Corrección de Errores
+
+- **Errores de Tipo en Componentes Reflex:** Solución de `TypeError` y `VarTypeError` al usar variables de estado en expresiones condicionales y al pasar propiedades a los componentes de formulario, utilizando `rx.cond` y la sintaxis correcta de Reflex.
+- **Importaciones de Rutas:** Corrección de `NameError` en `sia/sia.py` asegurando la importación adecuada de las vistas y estados de las nuevas páginas (`agentes` y `vehiculos`).
+
+
 # Release v0.4.4
 
 **Fecha de Release:** 2025-07-22

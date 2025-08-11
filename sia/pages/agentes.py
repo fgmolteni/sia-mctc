@@ -1,15 +1,12 @@
 import reflex as rx
+from sia.views.agent import agent_view
 from sia.views.sidebar import sidebar_main
-#from sia.pages.usuarios import users_page
 
-def index() -> rx.Component:
+
+def agentes_pages() -> rx.Component:
     return rx.hstack(
         sidebar_main(),
-        rx.box(
-            #users_page(),
-            width="100%",
-            padding="2rem",
-        ),
+        agent_view(),
         spacing="7",
         width="100%",
         height="100vh",

@@ -1,6 +1,8 @@
+from numpy import place
 import reflex as rx
 from sia.components.form_components import form_input, form_button
-from components.db_connector import add_agent, get_all_agents
+from components.db_agents import add_agent, get_all_agents
+from sia.views.sidebar import sidebar_main as sidebar
 
 class AgentState(rx.State):
     """Estado para manejar el formulario de añadir agente."""
@@ -60,17 +62,32 @@ class AgentState(rx.State):
             self.feedback_message = "Error al añadir el agente. Verifique que el DNI no esté duplicado."
             self.feedback_success = False
 
+
 def agent_form() -> rx.Component:
     """Renderiza el formulario para añadir un nuevo agente."""
     return rx.box(
         rx.form.root(
             rx.vstack(
-                form_input("Nombre", "", "text", "nombre", on_change=AgentState.set_nombre, value=AgentState.nombre),
-                form_input("Apellido", "", "text", "apellido", on_change=AgentState.set_apellido, value=AgentState.apellido),
-                form_input("Cargo", "", "text", "cargo", on_change=AgentState.set_cargo, value=AgentState.cargo),
-                form_input("DNI", "", "text", "dni", on_change=AgentState.set_dni, value=AgentState.dni),
-                form_input("Categoría", "", "text", "categoria", on_change=AgentState.set_categoria, value=AgentState.categoria),
-                form_button("Añadir Agente", on_click=AgentState.handle_submit),
+                rx.hstack(
+                    form_input("Nombre", "", "text", "nombre",
+                               on_change=AgentState.set_nombre, value=AgentState.nombre),
+                    form_input("Apellido", "", "text", "apellido",
+                               on_change=AgentState.set_apellido, value=AgentState.apellido),
+                ),
+                rx.hstack(
+                    form_input("DNI", "", "text", "dni",
+                               on_change=AgentState.set_dni, value=AgentState.dni),
+                ),
+                rx.divider(),
+                rx.hstack(
+
+                    form_input("Cargo", "", "text", "cargo",
+                               on_change=AgentState.set_cargo, value=AgentState.cargo),
+                    form_input("Categoría", "", "text", "categoria",
+                               on_change=AgentState.set_categoria, value=AgentState.categoria),
+                ),
+                form_button("Añadir Agente",
+                            on_click=lambda: AgentState.handle_submit()),
                 spacing="4",
             ),
         ),
@@ -83,7 +100,7 @@ def agent_form() -> rx.Component:
                 margin_top="1em"
             )
         ),
-        width="100%",
+        #width="100%",
         padding="20px",
         border="1px solid #444",
         border_radius="10px",
@@ -91,32 +108,38 @@ def agent_form() -> rx.Component:
 
 def agent_view() -> rx.Component:
     """La vista principal para la gestión de agentes."""
-    return rx.vstack(
-        rx.heading("Gestión de Agentes", color="white", size="8"),
-        rx.text("Añadir un nuevo agente al sistema.", color="gray", margin_bottom="1em"),
-        agent_form(),
-        rx.divider(),
-        rx.heading("Agentes Existentes", color="white", size="7"),
-        rx.cond(
-            AgentState.agents_data.length() > 0,
-            rx.data_table(
-                data=AgentState.agents_data,
-                columns=["ID", "Nombre", "Apellido", "Cargo", "DNI", "Categoría"],
-                pagination=True,
-                search=True,
-                sort=True,
-                width="100%",
+    return rx.hstack(
+        sidebar(),
+        rx.vstack(
+            rx.heading("Gestión de Agentes", color="white", size="8"),
+            rx.text("Añadir un nuevo agente al sistema.", color="gray", margin_bottom="1em"),
+            agent_form(),
+            rx.divider(),
+            rx.heading("Agentes Existentes", color="white", size="7"),
+            rx.cond(
+                AgentState.agents_data.length() > 0,
+                rx.data_table(
+                    data=AgentState.agents_data,
+                    columns=["ID", "Nombre", "Apellido", "Cargo", "DNI", "Categoría"],
+                    pagination=True,
+                    search=True,
+                    sort=True,
+                    width="100%",
+                ),
+                rx.text("No hay agentes registrados.", color="gray")
             ),
-            rx.text("No hay agentes registrados.", color="gray")
+            align_items="start",
+            spacing="4",
+            padding="20px",
+            padding_left="290px", # Added padding to account for sidebar
+            flex_grow=1, # Adjusted width
+            min_height="100vh",
+            bg="white", # Corrected typo
+            overflow_y="auto",
+            border_radius="10px"
         ),
-        align_items="start",
-        spacing="4",
-        padding="20px",
-        width="calc(100vw - 280px - 30px)",
-        min_height="100vh",
-        margin_left="280px",
-        margin_right="30px",
-        bg="#1a1a1a",
-        overflow_y="auto",
-        border_radius="10px"
+        spacing="7",
+        width="100%",
+        height="100vh",
+        background=rx.color("gray", 2),
     )

@@ -12,3 +12,4 @@ SQLAlchemy
 reflex==0.8.1
 pillow
 reflex-antd
+bcrypt
