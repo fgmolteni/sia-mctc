@@ -1,6 +1,7 @@
 from numpy import place
 import reflex as rx
-from sia.components.form_components import form_input, form_button
+from sia.components.forms.inputs import form_input
+from sia.components.forms.buttons import form_button
 from components.db_agents import add_agent, get_all_agents
 from sia.views.sidebar import sidebar_main as sidebar
 

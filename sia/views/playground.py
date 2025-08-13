@@ -1,14 +1,16 @@
 import reflex as rx
-from sia.components.buttons import *
-from sia.styles.colors import Color, ColorText
-from sia.styles.fonts import FontFamily, FontWeight
-from sia.styles.sizes import *
-
-from sia.styles.colors import Color,Color
-
-from sia.components.siderbar_componentes import sidebar_item, sidebar_items
-from sia.components.ant_breadcrumb import breadcrumb, breadcrumb_item
-from sia.components.ant_steps import steps_example
+from sia.components.forms.buttons import (
+    button_general,
+    button_redondo,
+    button_sin_fondo,
+    form_button,
+    form_reset_button,
+    button_icon_text_border,
+    button_sin_fondo_icon
+)
+from sia.components.layout.sidebars import sidebar_item
+from sia.components.navigation.breadcrumbs import breadcrumb, breadcrumb_item
+from sia.components.navigation.steps import steps_example
 from sia.views.forms_views import forms_views
 def playground() -> rx.Component:
     return rx.vstack(

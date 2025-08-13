@@ -1,13 +1,16 @@
 import reflex as rx
-from sia.styles.colors import Color, ColorText
-from sia.styles.sizes import SizeText, SizeSpace, SizeIcon
-from sia.styles.fonts import FontWeight
 from sia.styles.border import BorderRadius, CommonBorders
+from sia.styles.colors import Color, ColorText
+from sia.styles.fonts import FontWeight
+from sia.styles.sizes import SizeIcon, SizeSpace, SizeText
 
-def page_header(title: str, subtitle: str, action_button: rx.Component = None) -> rx.Component:
+
+def page_header(
+    title: str, subtitle: str, action_button: rx.Component = None
+) -> rx.Component:
     """
     Componente header reutilizable para páginas
-    
+
     Args:
         title: Título principal del header
         subtitle: Subtítulo descriptivo
@@ -43,11 +46,12 @@ def page_header(title: str, subtitle: str, action_button: rx.Component = None) -
         padding_x=SizeSpace.SMALL.value,
         margin_top=SizeSpace.MEDIUM.value,
         margin_bottom=SizeSpace.SMALL.value,
-        #bg="white",
-        #border=CommonBorders.LIGHT_SOLID,
-        #border_radius=BorderRadius.SMALL.value,
+        # bg="white",
+        # border=CommonBorders.LIGHT_SOLID,
+        # border_radius=BorderRadius.SMALL.value,
         spacing="4",
     )
+
 
 def new_user_button() -> rx.Component:
     """Botón específico para crear nuevo usuario"""
@@ -62,7 +66,7 @@ def new_user_button() -> rx.Component:
         ),
         bg="black",
         border=CommonBorders.LIGHT_SOLID,
-         border_radius=BorderRadius.SMALL.value,
+        border_radius=BorderRadius.SMALL.value,
         color="white",
         _hover={"bg": "gray.800"},
         _active={"bg": "gray.700"},
@@ -70,10 +74,11 @@ def new_user_button() -> rx.Component:
         underline="none",
     )
 
+
 def header_profiles() -> rx.Component:
     """Header para la página de perfiles"""
     return page_header(
         title="Perfiles de Usuarios",
         subtitle="Administra y gestiona los perfiles de usuarios",
-        action_button=new_user_button()
+        action_button=new_user_button(),
     )

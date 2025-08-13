@@ -1,5 +1,7 @@
 import reflex as rx
-from sia.components.form_components import form_input, form_button, form_select
+from sia.components.forms.inputs import form_input
+from sia.components.forms.buttons import form_button
+from sia.components.forms.selects import form_select
 from components.db_vehicles import add_vehicle, get_all_vehicles
 import pandas as pd
 

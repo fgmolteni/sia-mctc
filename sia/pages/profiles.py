@@ -1,12 +1,12 @@
 import reflex as rx
 from sia.views.sidebar import sidebar_main
-from sia.components.header import header_profiles
-from sia.components.cards import card_profile, info_card_profile
+from sia.components.layout.headers import header_profiles
+from sia.components.data_display.cards import card_profile, info_card_profile
 from sia.styles.fonts import FontWeight
 from sia.styles.sizes import SizeSpace, SizeIcon, SizeText
 from sia.styles.colors import Color, ColorText
 from sia.styles.border import CommonBorders, BorderRadius
-from sia.components.avartar import avatar_circle
+from sia.components.data_display.avatars import avatar_circle
 
 class ProfileState(rx.State):
     """Estado para manejar la página de perfiles."""
@@ -449,7 +449,7 @@ def permissions_tab_content() -> rx.Component:
             ),
             info_card_profile(
                 title="Gestionar Agentes",
-                icon="users-2",
+                icon="users",
                 content=rx.text(
                     ProfileState.permission_manage_agents,
                     color="gray.600",

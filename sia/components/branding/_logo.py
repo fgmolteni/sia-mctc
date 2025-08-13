@@ -1,13 +1,10 @@
-from fastapi import background
 import reflex as rx
-from sia.styles.sizes import BorderRadius, SizeLogo, SizeText, SizeButton, SizeSpace
+from sia.styles.sizes import BorderRadius, SizeLogo, SizeText, SizeSpace
 from sia.styles.fonts import FontFamily, FontWeight
 from sia.styles.colors import Color, ColorText
-
 from components.imagen_open import open_image
 
 img = open_image(r"./assets/logo.png")
-
 
 def name_app_wth_logo() -> rx.Component:
     return rx.box(
@@ -30,7 +27,6 @@ def name_app_wth_logo() -> rx.Component:
             padding=SizeSpace.SMALL.value,
         ),
     )
-
 
 def only_isologo(theme: str) -> rx.Component:
     if theme=="Dark":

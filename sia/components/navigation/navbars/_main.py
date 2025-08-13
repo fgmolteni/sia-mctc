@@ -1,13 +1,69 @@
 import reflex as rx
-
 from sia.styles.colors import Color
-from sia.styles.sizes import SizeLogo, SizeText
 from sia.styles.fonts import FontFamily, FontWeight
+from sia.styles.sizes import SizeLogo, SizeSpace, SizeText
+
+from sia.components.forms.buttons import button_redondo
+from sia.components.branding import only_isologo
+from sia.components.data_display.menus import menu_user
+
+
+def navbar() -> rx.Component:
+    return rx.box(
+        rx.hstack(
+            # only_isologo(
+            #     theme="Dark",
+            # ),
+            rx.spacer(),
+            rx.hstack(
+                rx.box(
+                    width="8px",
+                    height="8px",
+                    bg="#8A2BE2",
+                    border_radius="50%",
+                ),
+                rx.hstack(
+                    rx.text(
+                        "Personal",
+                        font_weight="medium",
+                        color="white",
+                        font_size="14px",
+                    ),
+                    rx.badge("adm", var="solid"),
+                ),
+                align="center",
+                justify="start",
+                spacing="3",
+                width="100%",
+                padding="4px",
+            ),
+            rx.spacer(),
+            # Botones del lado derecho
+            # menu_user(),
+            align_items="center",
+            padding_x=SizeSpace.X_LARGE.value,
+        ),
+        align="center",
+        justify="center",
+        width="100%",  # Fuerza a ocupar todo el viewport
+        left="0",
+        right="0",
+        position="sticky",  # O "sticky" si prefieres
+        top="0",
+        z_index=50,
+        background=Color.background.value,
+        # Elimina paddings laterales si no los necesitas
+    )
+
 
 def navbar_link(text: str, url: str) -> rx.Component:
     return rx.link(
-        rx.text(text, font_size=SizeText.MEDIUM.value, font_weight=FontWeight.MEDIUM.value), href=url
+        rx.text(
+            text, font_size=SizeText.MEDIUM.value, font_weight=FontWeight.MEDIUM.value
+        ),
+        href=url,
     )
+
 
 def navbar_user() -> rx.Component:
     return rx.box(
@@ -25,13 +81,13 @@ def navbar_user() -> rx.Component:
                         "SIA",
                         font_size=SizeText.X_LARGE.value,
                         font_family=FontFamily.DEFAULT.value,
-                        font_weight= FontWeight.MEDIUM.value,
+                        font_weight=FontWeight.MEDIUM.value,
                     ),
                     align_items="center",
                     margin_left="10em",
                     padding="0.2em",
                 ),
-                #background="blue",
+                # background="blue",
             )
         ),
         rx.mobile_and_tablet(
@@ -45,11 +101,11 @@ def navbar_user() -> rx.Component:
                         background_color="white",
                     ),
                     rx.heading(
-                        "Reflex", font_size=SizeText.X_LARGE.value, 
+                        "Reflex",
+                        font_size=SizeText.X_LARGE.value,
                         font_weight=FontWeight.BOLD.value,
                     ),
                     align_items="center",
-
                 ),
                 rx.menu.root(
                     rx.menu.trigger(

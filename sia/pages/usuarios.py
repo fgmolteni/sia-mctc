@@ -1,14 +1,18 @@
 
 import reflex as rx
 from sia.views.sidebar import sidebar_main
-from sia.components.header import page_header, new_user_button
-from sia.components.form_components import form_input, form_select
+from sia.components.layout.headers import page_header, new_user_button
+from sia.components.forms.inputs import form_input
+from sia.components.forms.selects import form_select
 from sia.styles.fonts import FontWeight
 from sia.styles.sizes import SizeAvatar, SizeText, SizeButton, SizeIcon, BorderRadius
 from sia.styles.colors import Color, ColorText
 from sia.styles.border import CommonBorders
-from sia.components.select_components import select_component
-from sia.components.avartar import avatar_circle
+from sia.components.forms.selects import select_component
+from sia.components.data_display.avatars import avatar_circle, avatar
+from sia.components.data_display.badges import role_badge, status_badge
+from sia.components.data_display.cards import stat_card
+from sia.components.data_display.tables import data_table, table_actions_menu
 
 class UserState(rx.State):
     """Estado para manejar la página de usuarios."""
@@ -18,10 +22,10 @@ class UserState(rx.State):
         """Cargar datos de usuarios."""
         # Por ahora usamos datos estáticos, pero aquí se podría conectar a la base de datos
         self.users_data = [
-            {"initials": "JP", "name": "Juan Pérez", "email": "juan.perez@empresa.com", "role": "Administrador", "area": "Administración", "status": "Activo", "permissions": "5 permisos", "attributes": "5 atributos", "last_access": "15/1/2024"},
-            {"initials": "MG", "name": "María García", "email": "maria.garcia@empresa.com", "role": "Manager", "area": "Ventas", "status": "Activo", "permissions": "4 permisos", "attributes": "3 atributos", "last_access": "14/1/2024"},
-            {"initials": "CL", "name": "Carlos López", "email": "carlos.lopez@empresa.com", "role": "Empleado", "area": "Marketing", "status": "Activo", "permissions": "4 permisos", "attributes": "3 atributos", "last_access": "13/1/2024"},
-            {"initials": "AM", "name": "Ana Martínez", "email": "ana.martinez@empresa.com", "role": "Empleado", "area": "RRHH", "status": "Inactivo", "permissions": "3 permisos", "attributes": "3 atributos", "last_access": "10/1/2024"},
+            {"name": "Juan Pérez", "email": "juan.perez@empresa.com", "role": "Administrador", "area": "Administración", "status": "Activo", "permissions": "5 permisos", "attributes": "5 atributos", "last_access": "15/1/2024"},
+            {"name": "María García", "email": "maria.garcia@empresa.com", "role": "Manager", "area": "Ventas", "status": "Activo", "permissions": "4 permisos", "attributes": "3 atributos", "last_access": "14/1/2024"},
+            {"name": "Carlos López", "email": "carlos.lopez@empresa.com", "role": "Empleado", "area": "Marketing", "status": "Activo", "permissions": "4 permisos", "attributes": "3 atributos", "last_access": "13/1/2024"},
+            {"name": "Ana Martínez", "email": "ana.martinez@empresa.com", "role": "Empleado", "area": "RRHH", "status": "Inactivo", "permissions": "3 permisos", "attributes": "3 atributos", "last_access": "10/1/2024"},
         ]
     
     def load_profiles(self):
@@ -30,48 +34,6 @@ class UserState(rx.State):
         pass
 
 from sia.styles.sizes import SizeText, SizeButton, SizeIcon, BorderRadius, SizeSpace
-
-def stat_card(title: str, value: str, icon: str, icon_color: str = "white.400") -> rx.Component:
-    return rx.card(
-        rx.vstack(
-            rx.hstack(
-                rx.text(
-                    title,
-                    color=ColorText.GRAY_500.value,
-                    font_size=SizeText.MEDIUM.value,
-                    font_weight=FontWeight.MEDIUM.value
-                ),
-                rx.spacer(),
-                rx.icon(
-                    tag=icon,
-                    size=SizeIcon.LARGE.value,
-                    color=icon_color,
-                    #background_color=Color.icon_background.value,
-                    padding=SizeSpace.SMALL.value,
-                    border_radius=BorderRadius.SMALL.value,
-                ),
-                align="start",
-                width="100%",
-                spacing="5",
-            ),
-            rx.spacer(),
-            rx.heading(
-                value,
-                font_size=SizeText.X_LARGE.value,
-                font_weight=FontWeight.BOLD.value,
-                align="left",
-                justify="end",
-                width="100%"
-            ),
-            width="100%",
-            align="start",
-            spacing="3"
-        ),
-        width_min="250px",
-        width="100%",
-        height="120px",
-        padding=SizeSpace.MEDIUM.value
-    )
 
 def search_filters() -> rx.Component:
     return rx.box(
@@ -132,107 +94,92 @@ def search_filters() -> rx.Component:
 
 def user_table() -> rx.Component:
     users_data = [
-        {"initials": "JP", "name": "Juan Pérez", "email": "juan.perez@empresa.com", "role": "Administrador", "area": "Administración", "status": "Activo", "permissions": "5 permisos", "attributes": "5 atributos", "last_access": "15/1/2024"},
-        {"initials": "MG", "name": "María García", "email": "maria.garcia@empresa.com", "role": "Manager", "area": "Ventas", "status": "Activo", "permissions": "4 permisos", "attributes": "3 atributos", "last_access": "14/1/2024"},
-        {"initials": "CL", "name": "Carlos López", "email": "carlos.lopez@empresa.com", "role": "Empleado", "area": "Marketing", "status": "Activo", "permissions": "4 permisos", "attributes": "3 atributos", "last_access": "13/1/2024"},
-        {"initials": "AM", "name": "Ana Martínez", "email": "ana.martinez@empresa.com", "role": "Empleado", "area": "RRHH", "status": "Inactivo", "permissions": "3 permisos", "attributes": "3 atributos", "last_access": "10/1/2024"},
+        {"name": "Juan Pérez", "email": "juan.perez@empresa.com", "area": "Administración", "status": "Activo", "permissions": "5 permisos", "attributes": "5 atributos", "last_access": "15/1/2024"},
+        {"name": "María García", "email": "maria.garcia@empresa.com", "area": "Ventas", "status": "Activo", "permissions": "4 permisos", "attributes": "3 atributos", "last_access": "14/1/2024"},
+        {"name": "Carlos López", "email": "carlos.lopez@empresa.com", "area": "Marketing", "status": "Activo", "permissions": "4 permisos", "attributes": "3 atributos", "last_access": "13/1/2024"},
+        {"name": "Ana Martínez", "email": "ana.martinez@empresa.com", "area": "RRHH", "status": "Inactivo", "permissions": "3 permisos", "attributes": "3 atributos", "last_access": "10/1/2024"},
     ]
-    table_headers = ["Usuario", "Rol", "Área", "Estado", "Permisos", "Atributos", "Último Acceso", "Acciones"]
-
-    return rx.box(
-        rx.vstack(
-            rx.hstack(
-                rx.text("Lista de Usuarios", font_weight=FontWeight.BOLD.value, font_size=SizeText.LARGE.value, color="gray.800"),
-                rx.spacer(),
-                rx.text("4 de 4 usuarios mostrados", color=ColorText.GRAY_500.value, font_size=SizeText.SMALL.value),
-                width="100%",
-                mb="4",
+    
+    # Funciones de renderizado personalizadas
+    def render_user_column(value, row_data):
+        return rx.hstack(
+            avatar_circle(user=row_data["name"], size=SizeAvatar.DEFAULT.value),
+            rx.vstack(
+                rx.text(row_data["name"], font_size=SizeText.MEDIUM.value, weight="medium"),
+                #rx.text(row_data["email"], font_size=SizeText.SMALL.value, color="gray.500"),
+                spacing="1",
+                align="start",
+                justify="center",
             ),
-            rx.table.root(
-                rx.table.header(
-                    rx.table.row(
-                        *[rx.table.column_header_cell(header, font_weight=FontWeight.MEDIUM.value, text_align="left", padding="3") for header in table_headers],
-                        bg=Color.background_light.value,
-                    ),
-                ),
-                rx.table.body(
-                    *[rx.table.row(
-                        # usuario
-                        rx.table.cell(
-                            rx.hstack(
-                                avatar_circle(
-                                    user=user["initials"],
-                                    size=SizeAvatar.SMALL.value,
-                                ),
-                                rx.vstack(
-                                    rx.text(user["name"], font_weight=FontWeight.MEDIUM.value),
-                                    rx.text(user["email"], color=ColorText.GRAY_500.value, font_size="2"),
-                                    align="start",
-                                    spacing="0",
-                                ),
-                                spacing="3",
-                            ),
-                            padding="3",
-                        ),
-                        # Rol
-                        rx.table.cell(
-                            rx.box(
-                                rx.badge(
-                                    user["role"],
-                                    color=Color.admin_text.value if user["role"] == "Administrador" else Color.manager_text.value if user["role"] == "Manager" else Color.employee_text.value,
-                                    bg=Color.admin_bg.value if user["role"] == "Administrador" else Color.manager_bg.value if user["role"] == "Manager" else Color.employee_bg.value,
-                                    px="2",
-                                    py="1",
-                                    border_radius=BorderRadius.DEFAULT.value,
-                                    font_weight=FontWeight.MEDIUM.value,
-                                ),
-                            ),
-                            padding="3",
-                        ),
-                        # Area
-                        rx.table.cell(user["area"], padding="3"),
-                        # Estado
-                        rx.table.cell(
-                            rx.hstack(
-                                rx.box(width="8px", height="8px", bg=Color.status_active.value if user["status"] == "Activo" else Color.icon_inactive.value, border_radius=BorderRadius.DEFAULT.value),
-                                rx.text(user["status"]),
-                                spacing="2",
-                                align_items="center",
-                            ),
-                            padding="3",
-                        ),
-                        rx.table.cell(rx.hstack(rx.icon(tag="shield", color=Color.icon_inactive.value, size=SizeIcon.SMALL.value), rx.text(user["permissions"]), spacing="2"), padding="3"),
-                        rx.table.cell(rx.hstack(rx.icon(tag="badge-check", color=Color.icon_inactive.value, size=SizeIcon.SMALL.value), rx.text(user["attributes"]), spacing="2"), padding="3"),
-                        rx.table.cell(user["last_access"], padding="3"),
-                        rx.table.cell(
-                            rx.menu.root(
-                                rx.menu.trigger(
-                                    rx.button(rx.icon(tag="ellipsis-vertical", color=Color.icon_inactive.value, size=SizeIcon.MEDIUM.value), color="white", bg="white")
-                                ),
-                                rx.menu.content(
-                                    rx.menu.item(rx.link(rx.hstack(rx.icon(tag="user", color=Color.icon_inactive.value, size=SizeIcon.MEDIUM.value), rx.text("Ver Perfil"), spacing="2"), href="/users/profiles")),
-                                    rx.menu.item(rx.hstack(rx.icon(tag="pencil", color=Color.admin_icon.value, size=SizeIcon.MEDIUM.value), rx.text("Modificar"), spacing="2")),
-                                    rx.menu.separator(),
-                                    rx.menu.item(rx.hstack(rx.icon(tag="trash-2", color=Color.delete_icon.value, size=SizeIcon.MEDIUM.value), rx.text("Eliminar"), spacing="2"), color=Color.delete_text.value),
-                                ),
-                            ),
-                            padding="3",
-                        ),
-                        vertical_align="middle",
-                    ) for user in users_data],
-                ),
-                width="100%",
-                border_radius=BorderRadius.SMALL.value,
-                border=CommonBorders.LIGHT_SOLID,
-            ),
-            width="100%",
-            align_items="start",
-        ),
-        width="100%",
-        bg="white",
-        padding="1.5rem",
-        border_radius=BorderRadius.SMALL.value,
-        border=CommonBorders.LIGHT_SOLID,
+            spacing="3",
+            align="center",
+            #justify="center",
+            width="100%"
+        )
+    
+    def render_role_column(value, row_data):
+        return role_badge(
+            text=row_data["role"],
+            #role="admin" if row_data["role"] == "Administrador" else "manager" if row_data["role"] == "Manager" else "employee"
+        )
+    
+    def render_status_column(value, row_data):
+        return status_badge(
+            text=row_data["status"],
+            status="active" if row_data["status"] == "Activo" else "inactive",
+            show_dot=True
+        )
+    
+    def render_permissions_column(value, row_data):
+        return rx.hstack(
+            rx.icon(tag="shield", color=Color.icon_inactive.value, size=SizeIcon.SMALL.value),
+            rx.text(row_data["permissions"]),
+            spacing="2"
+        )
+    
+    def render_attributes_column(value, row_data):
+        return rx.hstack(
+            rx.icon(tag="badge-check", color=Color.icon_inactive.value, size=SizeIcon.SMALL.value),
+            rx.text(row_data["attributes"]),
+            spacing="2"
+        )
+    
+    # Acciones personalizadas
+    user_actions = [
+        {
+            "label": "Ver Perfil",
+            "icon": "user",
+            "href": "/users/profiles",
+            "text_color": ColorText.PRIMARY.value,
+            "color": Color.icon_inactive.value
+        },
+        {
+            "label": "Modificar",
+            "icon": "pencil",
+            "color": Color.icon_inactive.value
+        },
+        {
+            "label": "Eliminar",
+            "icon": "trash-2",
+            "color": Color.delete_icon.value,
+            "text_color": Color.delete_text.value,
+            "separator_after": True
+        }
+    ]
+    
+    return data_table(
+        title="Lista de Usuarios",
+        data=users_data,
+        headers=["Usuario", "Email","Área", "Estado", "Permisos", "Acciones"],
+        render_functions={
+            "name": render_user_column,
+            "role": render_role_column,
+            "status": render_status_column,
+            "permissions": render_permissions_column,
+            "attributes": render_attributes_column,
+        },
+        actions_menu=table_actions_menu(user_actions),
+        counter_text="usuarios mostrados"
     )
 
 def statistics_cards_users() -> rx.Component:

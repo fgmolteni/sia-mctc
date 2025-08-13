@@ -10,6 +10,7 @@ from sia.pages.index import index
 from sia.pages.agentes import agentes_pages
 from sia.pages.usuarios import users_page, UserState
 from sia.pages.profiles import profiles_page
+from sia.pages.gallery import gallery_page
 
 
 class State(rx.State):
@@ -23,7 +24,7 @@ app = rx.App(
     theme=rx.theme(
         appearance="light",
         has_background=True,
-        accent_color="sky",
+        accent_color="green",
         gray_color="slate",
         radius="small",
         scaling="100%",
@@ -37,4 +38,5 @@ app.add_page(vehicle_view, route="/vehiculos", on_load=VehicleState.on_load)
 app.add_page(users_page, route="/users", on_load=UserState.load_users)
 app.add_page(user_control, route="/register")
 app.add_page(profiles_page, route="/users/profiles",  on_load=UserState.load_profiles)
+app.add_page(gallery_page, route="/gallery")
 #app.add_page(users_page, route="/usuarios", on_load=UserState.load_users)

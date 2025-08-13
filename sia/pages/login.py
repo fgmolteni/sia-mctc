@@ -1,7 +1,7 @@
 import reflex as rx
 from sia.views.login_views import login_default_icons, LoginState
-from sia.components.navbar_login import navbar_user
-from sia.components.topbanner import top_banner_gradient
+from sia.components.navigation.navbars import navbar_user
+from sia.components.feedback.banners import top_banner_gradient
 from sia.views.footer_login import footer_login
 
 class LoginTransitionState(rx.State):

@@ -1,5 +1,5 @@
 import reflex as rx
-from sia.components.siderbar_componentes import sidebar_header, sidebar_section, sidebar_item, sidebar_collapsible_item, sidebar_footer
+from sia.components.layout.sidebars import sidebar_header, sidebar_section, sidebar_item, sidebar_collapsible_item, sidebar_footer
 from sia.styles.colors import Color
 
 def sidebar_main() -> rx.Component:
@@ -14,6 +14,7 @@ def sidebar_main() -> rx.Component:
                 sidebar_item("Agentes", "users", "/agentes"),
                 sidebar_item("Vehiculos", "car", "/vehiculos"),
                 sidebar_item("Usuarios", "user", "/users"),
+                sidebar_item("Componentes", "gem", "/gallery"),
                 spacing="2",
                 width="100%",
                 padding="0 1rem",

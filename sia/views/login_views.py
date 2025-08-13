@@ -1,6 +1,6 @@
 import reflex as rx
 from components.imagen_open import open_image
-from sia.components.buttons import button_general
+from sia.components.forms.buttons import button_general
 from sia.styles.colors import ColorText
 from sia.styles.sizes import SizeText
 from sia.styles.fonts import FontWeight
