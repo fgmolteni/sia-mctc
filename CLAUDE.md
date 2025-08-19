@@ -2,47 +2,51 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
+## Instrucciones de Idioma
 
-SIA (Sistema Interno de Administración) is a travel expense management system for the Ministry of Science and Technology. The project has dual architecture:
+**IMPORTANTE**: Todas las respuestas y comunicaciones con el usuario deben ser en español. El equipo de desarrollo trabaja en español y prefiere recibir explicaciones, documentación y mensajes de error en este idioma.
 
-1. **Legacy Streamlit App** (`app.py`) - Original travel expense calculator
-2. **Modern Reflex Web App** (`sia/sia.py`) - New modular web application with user management
+## Descripción del Proyecto
 
-## Development Commands
+SIA (Sistema Interno de Administración) es un sistema de gestión de viáticos para el Ministerio de Ciencia y Tecnología. El proyecto tiene arquitectura dual:
 
-### Running the Applications
+1. **Aplicación Streamlit Legacy** (`app.py`) - Calculadora original de viáticos
+2. **Aplicación Web Reflex Moderna** (`sia/sia.py`) - Nueva aplicación web modular con gestión de usuarios
 
-**Streamlit Application (Legacy):**
+## Comandos de Desarrollo
+
+### Ejecutar las Aplicaciones
+
+**Aplicación Streamlit (Legacy):**
 ```bash
 streamlit run app.py
 ```
 
-**Reflex Application (Main):**
+**Aplicación Reflex (Principal):**
 ```bash
 reflex run
 ```
 
-### Database Setup
+### Configuración de Base de Datos
 
-**Start PostgreSQL with Docker:**
+**Iniciar PostgreSQL con Docker:**
 ```bash
 docker compose up -d
 ```
 
-**Check database status:**
+**Verificar estado de la base de datos:**
 ```bash
 docker ps
 ```
 
-### Dependencies
+### Dependencias
 
-**Install Python dependencies:**
+**Instalar dependencias de Python:**
 ```bash
 pip install -r requirements.txt
 ```
 
-## Architecture
+## Arquitectura
 
 ### Reflex Application Structure (`sia/`)
 

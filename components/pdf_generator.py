@@ -1,5 +1,9 @@
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+from components.logging import get_sia_logger
+
+# Logger para este módulo
+logger = get_sia_logger('pdf')
 
 def create_pdf(file_path: str, content: list[str]):
     """
@@ -25,8 +29,12 @@ def create_pdf(file_path: str, content: list[str]):
             y -= line_height  # Mover a la siguiente línea
 
         c.save()
-        print(f"PDF creado exitosamente en: {file_path}")
+        logger.info(f"PDF creado exitosamente", extra={
+            'action': 'pdf_created', 'file_path': file_path, 'content_lines': len(content)
+        })
         return True
     except Exception as e:
-        print(f"Error al crear el PDF: {e}")
+        logger.error(f"Error al crear PDF: {str(e)}", extra={
+            'action': 'pdf_creation_failed', 'file_path': file_path, 'content_lines': len(content) if content else 0
+        })
         return False

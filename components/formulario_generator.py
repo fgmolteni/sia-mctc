@@ -3,6 +3,10 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import cm
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph
+from components.logging import get_sia_logger
+
+# Logger para este módulo
+logger = get_sia_logger('pdf')
 
 def generar_anticipo_viatico(file_path: str, data: dict):
     """
@@ -246,10 +250,14 @@ def generar_anticipo_viatico(file_path: str, data: dict):
         c.drawCentredString(right_margin - 2.5*cm, y_pos - 0.3*cm, "Firma Autorizada")
 
         c.save()
-        print(f"Formulario de viático creado exitosamente en: {file_path}")
+        logger.info(f"Formulario de viático creado exitosamente", extra={
+            'action': 'form_pdf_created', 'file_path': file_path, 'form_type': 'anticipo_viatico'
+        })
         return True
     except Exception as e:
-        print(f"Error al crear el PDF del formulario: {e}")
+        logger.error(f"Error al crear formulario PDF: {str(e)}", extra={
+            'action': 'form_pdf_creation_failed', 'file_path': file_path, 'form_type': 'anticipo_viatico'
+        })
         return False
 
 if __name__ == '__main__':

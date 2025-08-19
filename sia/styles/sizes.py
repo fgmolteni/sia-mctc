@@ -32,6 +32,7 @@ class SizeAvatar(Enum):
     SMALL = "2"
     DEFAULT = "3"
     LARGE = "6"
+    X_LARGE = "8"
 
 class SizeIcon(Enum):
     X_SMALL = 12

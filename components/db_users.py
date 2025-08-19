@@ -1,6 +1,10 @@
 from components.db_common import get_db_engine
 from sqlalchemy import text
 import bcrypt
+from components.logging import get_sia_logger, log_security_event
+
+# Logger para este módulo
+logger = get_sia_logger('database')
 
 def add_user(nombre: str, apellido: str, nombre_usuario: str, contrasena: str, rol: str = 'usuario') -> int | None:
     """
@@ -28,10 +32,14 @@ def add_user(nombre: str, apellido: str, nombre_usuario: str, contrasena: str, r
                     "hash_contrasena": hashed_password,
                     "rol": rol
                 }).scalar_one()
-            print(f"Usuario {nombre_usuario} añadido exitosamente con ID: {result}")
+            logger.info(f"Usuario creado exitosamente", extra={
+                'action': 'user_created', 'user_id': result, 'username_len': len(nombre_usuario), 'role': rol
+            })
             return result
     except Exception as error:
-        print(f"Error al añadir usuario: {error}")
+        logger.error(f"Error al crear usuario: {str(error)}", extra={
+            'action': 'user_creation_failed', 'username_len': len(nombre_usuario), 'role': rol
+        })
         return None
     finally:
         if engine:
@@ -49,7 +57,9 @@ def get_all_users():
             users = [{'name': f'{row[0]} {row[1]}', 'email': row[2], 'role': row[3], 'area': 'Default', 'status': 'Activo', 'permissions': 0, 'attributes': 0, 'last_access': '', 'avatar': row[2][0].upper(), 'actions': ''} for row in result]
             return users
     except Exception as error:
-        print(f"Error al obtener usuarios: {error}")
+        logger.error(f"Error al obtener lista de usuarios: {str(error)}", extra={
+            'action': 'get_users_failed'
+        })
         return []
     finally:
         if engine:
@@ -74,12 +84,16 @@ def verify_user(nombre_usuario: str, contrasena: str) -> int | None:
             if result:
                 user_id, stored_hash = result
                 if bcrypt.checkpw(contrasena.encode('utf-8'), stored_hash.encode('utf-8')):
-                    print(f"Usuario {nombre_usuario} autenticado exitosamente.")
+                    log_security_event(logger, 'login_success', 'Autenticación exitosa', f'user_id:{user_id}')
                     return user_id
-            print(f"Fallo de autenticación para el usuario {nombre_usuario}.")
+            
+            # Log de intento de autenticación fallido (evento de seguridad)
+            log_security_event(logger, 'login_failed', 'Credenciales incorrectas', f'username_len:{len(nombre_usuario)}')
             return None
     except Exception as error:
-        print(f"Error al verificar usuario: {error}")
+        logger.error(f"Error en verificación de usuario: {str(error)}", extra={
+            'action': 'auth_error', 'username_len': len(nombre_usuario)
+        })
         return None
     finally:
         if engine:

@@ -6,7 +6,7 @@ from sia.styles.sizes import SizeIcon, SizeSpace, SizeText
 
 
 def page_header(
-    title: str, subtitle: str, action_button: rx.Component = None
+    title: str, subtitle: str, action_button: rx.Component = None, back_button: bool = False, redirect: str = None
 ) -> rx.Component:
     """
     Componente header reutilizable para páginas
@@ -15,10 +15,20 @@ def page_header(
         title: Título principal del header
         subtitle: Subtítulo descriptivo
         action_button: Botón de acción opcional (ej: "+ Nuevo Usuario")
+        back_button: Si mostrar el botón de volver atrás
     """
     return rx.vstack(
         # Header principal con título, subtítulo y botón
         rx.hstack(
+            # Botón de volver (opcional)
+            rx.button(
+                rx.icon("arrow-left", size=SizeIcon.LARGE.value),
+                background="transparent",
+                color=ColorText.GRAY_500.value,
+                _hover={"color": ColorText.GRAY_800.value},
+                padding="2",
+                on_click=rx.redirect(redirect),
+            ) if back_button else rx.box(),
             # Contenido izquierdo: título y subtítulo
             rx.vstack(
                 rx.heading(
@@ -43,13 +53,13 @@ def page_header(
             align="center",
         ),
         width="100%",
-        padding_x=SizeSpace.SMALL.value,
+        padding_x=SizeSpace.MEDIUM.value,
         margin_top=SizeSpace.MEDIUM.value,
         margin_bottom=SizeSpace.SMALL.value,
         # bg="white",
         # border=CommonBorders.LIGHT_SOLID,
         # border_radius=BorderRadius.SMALL.value,
-        spacing="4",
+        spacing="8",
     )
 
 
@@ -80,5 +90,7 @@ def header_profiles() -> rx.Component:
     return page_header(
         title="Perfiles de Usuarios",
         subtitle="Administra y gestiona los perfiles de usuarios",
-        action_button=new_user_button(),
+        #action_button=new_user_button(),
+        back_button=True,
+        redirect="/dashboard",
     )

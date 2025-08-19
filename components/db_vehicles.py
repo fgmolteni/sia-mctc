@@ -1,6 +1,10 @@
 from components.db_common import get_db_engine
 import pandas as pd
 from sqlalchemy import text
+from components.logging import get_sia_logger
+
+# Logger para este módulo
+logger = get_sia_logger('database')
 
 def get_vehiculos():
     """
@@ -18,7 +22,9 @@ def get_vehiculos():
         df = pd.read_sql_query(query, engine)
         return df
     except Exception as error:
-        print("Error al consultar la tabla de vehiculos:", error)
+        logger.error(f"Error al consultar tabla de vehículos: {str(error)}", extra={
+            'action': 'get_vehicles_failed'
+        })
         return pd.DataFrame()
     finally:
         if engine:
@@ -41,7 +47,9 @@ def get_all_vehicles():
         df = pd.read_sql_query(query, engine)
         return df
     except Exception as error:
-        print(f"Error al consultar todos los vehículos: {error}")
+        logger.error(f"Error al consultar todos los vehículos: {str(error)}", extra={
+            'action': 'get_all_vehicles_failed'
+        })
         return pd.DataFrame()
     finally:
         if engine:
@@ -73,10 +81,14 @@ def add_vehicle(marca: str, modelo: str, patente: str, consumo: float | None, co
                     "condicion": condicion,
                     "activo": activo
                 })
-            print(f"Vehículo {marca} {modelo} ({patente}) añadido exitosamente.")
+            logger.info(f"Vehículo agregado exitosamente", extra={
+                'action': 'vehicle_created', 'marca': marca, 'modelo': modelo, 'patente': patente
+            })
             return True
     except Exception as error:
-        print(f"Error al añadir vehículo: {error}")
+        logger.error(f"Error al agregar vehículo: {str(error)}", extra={
+            'action': 'vehicle_creation_failed', 'marca': marca, 'modelo': modelo, 'patente': patente
+        })
         return False
     finally:
         if engine:
