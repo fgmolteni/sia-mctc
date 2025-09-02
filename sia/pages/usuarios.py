@@ -110,6 +110,7 @@ class UserState(rx.State):
 
         finally:
             self.is_loading = False
+        return []
 
     def load_statistics(self):
         """Cargar estadísticas de usuarios."""
@@ -134,6 +135,7 @@ class UserState(rx.State):
                 "supervisores": 0,
                 "usuarios": 0,
             }
+        return []
 
     def search_users_filtered(self):
         """Buscar usuarios con filtros aplicados."""
@@ -427,7 +429,8 @@ class UserState(rx.State):
 
     def on_load(self):
         """Ejecutar al cargar la página."""
-        self.load_test_data()
+        self.load_users()
+        self.load_statistics()
         return []
 
 from sia.styles.sizes import SizeSpace
