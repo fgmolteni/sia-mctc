@@ -1,7 +1,7 @@
 import reflex as rx
 from sia.components.forms.selects._general import select_component
 from sia.styles.fonts import FontWeight
-from sia.styles.sizes import SizeSpace, SizeText, SizeGeneral, SizeIcon
+from sia.styles.sizes import SizeSpace, SizeText, SizeIcon
 from sia.styles.colors import Color, ColorText
 from sia.styles.border import CommonBorders, BorderRadius
 

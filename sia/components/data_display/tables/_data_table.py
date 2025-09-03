@@ -275,7 +275,7 @@ def default_actions_menu(row_data: Union[Dict, rx.Var[Dict[str, Any]]]) -> rx.Co
             rx.menu.separator(),
             rx.menu.item(
                 rx.hstack(
-                    rx.icon(tag="trash-2", color=Color.delete_icon.value, size=SizeIcon.MEDIUM.value), 
+                    rx.icon(tag="trash", color=Color.delete_icon.value, size=SizeIcon.MEDIUM.value), 
                     rx.text("Eliminar"), 
                     spacing="2"
                 ), 

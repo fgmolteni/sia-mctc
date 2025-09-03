@@ -143,7 +143,7 @@ def sidebar_footer() -> rx.Component:
                     rx.menu.item("Perfil", icon="user"),
                     rx.menu.item(
                         "Cerrar Sesión",
-                        icon="log-out",
+                        icon="log_out",
                         # on_click=LoginState.handle_logout,
                         variant="ghost",
                     ),
@@ -151,7 +151,7 @@ def sidebar_footer() -> rx.Component:
             ),
             rx.spacer(),
             rx.button(
-                rx.icon("log-out", size=20),
+                rx.icon("log_out", size=20),
                 # on_click=LoginState.handle_logout,
                 variant="ghost",
             ),

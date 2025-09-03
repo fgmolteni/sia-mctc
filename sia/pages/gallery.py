@@ -14,15 +14,15 @@ from sia.components.data_display.avatars import avatar, avatar_circle
 from sia.components.data_display.badges import role_badge, status_badge
 from sia.components.data_display.cards import stat_card
 from sia.components.data_display.menus import menu_user
-from sia.components.data_display.timelines import timeline, timeline_item
-from sia.components.data_display.tables import data_table, table_actions_menu
+from sia.components.data_display.timelines import timeline
+from sia.components.data_display.tables import data_table
 from sia.components.navigation.steps import steps_example
-from sia.components.navigation.breadcrumbs import breadcrumb, breadcrumb_item
+from sia.components.navigation.breadcrumbs import breadcrumb
 from sia.components.forms.inputs import form_input, form_date_input, form_time_input
 from sia.components.forms.selects import form_select, select_component
 from sia.components.feedback.banners import top_banner_gradient
 from sia.styles.colors import Color, ColorText
-from sia.styles.sizes import SizeSpace, SizeText, BorderRadius
+from sia.styles.sizes import SizeSpace, BorderRadius
 
 
 def _create_section(title: str, description: str, content: rx.Component) -> rx.Component:
@@ -225,7 +225,7 @@ def gallery_page() -> rx.Component:
                         stat_card(
                             title="Ventas del Mes",
                             value="$45,230",
-                            icon="trending-up",
+                            icon="trending_up",
                             icon_color="green.400"
                         ),
                         stat_card(
@@ -347,7 +347,7 @@ def gallery_page() -> rx.Component:
             padding_x=SizeSpace.LARGE.value,
             padding_y=SizeSpace.X_LARGE.value
         ),
-        aling="center",
+        align="center",
         padding="50px",
         width="100%",
         background=Color.background.value,

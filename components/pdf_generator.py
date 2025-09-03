@@ -29,7 +29,7 @@ def create_pdf(file_path: str, content: list[str]):
             y -= line_height  # Mover a la siguiente línea
 
         c.save()
-        logger.info(f"PDF creado exitosamente", extra={
+        logger.info("PDF creado exitosamente", extra={
             'action': 'pdf_created', 'file_path': file_path, 'content_lines': len(content)
         })
         return True

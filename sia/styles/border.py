@@ -1,6 +1,5 @@
 from enum import Enum
 from sia.styles.colors import Color
-import reflex as rx
 
 class BorderWidth(Enum):
     """Grosores estándar para bordes"""

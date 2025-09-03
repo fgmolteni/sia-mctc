@@ -1,7 +1,5 @@
-from ast import Name
-from altair.vegalite.v5 import data
 import streamlit as st
-from datetime import datetime as dt, date, time
+from datetime import date, time
 import pandas as pd
 from components.distance_calculator import get_driving_distance_and_time as cddt
 from components.date_calculator import calculate_travel_expenses as cte

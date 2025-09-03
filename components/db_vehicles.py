@@ -81,7 +81,7 @@ def add_vehicle(marca: str, modelo: str, patente: str, consumo: float | None, co
                     "condicion": condicion,
                     "activo": activo
                 })
-            logger.info(f"Vehículo agregado exitosamente", extra={
+            logger.info("Vehículo agregado exitosamente", extra={
                 'action': 'vehicle_created', 'marca': marca, 'modelo': modelo, 'patente': patente
             })
             return True

@@ -25,10 +25,9 @@ def avatar(user: str, title: str, size: str) -> rx.Component:
 
 
 def avatar_circle(user: str, size: str = SizeAvatar.DEFAULT.value) -> rx.Component:
-    # Extract first letter of username
-    first_letter = user[0].upper() if user else "?"
+    # Extract first letter of username - simplified para evitar errores de Var
     return rx.avatar(
-        fallback=first_letter,
+        fallback="U",  # Fallback fijo por ahora
         size=size,
         color_scheme="gray",
         radius="full",

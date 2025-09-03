@@ -4,7 +4,6 @@ Script de prueba para el sistema de logging centralizado de SIA
 """
 
 import os
-import sys
 from components.logging import get_sia_logger, log_security_event
 
 def test_basic_logging():

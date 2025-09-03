@@ -1,6 +1,6 @@
 import reflex as rx
-from sia.components.data_display.timelines import timeline, create_timeline
-from sia.styles.colors import Color, ColorText
+from sia.components.data_display.timelines import timeline
+from sia.styles.colors import Color
 
 timeline(items=[
     {"children": rx.text("Create a services site 2015-09-01", color="white"), "color": Color.accent.value},

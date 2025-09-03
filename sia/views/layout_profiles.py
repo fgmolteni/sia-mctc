@@ -1,8 +1,5 @@
 import reflex as rx
-from sia.components.forms.selects._general import select_component
 from sia.components.data_display.cards import (
-    card_profile, 
-    info_card_profile,
     dashboard_permission_card,
     users_permission_card,
     reports_permission_card,

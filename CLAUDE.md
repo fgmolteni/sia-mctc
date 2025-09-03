@@ -15,16 +15,17 @@ SIA (Sistema Interno de Administración) es un sistema de gestión de viáticos 
 
 ## Comandos de Desarrollo
 
-### Ejecutar las Aplicaciones
+### Configuración del Entorno
 
-**Aplicación Streamlit (Legacy):**
+**Crear y activar entorno virtual:**
 ```bash
-streamlit run app.py
+python3 -m venv .venv
+source .venv/bin/activate  # En Windows: .venv\Scripts\activate
 ```
 
-**Aplicación Reflex (Principal):**
+**Instalar dependencias de Python:**
 ```bash
-reflex run
+pip install -r requirements.txt
 ```
 
 ### Configuración de Base de Datos
@@ -39,11 +40,33 @@ docker compose up -d
 docker ps
 ```
 
-### Dependencias
-
-**Instalar dependencias de Python:**
+**Verificar logs de la base de datos:**
 ```bash
-pip install -r requirements.txt
+docker compose logs db
+```
+
+**Detener la base de datos:**
+```bash
+docker compose down
+```
+
+### Ejecutar las Aplicaciones
+
+**Aplicación Reflex (Principal):**
+```bash
+reflex run
+```
+
+**Aplicación Streamlit (Legacy):**
+```bash
+streamlit run app.py
+```
+
+### Testing y Desarrollo
+
+**Ejecutar test de logging (ejemplo disponible):**
+```bash
+python test_logging.py
 ```
 
 ## Arquitectura
@@ -73,9 +96,13 @@ Business logic modules for travel expense calculations:
 
 ### Database
 
-- **PostgreSQL** - Primary database (Docker containerized)
-- **Connection** - Managed through `components/db_connector.py`
-- **Schema** - Located in `database/schema.sql`
+- **PostgreSQL con pgvector** - Base de datos principal (containerizada con Docker)
+- **Connection** - Gestionada a través de `components/db_connector.py`
+- **Schema** - Ubicado en `database/schema.sql`
+- **Migración** - Script de migración CSV a SQL en `database/migrate_csv_to_sql.py`
+- **Configuración** - Variables de entorno en `.env`:
+  - `DATABASE_URL=postgresql://user_sia:password_sia@localhost:5432/db_sia`
+  - Puerto: 5432 (PostgreSQL estándar)
 
 ## Code Patterns
 
@@ -113,10 +140,24 @@ The project uses a comprehensive design system located in `sia/styles/`:
 - **ReportLab** - PDF generation
 - **Geopy/Requests** - Geographic calculations
 
+## Configuración del Proyecto
+
+### Configuración de Reflex
+
+- **rxconfig.py** - Configuración principal con plugins TailwindV4 y Sitemap
+- **Assets** - Directorio `assets/` para archivos estáticos
+- **Styles** - Sistema de diseño modular en `sia/styles/`
+
+### Logging
+
+- **Configuración** - `components/logging/logger_config.py`
+- **Logs** - Directorio `logs/` para archivos de log
+- **Test** - `test_logging.py` para verificar funcionamiento
+
 ## Development Notes
 
-- The project is transitioning from Streamlit to Reflex
-- Database credentials should be managed via environment variables
-- PDF reports are generated to the `report/` directory
-- Asset files are served from `assets/` directory
-- The current branch `feature/implement-reflex` contains the new Reflex implementation
+- El proyecto está en transición de Streamlit a Reflex
+- Los reportes PDF se generan en el directorio `report/`
+- La rama `feature/implement-reflex` contiene la nueva implementación
+- Usar variables de entorno para credenciales de base de datos
+- El proyecto incluye datos de ejemplo en `data/` (agent.csv, cars.csv)

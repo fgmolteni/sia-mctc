@@ -3,9 +3,8 @@ from sia.styles.fonts import FontWeight
 from sia.styles.sizes import SizeText, SizeIcon, BorderRadius, SizeSpace
 from sia.styles.colors import Color, ColorText
 from sia.styles.border import CommonBorders
-from sia.components.data_display.avatars import avatar_circle
 
-def stat_card(title: str, value: str, icon: str, icon_color: str = "white.400") -> rx.Component:
+def stat_card(title: str, value: str, icon: str, icon_color: str = "white.400", **kwargs) -> rx.Component:
     """Componente de tarjeta de estadísticas reutilizable.
     
     Args:
@@ -54,7 +53,8 @@ def stat_card(title: str, value: str, icon: str, icon_color: str = "white.400") 
         width_min="250px",
         width="100%",
         height="120px",
-        padding=SizeSpace.MEDIUM.value
+        padding=SizeSpace.MEDIUM.value,
+        **kwargs
     )
 
 def info_card_profile(

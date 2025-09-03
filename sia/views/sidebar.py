@@ -1,6 +1,5 @@
 import reflex as rx
-from sia.components.layout.sidebars import sidebar_header, sidebar_section, sidebar_item, sidebar_collapsible_item, sidebar_footer
-from sia.styles.colors import Color
+from sia.components.layout.sidebars import sidebar_header, sidebar_section, sidebar_item, sidebar_footer
 
 def sidebar_main() -> rx.Component:
     return rx.box(

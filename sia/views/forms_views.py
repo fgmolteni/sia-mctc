@@ -2,9 +2,8 @@ import reflex as rx
 from sia.components.forms.inputs import form_input, form_date_input, form_time_input
 from sia.components.forms.buttons import form_button, form_reset_button
 from sia.components.forms.selects import form_select
-from datetime import datetime as dt, date, time
+from datetime import datetime as dt, datetime
 import pandas as pd
-import asyncio
 from components.distance_calculator import get_driving_distance_and_time as cddt
 from components.date_calculator import calculate_travel_expenses as cte
 from components.converter import number_to_text, number_to_currency
@@ -327,7 +326,7 @@ def forms_views() -> rx.Component:
                 ),
                 # Muestra informacion de agente
                 rx.cond(
-                    ~FormState.get_selected_agent_data.empty,
+                    FormState.get_selected_agent_data.length > 0,
                     rx.data_table(
                         data=FormState.get_selected_agent_data,
                         pagination=False,
@@ -364,7 +363,7 @@ def forms_views() -> rx.Component:
                 ),
                 # Muestra informacion de vehiculo
                 rx.cond(
-                    ~FormState.get_selected_car_data.empty,
+                    FormState.get_selected_car_data.length > 0,
                     rx.data_table(
                         data=FormState.get_selected_car_data,
                         pagination=False,

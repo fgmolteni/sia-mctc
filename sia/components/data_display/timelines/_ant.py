@@ -1,5 +1,5 @@
 import reflex as rx
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 
 class AntTimeline(rx.Component):

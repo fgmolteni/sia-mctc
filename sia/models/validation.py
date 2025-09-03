@@ -46,6 +46,7 @@ class User(BaseValidationModel):
     - nombre: VARCHAR(100) NOT NULL
     - apellido: VARCHAR(100) NOT NULL  
     - nombre_usuario: VARCHAR(50) UNIQUE NOT NULL
+    - email: VARCHAR(255) UNIQUE NOT NULL
     - hash_contrasena: VARCHAR(255) NOT NULL
     - rol: VARCHAR(50) DEFAULT 'usuario' NOT NULL
     - fecha_creacion: TIMESTAMPTZ DEFAULT now()
@@ -59,6 +60,12 @@ class User(BaseValidationModel):
         min_length=3, 
         max_length=50,
         description="Nombre de usuario único en el sistema"
+    )
+    email: str = Field(
+        ..., 
+        min_length=5, 
+        max_length=255,
+        description="Email único del usuario"
     )
     hash_contrasena: str = Field(..., max_length=255, description="Hash de la contraseña")
     rol: Literal["admin", "usuario", "supervisor"] = Field(
@@ -85,9 +92,22 @@ class User(BaseValidationModel):
         if not v or not v.strip():
             raise ValueError('El nombre de usuario no puede estar vacío')
         
-        # Permitir letras, números, guiones, guiones bajos, puntos y arrobas (para emails)
-        if not re.match(r'^[a-zA-Z0-9_.-@]+$', v.strip()):
-            raise ValueError('El nombre de usuario solo puede contener letras, números, guiones, puntos y @')
+        # Permitir letras, números, guiones, guiones bajos y puntos
+        if not re.match(r'^[a-zA-Z0-9_.-]+$', v.strip()):
+            raise ValueError('El nombre de usuario solo puede contener letras, números, guiones y puntos')
+        
+        return v.strip().lower()
+    
+    @validator('email')
+    def validate_email(cls, v):
+        """Valida el formato del email."""
+        if not v or not v.strip():
+            raise ValueError('El email no puede estar vacío')
+        
+        # Validar formato básico de email
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, v.strip()):
+            raise ValueError('Formato de email inválido')
         
         return v.strip().lower()
 
@@ -368,6 +388,7 @@ class UserCreate(BaseValidationModel):
     nombre: str = Field(..., min_length=1, max_length=100)
     apellido: str = Field(..., min_length=1, max_length=100)
     nombre_usuario: str = Field(..., min_length=3, max_length=50)
+    email: str = Field(..., min_length=5, max_length=255, description="Email del usuario")
     contrasena: str = Field(..., min_length=6, description="Contraseña en texto plano")
     rol: Literal["admin", "usuario", "supervisor"] = "usuario"
     
@@ -391,6 +412,7 @@ class UserUpdate(BaseValidationModel):
     nombre: Optional[str] = Field(None, min_length=1, max_length=100)
     apellido: Optional[str] = Field(None, min_length=1, max_length=100)
     nombre_usuario: Optional[str] = Field(None, min_length=3, max_length=50)
+    email: Optional[str] = Field(None, min_length=5, max_length=255, description="Email del usuario")
     rol: Optional[Literal["admin", "usuario", "supervisor"]] = None
     activo: Optional[bool] = None
 

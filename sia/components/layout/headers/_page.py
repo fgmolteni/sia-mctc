@@ -1,6 +1,6 @@
 import reflex as rx
 from sia.styles.border import BorderRadius, CommonBorders
-from sia.styles.colors import Color, ColorText
+from sia.styles.colors import ColorText
 from sia.styles.fonts import FontWeight
 from sia.styles.sizes import SizeIcon, SizeSpace, SizeText
 
@@ -65,6 +65,8 @@ def page_header(
 
 def new_user_button() -> rx.Component:
     """Botón específico para crear nuevo usuario"""
+    from sia.pages.usuarios import UserState
+    
     return rx.button(
         rx.hstack(
             rx.icon("plus", size=SizeIcon.LARGE.value),
@@ -82,6 +84,7 @@ def new_user_button() -> rx.Component:
         _active={"bg": "gray.700"},
         weight="medium",
         underline="none",
+        on_click=UserState.show_create_user_modal,
     )
 
 

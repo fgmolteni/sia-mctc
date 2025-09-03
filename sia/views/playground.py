@@ -1,15 +1,4 @@
 import reflex as rx
-from sia.components.forms.buttons import (
-    button_general,
-    button_redondo,
-    button_sin_fondo,
-    form_button,
-    form_reset_button,
-    button_icon_text_border,
-    button_sin_fondo_icon
-)
-from sia.components.layout.sidebars import sidebar_item
-from sia.components.navigation.breadcrumbs import breadcrumb, breadcrumb_item
 from sia.components.navigation.steps import steps_example
 from sia.views.forms_views import forms_views
 def playground() -> rx.Component:

@@ -3,7 +3,6 @@
 from typing import List, Dict, Optional, Any
 from datetime import datetime, timedelta
 import secrets
-import hashlib
 from sqlalchemy import text
 from .db_common import get_db_engine
 from .db_audit import log_user_action

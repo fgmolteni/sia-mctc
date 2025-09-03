@@ -1,4 +1,3 @@
-from numpy import place
 import reflex as rx
 from sia.components.forms.inputs import form_input
 from sia.components.forms.buttons import form_button

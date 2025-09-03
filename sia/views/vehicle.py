@@ -3,7 +3,6 @@ from sia.components.forms.inputs import form_input
 from sia.components.forms.buttons import form_button
 from sia.components.forms.selects import form_select
 from components.db_vehicles import add_vehicle, get_all_vehicles
-import pandas as pd
 
 class VehicleState(rx.State):
     """Estado para manejar el formulario de añadir vehículo."""
@@ -41,17 +40,21 @@ class VehicleState(rx.State):
 
     def handle_submit(self):
         """Gestiona el envío del formulario para crear un nuevo vehículo."""
-        if not all([self.marca, self.modelo, self.patente]):
+        # Validar campos obligatorios
+        if not self.marca.strip() or not self.modelo.strip() or not self.patente.strip():
             self.feedback_message = "Los campos Marca, Modelo y Patente son obligatorios."
             self.feedback_success = False
             return
 
-        try:
-            consumo_float = float(self.consumo) if self.consumo else None
-        except ValueError:
-            self.feedback_message = "El consumo debe ser un número válido."
-            self.feedback_success = False
-            return
+        # Validar consumo si se proporciona
+        consumo_float = None
+        if self.consumo.strip():
+            try:
+                consumo_float = float(self.consumo)
+            except ValueError:
+                self.feedback_message = "El consumo debe ser un número válido."
+                self.feedback_success = False
+                return
 
         success = add_vehicle(
             marca=self.marca,

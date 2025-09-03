@@ -1,0 +1,10 @@
+Para auto-corregir errores, usa estos comandos:
+
+# Ver qué se puede corregir automáticamente:
+ruff check . --fix --dry-run > corrections_preview.txt
+
+# Aplicar correcciones automáticamente:
+ruff check . --fix
+
+# Formatear código:
+ruff format .

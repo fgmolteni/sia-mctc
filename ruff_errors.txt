@@ -1,0 +1,963 @@
+F841 Local variable `transaction` is assigned to but never used
+  --> components/db_agents.py:63:40
+   |
+61 |         with engine.connect() as connection:
+62 |             # Usamos una transacción para asegurar la integridad de los datos
+63 |             with connection.begin() as transaction:
+   |                                        ^^^^^^^^^^^
+64 |                 query = text("""
+65 |                     INSERT INTO agentes (nombre, apellido, cargo, dni, categoria)
+   |
+help: Remove assignment to unused variable `transaction`
+
+F841 Local variable `font_small` is assigned to but never used
+  --> components/formulario_generator.py:37:9
+   |
+35 |         font_normal_bold = "Helvetica-Bold"
+36 |         font_normal = "Helvetica"
+37 |         font_small = "Helvetica"
+   |         ^^^^^^^^^^
+38 |         
+39 |         font_size_large = 10
+   |
+help: Remove assignment to unused variable `font_small`
+
+E402 Module level import not at top of cell
+  --> notebook/viaticos.ipynb:cell 1:12:1
+   |
+10 |     sys.path.append(project_root)
+11 |
+12 | from components.distance_calculator import get_driving_distance_and_time as gddt
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+13 | from components.date_calculator import calculate_days as cdays
+   |
+
+E402 Module level import not at top of cell
+  --> notebook/viaticos.ipynb:cell 1:13:1
+   |
+12 | from components.distance_calculator import get_driving_distance_and_time as gddt
+13 | from components.date_calculator import calculate_days as cdays
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14 |
+15 | from components.constants import CasesPorCargo as Clase
+   |
+
+E402 Module level import not at top of cell
+  --> notebook/viaticos.ipynb:cell 1:15:1
+   |
+13 | from components.date_calculator import calculate_days as cdays
+14 |
+15 | from components.constants import CasesPorCargo as Clase
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+
+F401 `._logo.name_app_wth_logo` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/branding/__init__.py:1:20
+  |
+1 | from ._logo import name_app_wth_logo, only_isologo
+  |                    ^^^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `name_app_wth_logo as name_app_wth_logo`
+
+F401 `._logo.only_isologo` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/branding/__init__.py:1:39
+  |
+1 | from ._logo import name_app_wth_logo, only_isologo
+  |                                       ^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `only_isologo as only_isologo`
+
+F401 `.avatars` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/__init__.py:1:15
+  |
+1 | from . import avatars, badges, cards, menus, tables, timelines
+  |               ^^^^^^^
+  |
+help: Use an explicit re-export: `avatars as avatars`
+
+F401 `.badges` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/__init__.py:1:24
+  |
+1 | from . import avatars, badges, cards, menus, tables, timelines
+  |                        ^^^^^^
+  |
+help: Use an explicit re-export: `badges as badges`
+
+F401 `.cards` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/__init__.py:1:32
+  |
+1 | from . import avatars, badges, cards, menus, tables, timelines
+  |                                ^^^^^
+  |
+help: Use an explicit re-export: `cards as cards`
+
+F401 `.menus` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/__init__.py:1:39
+  |
+1 | from . import avatars, badges, cards, menus, tables, timelines
+  |                                       ^^^^^
+  |
+help: Use an explicit re-export: `menus as menus`
+
+F401 `.tables` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/__init__.py:1:46
+  |
+1 | from . import avatars, badges, cards, menus, tables, timelines
+  |                                              ^^^^^^
+  |
+help: Use an explicit re-export: `tables as tables`
+
+F401 `.timelines` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/__init__.py:1:54
+  |
+1 | from . import avatars, badges, cards, menus, tables, timelines
+  |                                                      ^^^^^^^^^
+  |
+help: Use an explicit re-export: `timelines as timelines`
+
+F401 `._main.avatar` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/avatars/__init__.py:1:20
+  |
+1 | from ._main import avatar, avatar_circle
+  |                    ^^^^^^
+  |
+help: Use an explicit re-export: `avatar as avatar`
+
+F401 `._main.avatar_circle` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/avatars/__init__.py:1:28
+  |
+1 | from ._main import avatar, avatar_circle
+  |                            ^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `avatar_circle as avatar_circle`
+
+F811 Redefinition of unused `select_component` from line 2
+  --> sia/components/data_display/cards/_permission_card.py:8:42
+   |
+ 6 | from sia.styles.border import CommonBorders, BorderRadius
+ 7 |
+ 8 | from sia.components.forms.selects import select_component
+   |                                          ^^^^^^^^^^^^^^^^ `select_component` redefined here
+ 9 |
+10 | class PermissionCardState(rx.State):
+   |
+  ::: sia/components/data_display/cards/_permission_card.py:2:51
+   |
+ 1 | import reflex as rx
+ 2 | from sia.components.forms.selects._general import select_component
+   |                                                   ---------------- previous definition of `select_component` here
+ 3 | from sia.styles.fonts import FontWeight
+ 4 | from sia.styles.sizes import SizeSpace, SizeText, SizeIcon
+   |
+help: Remove definition: `select_component`
+
+F841 Local variable `permission_values` is assigned to but never used
+  --> sia/components/data_display/cards/_permission_card.py:38:5
+   |
+36 |     # Opciones del selector
+37 |     permission_options = ["Sin Acceso", "Ver", "Editar"]
+38 |     permission_values = ["no_acceso", "ver", "editar"]
+   |     ^^^^^^^^^^^^^^^^^
+39 |     
+40 |     # Colores basados en el nivel de permiso
+   |
+help: Remove assignment to unused variable `permission_values`
+
+F401 `._user.MenuState` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/menus/__init__.py:1:20
+  |
+1 | from ._user import MenuState, menu_user
+  |                    ^^^^^^^^^
+  |
+help: Use an explicit re-export: `MenuState as MenuState`
+
+F401 `._user.menu_user` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/menus/__init__.py:1:31
+  |
+1 | from ._user import MenuState, menu_user
+  |                               ^^^^^^^^^
+  |
+help: Use an explicit re-export: `menu_user as menu_user`
+
+F401 `._ant.AntTimeline` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/timelines/__init__.py:1:19
+  |
+1 | from ._ant import AntTimeline, AntTimelineItem, timeline, timeline_item
+  |                   ^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `AntTimeline as AntTimeline`
+
+F401 `._ant.AntTimelineItem` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/timelines/__init__.py:1:32
+  |
+1 | from ._ant import AntTimeline, AntTimelineItem, timeline, timeline_item
+  |                                ^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `AntTimelineItem as AntTimelineItem`
+
+F401 `._ant.timeline` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/timelines/__init__.py:1:49
+  |
+1 | from ._ant import AntTimeline, AntTimelineItem, timeline, timeline_item
+  |                                                 ^^^^^^^^
+  |
+help: Use an explicit re-export: `timeline as timeline`
+
+F401 `._ant.timeline_item` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/data_display/timelines/__init__.py:1:59
+  |
+1 | from ._ant import AntTimeline, AntTimelineItem, timeline, timeline_item
+  |                                                           ^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `timeline_item as timeline_item`
+
+F401 `.banners` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/feedback/__init__.py:1:15
+  |
+1 | from . import banners
+  |               ^^^^^^^
+  |
+help: Use an explicit re-export: `banners as banners`
+
+F401 `._main.top_banner_gradient` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/feedback/banners/__init__.py:1:20
+  |
+1 | from ._main import top_banner_gradient
+  |                    ^^^^^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `top_banner_gradient as top_banner_gradient`
+
+F401 `.buttons` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/__init__.py:1:15
+  |
+1 | from . import buttons, inputs, selects
+  |               ^^^^^^^
+  |
+help: Use an explicit re-export: `buttons as buttons`
+
+F401 `.inputs` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/__init__.py:1:24
+  |
+1 | from . import buttons, inputs, selects
+  |                        ^^^^^^
+  |
+help: Use an explicit re-export: `inputs as inputs`
+
+F401 `.selects` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/__init__.py:1:32
+  |
+1 | from . import buttons, inputs, selects
+  |                                ^^^^^^^
+  |
+help: Use an explicit re-export: `selects as selects`
+
+F401 `._general.button_general` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/buttons/__init__.py:2:5
+  |
+1 | from ._general import (
+2 |     button_general,
+  |     ^^^^^^^^^^^^^^
+3 |     button_redondo,
+4 |     button_sin_fondo,
+  |
+help: Use an explicit re-export: `button_general as button_general`
+
+F401 `._general.button_redondo` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/buttons/__init__.py:3:5
+  |
+1 | from ._general import (
+2 |     button_general,
+3 |     button_redondo,
+  |     ^^^^^^^^^^^^^^
+4 |     button_sin_fondo,
+5 |     form_button,
+  |
+help: Use an explicit re-export: `button_redondo as button_redondo`
+
+F401 `._general.button_sin_fondo` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/buttons/__init__.py:4:5
+  |
+2 |     button_general,
+3 |     button_redondo,
+4 |     button_sin_fondo,
+  |     ^^^^^^^^^^^^^^^^
+5 |     form_button,
+6 |     form_reset_button,
+  |
+help: Use an explicit re-export: `button_sin_fondo as button_sin_fondo`
+
+F401 `._general.form_button` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/buttons/__init__.py:5:5
+  |
+3 |     button_redondo,
+4 |     button_sin_fondo,
+5 |     form_button,
+  |     ^^^^^^^^^^^
+6 |     form_reset_button,
+7 | )
+  |
+help: Use an explicit re-export: `form_button as form_button`
+
+F401 `._general.form_reset_button` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/buttons/__init__.py:6:5
+  |
+4 |     button_sin_fondo,
+5 |     form_button,
+6 |     form_reset_button,
+  |     ^^^^^^^^^^^^^^^^^
+7 | )
+8 | from ._icon import button_icon_text_border, button_sin_fondo_icon
+  |
+help: Use an explicit re-export: `form_reset_button as form_reset_button`
+
+F401 `._icon.button_icon_text_border` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/buttons/__init__.py:8:20
+  |
+6 |     form_reset_button,
+7 | )
+8 | from ._icon import button_icon_text_border, button_sin_fondo_icon
+  |                    ^^^^^^^^^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `button_icon_text_border as button_icon_text_border`
+
+F401 `._icon.button_sin_fondo_icon` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/buttons/__init__.py:8:45
+  |
+6 |     form_reset_button,
+7 | )
+8 | from ._icon import button_icon_text_border, button_sin_fondo_icon
+  |                                             ^^^^^^^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `button_sin_fondo_icon as button_sin_fondo_icon`
+
+F401 `._text.form_date_input` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/inputs/__init__.py:1:20
+  |
+1 | from ._text import form_date_input, form_input, form_time_input
+  |                    ^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `form_date_input as form_date_input`
+
+F401 `._text.form_input` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/inputs/__init__.py:1:37
+  |
+1 | from ._text import form_date_input, form_input, form_time_input
+  |                                     ^^^^^^^^^^
+  |
+help: Use an explicit re-export: `form_input as form_input`
+
+F401 `._text.form_time_input` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/inputs/__init__.py:1:49
+  |
+1 | from ._text import form_date_input, form_input, form_time_input
+  |                                                 ^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `form_time_input as form_time_input`
+
+F401 `._user_modal.user_modal` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/modals/__init__.py:1:26
+  |
+1 | from ._user_modal import user_modal
+  |                          ^^^^^^^^^^
+  |
+help: Use an explicit re-export: `user_modal as user_modal`
+
+F401 `._general.form_select` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/selects/__init__.py:1:23
+  |
+1 | from ._general import form_select, select_component
+  |                       ^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `form_select as form_select`
+
+F401 `._general.select_component` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/forms/selects/__init__.py:1:36
+  |
+1 | from ._general import form_select, select_component
+  |                                    ^^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `select_component as select_component`
+
+F401 `.headers` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/__init__.py:1:15
+  |
+1 | from . import headers, sidebars
+  |               ^^^^^^^
+  |
+help: Use an explicit re-export: `headers as headers`
+
+F401 `.sidebars` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/__init__.py:1:24
+  |
+1 | from . import headers, sidebars
+  |                        ^^^^^^^^
+  |
+help: Use an explicit re-export: `sidebars as sidebars`
+
+F401 `._page.header_profiles` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/headers/__init__.py:1:20
+  |
+1 | from ._page import header_profiles, new_user_button, page_header
+  |                    ^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `header_profiles as header_profiles`
+
+F401 `._page.new_user_button` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/headers/__init__.py:1:37
+  |
+1 | from ._page import header_profiles, new_user_button, page_header
+  |                                     ^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `new_user_button as new_user_button`
+
+F401 `._page.page_header` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/headers/__init__.py:1:54
+  |
+1 | from ._page import header_profiles, new_user_button, page_header
+  |                                                      ^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `page_header as page_header`
+
+F401 `._main.sidebar_collapsible_item` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/sidebars/__init__.py:2:5
+  |
+1 | from ._main import (
+2 |     sidebar_collapsible_item,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^
+3 |     sidebar_footer,
+4 |     sidebar_header,
+  |
+help: Use an explicit re-export: `sidebar_collapsible_item as sidebar_collapsible_item`
+
+F401 `._main.sidebar_footer` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/sidebars/__init__.py:3:5
+  |
+1 | from ._main import (
+2 |     sidebar_collapsible_item,
+3 |     sidebar_footer,
+  |     ^^^^^^^^^^^^^^
+4 |     sidebar_header,
+5 |     sidebar_item,
+  |
+help: Use an explicit re-export: `sidebar_footer as sidebar_footer`
+
+F401 `._main.sidebar_header` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/sidebars/__init__.py:4:5
+  |
+2 |     sidebar_collapsible_item,
+3 |     sidebar_footer,
+4 |     sidebar_header,
+  |     ^^^^^^^^^^^^^^
+5 |     sidebar_item,
+6 |     sidebar_section,
+  |
+help: Use an explicit re-export: `sidebar_header as sidebar_header`
+
+F401 `._main.sidebar_item` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/sidebars/__init__.py:5:5
+  |
+3 |     sidebar_footer,
+4 |     sidebar_header,
+5 |     sidebar_item,
+  |     ^^^^^^^^^^^^
+6 |     sidebar_section,
+7 |     sidebar_sub_item,
+  |
+help: Use an explicit re-export: `sidebar_item as sidebar_item`
+
+F401 `._main.sidebar_section` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/sidebars/__init__.py:6:5
+  |
+4 |     sidebar_header,
+5 |     sidebar_item,
+6 |     sidebar_section,
+  |     ^^^^^^^^^^^^^^^
+7 |     sidebar_sub_item,
+8 | )
+  |
+help: Use an explicit re-export: `sidebar_section as sidebar_section`
+
+F401 `._main.sidebar_sub_item` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/layout/sidebars/__init__.py:7:5
+  |
+5 |     sidebar_item,
+6 |     sidebar_section,
+7 |     sidebar_sub_item,
+  |     ^^^^^^^^^^^^^^^^
+8 | )
+  |
+help: Use an explicit re-export: `sidebar_sub_item as sidebar_sub_item`
+
+F401 `.navbars` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/__init__.py:1:15
+  |
+1 | from . import navbars, breadcrumbs, steps
+  |               ^^^^^^^
+  |
+help: Use an explicit re-export: `navbars as navbars`
+
+F401 `.breadcrumbs` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/__init__.py:1:24
+  |
+1 | from . import navbars, breadcrumbs, steps
+  |                        ^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `breadcrumbs as breadcrumbs`
+
+F401 `.steps` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/__init__.py:1:37
+  |
+1 | from . import navbars, breadcrumbs, steps
+  |                                     ^^^^^
+  |
+help: Use an explicit re-export: `steps as steps`
+
+F401 `._ant.AntBreadcrumb` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/breadcrumbs/__init__.py:1:19
+  |
+1 | from ._ant import AntBreadcrumb, AntBreadcrumbItem, breadcrumb, breadcrumb_item
+  |                   ^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `AntBreadcrumb as AntBreadcrumb`
+
+F401 `._ant.AntBreadcrumbItem` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/breadcrumbs/__init__.py:1:34
+  |
+1 | from ._ant import AntBreadcrumb, AntBreadcrumbItem, breadcrumb, breadcrumb_item
+  |                                  ^^^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `AntBreadcrumbItem as AntBreadcrumbItem`
+
+F401 `._ant.breadcrumb` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/breadcrumbs/__init__.py:1:53
+  |
+1 | from ._ant import AntBreadcrumb, AntBreadcrumbItem, breadcrumb, breadcrumb_item
+  |                                                     ^^^^^^^^^^
+  |
+help: Use an explicit re-export: `breadcrumb as breadcrumb`
+
+F401 `._ant.breadcrumb_item` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/breadcrumbs/__init__.py:1:65
+  |
+1 | from ._ant import AntBreadcrumb, AntBreadcrumbItem, breadcrumb, breadcrumb_item
+  |                                                                 ^^^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `breadcrumb_item as breadcrumb_item`
+
+F401 `._main.navbar` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/navbars/__init__.py:1:20
+  |
+1 | from ._main import navbar, navbar_link, navbar_user
+  |                    ^^^^^^
+  |
+help: Use an explicit re-export: `navbar as navbar`
+
+F401 `._main.navbar_link` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/navbars/__init__.py:1:28
+  |
+1 | from ._main import navbar, navbar_link, navbar_user
+  |                            ^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `navbar_link as navbar_link`
+
+F401 `._main.navbar_user` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/navbars/__init__.py:1:41
+  |
+1 | from ._main import navbar, navbar_link, navbar_user
+  |                                         ^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `navbar_user as navbar_user`
+
+F401 `._ant.AntSteps` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/steps/__init__.py:1:19
+  |
+1 | from ._ant import AntSteps, ant_steps, steps_example
+  |                   ^^^^^^^^
+  |
+help: Use an explicit re-export: `AntSteps as AntSteps`
+
+F401 `._ant.ant_steps` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/steps/__init__.py:1:29
+  |
+1 | from ._ant import AntSteps, ant_steps, steps_example
+  |                             ^^^^^^^^^
+  |
+help: Use an explicit re-export: `ant_steps as ant_steps`
+
+F401 `._ant.steps_example` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> sia/components/navigation/steps/__init__.py:1:40
+  |
+1 | from ._ant import AntSteps, ant_steps, steps_example
+  |                                        ^^^^^^^^^^^^^
+  |
+help: Use an explicit re-export: `steps_example as steps_example`
+
+E402 Module level import not at top of file
+   --> sia/pages/usuarios.py:403:1
+    |
+401 |         ]
+402 |
+403 | from sia.styles.sizes import SizeSpace
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+404 |
+405 | def search_filters() -> rx.Component:
+    |
+
+F821 Undefined name `datetime`
+   --> sia/views/forms_views.py:109:34
+    |
+108 |             # Combine date and time for TIMESTAMP fields
+109 |             datetime_start_obj = datetime.combine(date_start_obj, time_start_obj)
+    |                                  ^^^^^^^^
+110 |             datetime_end_obj = datetime.combine(date_end_obj, time_end_obj)
+    |
+
+F821 Undefined name `datetime`
+   --> sia/views/forms_views.py:110:32
+    |
+108 |             # Combine date and time for TIMESTAMP fields
+109 |             datetime_start_obj = datetime.combine(date_start_obj, time_start_obj)
+110 |             datetime_end_obj = datetime.combine(date_end_obj, time_end_obj)
+    |                                ^^^^^^^^
+111 |
+112 |         except (ValueError, TypeError) as e:
+    |
+
+F811 Redefinition of unused `header_profiles` from line 13
+   --> sia/views/layout_profiles.py:257:5
+    |
+255 |     )
+256 |
+257 | def header_profiles() -> rx.Component:
+    |     ^^^^^^^^^^^^^^^ `header_profiles` redefined here
+258 |     return rx.box(
+259 |         page_header(
+    |
+   ::: sia/views/layout_profiles.py:13:56
+    |
+ 11 | from sia.styles.border import CommonBorders, BorderRadius
+ 12 | from sia.components.data_display.avatars import avatar_circle
+ 13 | from sia.components.layout.headers import page_header, header_profiles
+    |                                                        --------------- previous definition of `header_profiles` here
+ 14 |
+ 15 | class ProfileState(rx.State):
+    |
+help: Remove definition: `header_profiles`
+
+F841 Local variable `result` is assigned to but never used
+  --> test_components.py:58:9
+   |
+56 |         from sia.components.data_display.tables import data_table
+57 |         sample_data = [{"name": "Test", "role": "Admin"}]
+58 |         result = data_table(title="Test Table", data=sample_data, headers=["Name", "Role"])
+   |         ^^^^^^
+59 |         print("✓ data_table funciona con parámetros básicos")
+60 |     except Exception as e:
+   |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `call_kwargs` is assigned to but never used
+   --> tests/components/test_role_badge.py:207:9
+    |
+205 |         mock_reflex_imports['badge'].assert_called_once()
+206 |         
+207 |         call_kwargs = mock_reflex_imports['badge'].call_args.kwargs
+    |         ^^^^^^^^^^^
+208 |         
+209 |         # Estas verificaciones FALLARÁN hasta implementar estilos correctos
+    |
+help: Remove assignment to unused variable `call_kwargs`
+
+F841 Local variable `call_kwargs` is assigned to but never used
+   --> tests/components/test_role_badge.py:246:9
+    |
+245 |         # Las propiedades adicionales deben ser pasadas al badge
+246 |         call_kwargs = mock_reflex_imports['badge'].call_args.kwargs
+    |         ^^^^^^^^^^^
+247 |         
+248 |         # Esta verificación FALLARÁ hasta implementar **kwargs correctamente
+    |
+help: Remove assignment to unused variable `call_kwargs`
+
+F841 Local variable `call_kwargs` is assigned to but never used
+   --> tests/components/test_stat_card.py:209:9
+    |
+207 |         # Verificar que rx.card fue llamado con propiedades de estilo
+208 |         mock_reflex_imports['card'].assert_called_once()
+209 |         call_kwargs = mock_reflex_imports['card'].call_args.kwargs if mock_reflex_imports['card'].call_args else {}
+    |         ^^^^^^^^^^^
+210 |         
+211 |         # Estas aserciones FALLARÁN hasta que las propiedades sean implementadas
+    |
+help: Remove assignment to unused variable `call_kwargs`
+
+F841 Local variable `expected_style_props` is assigned to but never used
+   --> tests/components/test_stat_card.py:212:9
+    |
+211 |         # Estas aserciones FALLARÁN hasta que las propiedades sean implementadas
+212 |         expected_style_props = ['width_min', 'width', 'height', 'padding']
+    |         ^^^^^^^^^^^^^^^^^^^^
+213 |         # Nota: Verificación específica depende de cómo se pasen los argumentos
+    |
+help: Remove assignment to unused variable `expected_style_props`
+
+F841 Local variable `call_kwargs` is assigned to but never used
+   --> tests/components/test_status_badge.py:209:9
+    |
+208 |         # Verificar propiedades de estilo
+209 |         call_kwargs = mock_reflex_imports['badge'].call_args.kwargs
+    |         ^^^^^^^^^^^
+210 |         expected_style_props = ['color', 'bg', 'px', 'py', 'border_radius', 'font_weight']
+    |
+help: Remove assignment to unused variable `call_kwargs`
+
+F841 Local variable `expected_style_props` is assigned to but never used
+   --> tests/components/test_status_badge.py:210:9
+    |
+208 |         # Verificar propiedades de estilo
+209 |         call_kwargs = mock_reflex_imports['badge'].call_args.kwargs
+210 |         expected_style_props = ['color', 'bg', 'px', 'py', 'border_radius', 'font_weight']
+    |         ^^^^^^^^^^^^^^^^^^^^
+211 |         
+212 |         # Esta verificación FALLARÁ hasta implementar estilos correctos
+    |
+help: Remove assignment to unused variable `expected_style_props`
+
+F841 Local variable `expected_modal_calls` is assigned to but never used
+  --> tests/components/test_user_modal.py:79:13
+   |
+78 |             # Debe usar componentes de modal de Reflex
+79 |             expected_modal_calls = ['modal_overlay', 'modal_content', 'modal_header', 'modal_body', 'modal_footer']
+   |             ^^^^^^^^^^^^^^^^^^^^
+80 |             # Esta verificación FALLARÁ hasta implementar la estructura del modal
+   |
+help: Remove assignment to unused variable `expected_modal_calls`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:103:17
+    |
+101 |             try:
+102 |                 from sia.components.forms.modals import user_modal
+103 |                 result = user_modal()
+    |                 ^^^^^^
+104 |             except ImportError:
+105 |                 pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:126:17
+    |
+124 |             try:
+125 |                 from sia.components.forms.modals import user_modal
+126 |                 result = user_modal()
+    |                 ^^^^^^
+127 |             except ImportError:
+128 |                 pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:156:21
+    |
+154 |                 try:
+155 |                     from sia.components.forms.modals import user_modal
+156 |                     result = user_modal()
+    |                     ^^^^^^
+157 |                 except ImportError:
+158 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:188:21
+    |
+186 |                 try:
+187 |                     from sia.components.forms.modals import user_modal
+188 |                     result = user_modal()
+    |                     ^^^^^^
+189 |                 except ImportError:
+190 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:219:21
+    |
+217 |                 try:
+218 |                     from sia.components.forms.modals import user_modal
+219 |                     result = user_modal()
+    |                     ^^^^^^
+220 |                 except ImportError:
+221 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:254:21
+    |
+252 |                 try:
+253 |                     from sia.components.forms.modals import user_modal
+254 |                     result = user_modal()
+    |                     ^^^^^^
+255 |                 except ImportError:
+256 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:287:21
+    |
+285 |                 try:
+286 |                     from sia.components.forms.modals import user_modal
+287 |                     result = user_modal()
+    |                     ^^^^^^
+288 |                 except ImportError:
+289 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:318:21
+    |
+316 |                 try:
+317 |                     from sia.components.forms.modals import user_modal
+318 |                     result = user_modal()
+    |                     ^^^^^^
+319 |                 except ImportError:
+320 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:359:21
+    |
+357 |                 try:
+358 |                     from sia.components.forms.modals import user_modal
+359 |                     result = user_modal()
+    |                     ^^^^^^
+360 |                 except ImportError:
+361 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:387:21
+    |
+385 |                 try:
+386 |                     from sia.components.forms.modals import user_modal
+387 |                     result = user_modal()
+    |                     ^^^^^^
+388 |                 except ImportError:
+389 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:417:21
+    |
+415 |                 try:
+416 |                     from sia.components.forms.modals import user_modal
+417 |                     result = user_modal()
+    |                     ^^^^^^
+418 |                 except ImportError:
+419 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `mock_color` is assigned to but never used
+   --> tests/components/test_user_modal.py:463:54
+    |
+462 |             # Mock de importaciones de colores
+463 |             with patch('sia.styles.colors.Color') as mock_color, \
+    |                                                      ^^^^^^^^^^
+464 |                  patch('sia.styles.colors.ColorText') as mock_color_text:
+    |
+help: Remove assignment to unused variable `mock_color`
+
+F841 Local variable `mock_color_text` is assigned to but never used
+   --> tests/components/test_user_modal.py:464:58
+    |
+462 |             # Mock de importaciones de colores
+463 |             with patch('sia.styles.colors.Color') as mock_color, \
+464 |                  patch('sia.styles.colors.ColorText') as mock_color_text:
+    |                                                          ^^^^^^^^^^^^^^^
+465 |                 
+466 |                 # Act
+    |
+help: Remove assignment to unused variable `mock_color_text`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:469:21
+    |
+467 |                 try:
+468 |                     from sia.components.forms.modals import user_modal
+469 |                     result = user_modal()
+    |                     ^^^^^^
+470 |                 except ImportError:
+471 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:491:17
+    |
+489 |             try:
+490 |                 from sia.components.forms.modals import user_modal
+491 |                 result = user_modal()
+    |                 ^^^^^^
+492 |             except ImportError:
+493 |                 pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:529:17
+    |
+527 |             try:
+528 |                 from sia.components.forms.modals import user_modal
+529 |                 result = user_modal()
+    |                 ^^^^^^
+530 |             except ImportError:
+531 |                 pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:559:21
+    |
+557 |                 try:
+558 |                     from sia.components.forms.modals import user_modal
+559 |                     result = user_modal()
+    |                     ^^^^^^
+560 |                 except ImportError:
+561 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:652:21
+    |
+650 |                 try:
+651 |                     from sia.components.forms.modals import user_modal
+652 |                     result = user_modal()
+    |                     ^^^^^^
+653 |                 except ImportError:
+654 |                     pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+F841 Local variable `result` is assigned to but never used
+   --> tests/components/test_user_modal.py:683:17
+    |
+681 |             try:
+682 |                 from sia.components.forms.modals import user_modal
+683 |                 result = user_modal()
+    |                 ^^^^^^
+684 |             except ImportError:
+685 |                 pytest.skip("Componente user_modal no implementado aún")
+    |
+help: Remove assignment to unused variable `result`
+
+Found 96 errors.
+No fixes available (30 hidden fixes can be enabled with the `--unsafe-fixes` option).

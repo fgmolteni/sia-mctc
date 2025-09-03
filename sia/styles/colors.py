@@ -24,6 +24,7 @@ class Color(Enum):
     employee_text = "#16A34A"  # Texto para rol Empleado
     delete_icon = "#F87171"  # Icono de eliminación
     delete_text = "#EF4444"  # Texto de eliminación
+    primary_dark = "#0F0F0F"  # Color primario oscuro para hover
 
 class ColorText(Enum):
     PRIMARY = "#FFFFFF"

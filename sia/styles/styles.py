@@ -1,4 +1,3 @@
-import reflex as rx
 from .fonts import FontFamily, FontWeight
 
 BASE_STYLE = {

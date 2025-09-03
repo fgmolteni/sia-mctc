@@ -1,10 +1,7 @@
 import reflex as rx
-from sia.views.sidebar import sidebar_main
-from sia.pages.dashboard import dashboard
 from sia.pages.login import login
 from sia.pages.user_control import user_control
-from sia.views.forms_views import FormState
-from sia.views.agent import agent_view, AgentState
+from sia.views.agent import AgentState
 from sia.views.vehicle import vehicle_view, VehicleState
 from sia.pages.index import index
 from sia.pages.agentes import agentes_pages
