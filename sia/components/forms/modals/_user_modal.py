@@ -69,7 +69,12 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
                     ),
                     rx.spacer(),
                     rx.dialog.close(
-                        rx.icon(tag="x", cursor="pointer")
+                        rx.icon(
+                            tag="x", 
+                            cursor="pointer",
+                            color=ColorText.GRAY_500.value,
+                            _hover={"color": ColorText.GRAY_800.value}
+                        )
                     ),
                     width="100%",
                     align="center",
@@ -138,9 +143,24 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
                     max_length=validation_rules.get("email", {}).get("max_length")
                 ),
                 
+                # Campo DNI
+                form_input(
+                    label="DNI",
+                    placeholder=get_placeholder_by_field("dni"),
+                    type="text",
+                    name="dni",
+                    value=UserState.form_dni,
+                    on_change=UserState.set_form_dni,
+                    required=False,
+                    validation_rules=validation_rules.get("dni"),
+                    helper_text=validation_rules.get("dni", {}).get("helper_text", "Documento Nacional de Identidad (7-8 dígitos)"),
+                    show_counter=True,
+                    max_length=validation_rules.get("dni", {}).get("max_length", 8)
+                ),
+                
                 # Campo contraseña - solo en modo crear
                 rx.cond(
-                    ~UserState.form_is_editing,  # Solo mostrar si NO está editando
+                    ~UserState.form_is_editing,  # Solo mostrar cuando NO está editando (creando nuevo usuario)
                     password_input_with_strength(
                         label="Contraseña",
                         placeholder=get_placeholder_by_field("contrasena"),
@@ -173,13 +193,12 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
             # Footer del modal con botones
             rx.hstack(
                 # Botón cancelar
-                rx.dialog.close(
-                    rx.button(
-                        "Cancelar",
-                        variant="outline",
-                        color_scheme="gray",
-                        disabled=UserState.is_loading,
-                    )
+                rx.button(
+                    "Cancelar",
+                    variant="outline",
+                    color_scheme="gray",
+                    disabled=UserState.is_loading,
+                    on_click=UserState.close_user_modal  # Ejecuta la lógica de cierre que cambia show_user_modal
                 ),
                 
                 # Botón submit (crear o actualizar)
@@ -220,5 +239,12 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
             border_radius=BorderRadius.LARGE.value,
         ),
         open=UserState.show_user_modal,
-        on_open_change=UserState.close_user_modal,
+        on_open_change=UserState.close_user_modal,  # Se ejecuta tanto por click externo como por cerrar
+        # Configurar backdrop y comportamiento modal
+        style={
+            "&[data-state='open']": {
+                "backdrop": "rgba(0, 0, 0, 0.5)",
+                "backdrop_filter": "blur(4px)"
+            }
+        },
     )

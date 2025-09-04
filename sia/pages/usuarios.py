@@ -66,6 +66,7 @@ class UserState(rx.State):
     form_apellido: str = ""
     form_nombre_usuario: str = ""
     form_email: str = ""
+    form_dni: str = ""
     form_contrasena: str = ""
     form_rol: str = "usuario"
     form_is_editing: bool = False
@@ -84,6 +85,7 @@ class UserState(rx.State):
             "id": user.id,
             "name": f"{user.nombre} {user.apellido}",
             "email": user.email,  # Usando el campo email real
+            "dni": user.dni,  # Campo DNI agregado
             "role": role_display_map.get(user.rol, user.rol.title()),
             "area": "Ministerio C&T",  # Por ahora área fija
             "status": "Activo",  # Por ahora todos activos
@@ -276,6 +278,7 @@ class UserState(rx.State):
         self.form_apellido = ""
         self.form_nombre_usuario = ""
         self.form_email = ""
+        self.form_dni = ""
         self.form_contrasena = ""
         self.form_rol = "usuario"
 
@@ -290,6 +293,7 @@ class UserState(rx.State):
                 self.form_apellido = user.apellido
                 self.form_nombre_usuario = user.nombre_usuario
                 self.form_email = user.email
+                self.form_dni = str(user.dni) if user.dni else ""
                 self.form_rol = user.rol
                 # No cargar contraseña por seguridad
                 self.form_contrasena = ""
@@ -309,11 +313,22 @@ class UserState(rx.State):
 
         try:
             # Crear objeto UserCreate
+            # Convertir DNI a entero si está presente
+            dni_value = None
+            if self.form_dni.strip():
+                try:
+                    dni_value = int(self.form_dni.strip())
+                except ValueError:
+                    self.error_message = "El DNI debe ser un número válido"
+                    self.is_loading = False
+                    return
+                    
             user_data = UserCreate(
                 nombre=self.form_nombre,
                 apellido=self.form_apellido,
                 nombre_usuario=self.form_nombre_usuario,
                 email=self.form_email,
+                dni=dni_value,
                 contrasena=self.form_contrasena,
                 rol=self.form_rol,
             )
@@ -359,6 +374,13 @@ class UserState(rx.State):
                 update_data["nombre_usuario"] = self.form_nombre_usuario
             if self.form_email:
                 update_data["email"] = self.form_email
+            if self.form_dni.strip():
+                try:
+                    update_data["dni"] = int(self.form_dni.strip())
+                except ValueError:
+                    self.error_message = "El DNI debe ser un número válido"
+                    self.is_loading = False
+                    return
             if self.form_rol:
                 update_data["rol"] = self.form_rol
 
@@ -441,6 +463,13 @@ class UserState(rx.State):
         """Establecer email en el formulario."""
         # Aplicar transformación automática (minúsculas)
         self.form_email = apply_auto_transform(email, 'lowercase')
+
+    def set_form_dni(self, dni: str):
+        """Establecer DNI en el formulario."""
+        # Solo permitir números y limpiar espacios/puntos
+        import re
+        dni_clean = re.sub(r'[^\d]', '', dni)
+        self.form_dni = dni_clean
 
     def set_form_contrasena(self, contrasena: str):
         """Establecer contraseña en el formulario."""
@@ -863,7 +892,7 @@ def users_page() -> rx.Component:
                             # Tabla de usuarios
                             user_table(),
                             
-                            spacing="6",
+                            spacing="0",
                             width="100%",
                             max_width="1400px",
                             margin="0 auto",

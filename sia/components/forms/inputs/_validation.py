@@ -51,6 +51,16 @@ def get_user_validation_rules() -> Dict[str, Dict[str, Any]]:
             'auto_transform': 'lowercase',
             'unique_check': True
         },
+        'dni': {
+            'min_length': 7,
+            'max_length': 8,
+            'pattern': r'^\d{7,8}$',
+            'pattern_name': 'DNI',
+            'helper_text': 'DNI argentino sin puntos (7-8 dígitos)',
+            'unique_check': True,
+            'optional': True,
+            'custom_validation': 'dni_argentino'
+        },
         'contrasena': {
             'password': True,
             'min_length': 6,

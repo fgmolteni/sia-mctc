@@ -161,3 +161,4 @@ The project uses a comprehensive design system located in `sia/styles/`:
 - La rama `feature/implement-reflex` contiene la nueva implementación
 - Usar variables de entorno para credenciales de base de datos
 - El proyecto incluye datos de ejemplo en `data/` (agent.csv, cars.csv)
+- no quiero que hagas referencias claude o claude-code cuando hagas un commit o documentacion

@@ -47,6 +47,7 @@ class User(BaseValidationModel):
     - apellido: VARCHAR(100) NOT NULL  
     - nombre_usuario: VARCHAR(50) UNIQUE NOT NULL
     - email: VARCHAR(255) UNIQUE NOT NULL
+    - dni: INTEGER UNIQUE (DNI argentino)
     - hash_contrasena: VARCHAR(255) NOT NULL
     - rol: VARCHAR(50) DEFAULT 'usuario' NOT NULL
     - fecha_creacion: TIMESTAMPTZ DEFAULT now()
@@ -66,6 +67,10 @@ class User(BaseValidationModel):
         min_length=5, 
         max_length=255,
         description="Email único del usuario"
+    )
+    dni: Optional[int] = Field(
+        None,
+        description="DNI argentino único (7-8 dígitos)"
     )
     hash_contrasena: str = Field(..., max_length=255, description="Hash de la contraseña")
     rol: Literal["admin", "usuario", "supervisor"] = Field(
@@ -110,6 +115,25 @@ class User(BaseValidationModel):
             raise ValueError('Formato de email inválido')
         
         return v.strip().lower()
+    
+    @validator('dni')
+    def validate_dni(cls, v):
+        """Valida el formato del DNI argentino."""
+        if v is None:
+            return None
+            
+        # Verificar que sea un número entero válido
+        if not isinstance(v, int):
+            try:
+                v = int(v)
+            except (ValueError, TypeError):
+                raise ValueError('El DNI debe ser un número válido')
+        
+        # Verificar que esté en el rango válido de DNI argentino
+        if v < 1000000 or v > 99999999:
+            raise ValueError('El DNI debe estar en el rango válido (1.000.000 - 99.999.999)')
+        
+        return v
 
 
 class Agent(BaseValidationModel):
@@ -389,8 +413,65 @@ class UserCreate(BaseValidationModel):
     apellido: str = Field(..., min_length=1, max_length=100)
     nombre_usuario: str = Field(..., min_length=3, max_length=50)
     email: str = Field(..., min_length=5, max_length=255, description="Email del usuario")
+    dni: Optional[int] = Field(None, description="DNI argentino único (7-8 dígitos)")
     contrasena: str = Field(..., min_length=6, description="Contraseña en texto plano")
     rol: Literal["admin", "usuario", "supervisor"] = "usuario"
+    
+    @validator('nombre', 'apellido')
+    def validate_names(cls, v):
+        """Valida que nombres y apellidos no estén vacíos y tengan formato correcto."""
+        if not v or not v.strip():
+            raise ValueError('El nombre y apellido no pueden estar vacíos')
+        
+        # Solo letras, espacios, acentos y caracteres especiales del español
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$', v.strip()):
+            raise ValueError('El nombre solo puede contener letras y espacios')
+        
+        return v.strip().title()
+    
+    @validator('nombre_usuario')
+    def validate_username(cls, v):
+        """Valida el formato del nombre de usuario."""
+        if not v or not v.strip():
+            raise ValueError('El nombre de usuario no puede estar vacío')
+        
+        # Permitir letras, números, guiones, guiones bajos y puntos
+        if not re.match(r'^[a-zA-Z0-9_.-]+$', v.strip()):
+            raise ValueError('El nombre de usuario solo puede contener letras, números, guiones y puntos')
+        
+        return v.strip().lower()
+    
+    @validator('email')
+    def validate_email(cls, v):
+        """Valida el formato del email."""
+        if not v or not v.strip():
+            raise ValueError('El email no puede estar vacío')
+        
+        # Validar formato básico de email
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, v.strip()):
+            raise ValueError('Formato de email inválido')
+        
+        return v.strip().lower()
+    
+    @validator('dni')
+    def validate_dni(cls, v):
+        """Valida el formato del DNI argentino."""
+        if v is None:
+            return None
+            
+        # Verificar que sea un número entero válido
+        if not isinstance(v, int):
+            try:
+                v = int(v)
+            except (ValueError, TypeError):
+                raise ValueError('El DNI debe ser un número válido')
+        
+        # Verificar que esté en el rango válido de DNI argentino
+        if v < 1000000 or v > 99999999:
+            raise ValueError('El DNI debe estar en el rango válido (1.000.000 - 99.999.999)')
+        
+        return v
     
     @validator('contrasena')
     def validate_password(cls, v):
@@ -413,6 +494,7 @@ class UserUpdate(BaseValidationModel):
     apellido: Optional[str] = Field(None, min_length=1, max_length=100)
     nombre_usuario: Optional[str] = Field(None, min_length=3, max_length=50)
     email: Optional[str] = Field(None, min_length=5, max_length=255, description="Email del usuario")
+    dni: Optional[int] = Field(None, description="DNI argentino único (7-8 dígitos)")
     rol: Optional[Literal["admin", "usuario", "supervisor"]] = None
     activo: Optional[bool] = None
 

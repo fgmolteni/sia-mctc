@@ -35,26 +35,29 @@ def create_user(user_data: UserCreate) -> tuple[bool, str, Optional[int]]:
 
         with engine.connect() as connection:
             with connection.begin():
-                # Verificar si ya existe el usuario por nombre_usuario o email
+                # Verificar si ya existe el usuario por nombre_usuario, email o DNI
                 check_query = text("""
                     SELECT COUNT(*) FROM usuarios 
-                    WHERE nombre_usuario = :nombre_usuario OR email = :email
+                    WHERE nombre_usuario = :nombre_usuario 
+                    OR email = :email
+                    OR (dni IS NOT NULL AND dni = :dni)
                 """)
                 exists = connection.execute(
                     check_query, 
                     {
                         "nombre_usuario": validated_user.nombre_usuario,
-                        "email": validated_user.email
+                        "email": validated_user.email,
+                        "dni": validated_user.dni
                     }
                 ).scalar()
                 
                 if exists > 0:
-                    return False, "Ya existe un usuario con este nombre de usuario o email", None
+                    return False, "Ya existe un usuario con este nombre de usuario, email o DNI", None
                 
                 # Insertar nuevo usuario
                 query = text("""
-                    INSERT INTO usuarios (nombre, apellido, nombre_usuario, email, hash_contrasena, rol)
-                    VALUES (:nombre, :apellido, :nombre_usuario, :email, :hash_contrasena, :rol) 
+                    INSERT INTO usuarios (nombre, apellido, nombre_usuario, email, dni, hash_contrasena, rol)
+                    VALUES (:nombre, :apellido, :nombre_usuario, :email, :dni, :hash_contrasena, :rol) 
                     RETURNING id;
                 """)
                 result = connection.execute(query, {
@@ -62,6 +65,7 @@ def create_user(user_data: UserCreate) -> tuple[bool, str, Optional[int]]:
                     "apellido": validated_user.apellido,
                     "nombre_usuario": validated_user.nombre_usuario,
                     "email": validated_user.email,
+                    "dni": validated_user.dni,
                     "hash_contrasena": hashed_password,
                     "rol": validated_user.rol
                 }).scalar_one()
@@ -105,7 +109,7 @@ def get_all_users() -> tuple[bool, str, List[User]]:
     try:
         with engine.connect() as connection:
             query = text("""
-                SELECT id, nombre, apellido, nombre_usuario, email, hash_contrasena, 
+                SELECT id, nombre, apellido, nombre_usuario, email, dni, hash_contrasena, 
                        rol, fecha_creacion 
                 FROM usuarios 
                 ORDER BY fecha_creacion DESC
@@ -121,9 +125,10 @@ def get_all_users() -> tuple[bool, str, List[User]]:
                         apellido=row[2],
                         nombre_usuario=row[3],
                         email=row[4],
-                        hash_contrasena=row[5],
-                        rol=row[6],
-                        fecha_creacion=row[7]
+                        dni=row[5],
+                        hash_contrasena=row[6],
+                        rol=row[7],
+                        fecha_creacion=row[8]
                     )
                     users.append(user)
                 except ValidationError as ve:
@@ -163,7 +168,7 @@ def get_user_by_id(user_id: int) -> tuple[bool, str, Optional[User]]:
     try:
         with engine.connect() as connection:
             query = text("""
-                SELECT id, nombre, apellido, nombre_usuario, email, hash_contrasena, 
+                SELECT id, nombre, apellido, nombre_usuario, email, dni, hash_contrasena, 
                        rol, fecha_creacion 
                 FROM usuarios 
                 WHERE id = :user_id
@@ -179,9 +184,10 @@ def get_user_by_id(user_id: int) -> tuple[bool, str, Optional[User]]:
                 apellido=result[2],
                 nombre_usuario=result[3],
                 email=result[4],
-                hash_contrasena=result[5],
-                rol=result[6],
-                fecha_creacion=result[7]
+                dni=result[5],
+                hash_contrasena=result[6],
+                rol=result[7],
+                fecha_creacion=result[8]
             )
             
             return True, "Usuario encontrado", user
@@ -261,6 +267,20 @@ def update_user(user_id: int, user_data: UserUpdate) -> tuple[bool, str, Optiona
                     
                     if email_exists > 0:
                         return False, "Ya existe un usuario con este email", None
+                
+                # Verificar DNI único si se está actualizando
+                if 'dni' in update_fields and update_fields['dni'] is not None:
+                    dni_check = text("""
+                        SELECT COUNT(*) FROM usuarios 
+                        WHERE dni = :dni AND id != :user_id
+                    """)
+                    dni_exists = connection.execute(dni_check, {
+                        "dni": update_fields['dni'],
+                        "user_id": user_id
+                    }).scalar()
+                    
+                    if dni_exists > 0:
+                        return False, "Ya existe un usuario con este DNI", None
                 
                 # Construir query dinámico
                 set_clause = ", ".join([f"{field} = :{field}" for field in update_fields.keys()])
@@ -367,7 +387,7 @@ def search_users(search_term: str = "", role_filter: str = "", status_filter: st
         with engine.connect() as connection:
             # Base query
             base_query = """
-                SELECT id, nombre, apellido, nombre_usuario, hash_contrasena, 
+                SELECT id, nombre, apellido, nombre_usuario, email, dni, hash_contrasena, 
                        rol, fecha_creacion 
                 FROM usuarios 
                 WHERE 1=1
@@ -407,9 +427,11 @@ def search_users(search_term: str = "", role_filter: str = "", status_filter: st
                         nombre=row[1],
                         apellido=row[2],
                         nombre_usuario=row[3],
-                        hash_contrasena=row[4],
-                        rol=row[5],
-                        fecha_creacion=row[6]
+                        email=row[4],
+                        dni=row[5],
+                        hash_contrasena=row[6],
+                        rol=row[7],
+                        fecha_creacion=row[8]
                     )
                     users.append(user)
                 except ValidationError as ve:
@@ -499,7 +521,7 @@ def verify_user(nombre_usuario: str, contrasena: str) -> tuple[bool, str, Option
     try:
         with engine.connect() as connection:
             query = text("""
-                SELECT id, nombre, apellido, nombre_usuario, hash_contrasena, 
+                SELECT id, nombre, apellido, nombre_usuario, email, dni, hash_contrasena, 
                        rol, fecha_creacion 
                 FROM usuarios 
                 WHERE nombre_usuario = :nombre_usuario
@@ -507,16 +529,18 @@ def verify_user(nombre_usuario: str, contrasena: str) -> tuple[bool, str, Option
             result = connection.execute(query, {"nombre_usuario": nombre_usuario}).fetchone()
 
             if result:
-                stored_hash = result[4]
+                stored_hash = result[6]
                 if bcrypt.checkpw(contrasena.encode('utf-8'), stored_hash.encode('utf-8')):
                     user = User(
                         id=result[0],
                         nombre=result[1],
                         apellido=result[2],
                         nombre_usuario=result[3],
-                        hash_contrasena=result[4],
-                        rol=result[5],
-                        fecha_creacion=result[6]
+                        email=result[4],
+                        dni=result[5],
+                        hash_contrasena=result[6],
+                        rol=result[7],
+                        fecha_creacion=result[8]
                     )
                     
                     log_security_event(logger, 'login_success', 'Autenticación exitosa', f'user_id:{user.id}')
@@ -542,7 +566,7 @@ def verify_user(nombre_usuario: str, contrasena: str) -> tuple[bool, str, Option
 
 
 # Funciones de compatibilidad con el código existente
-def add_user(nombre: str, apellido: str, nombre_usuario: str, contrasena: str, rol: str = 'usuario') -> int | None:
+def add_user(nombre: str, apellido: str, nombre_usuario: str, contrasena: str, rol: str = 'usuario', dni: int = None) -> int | None:
     """
     Función de compatibilidad. Usa la nueva función create_user internamente.
     
@@ -554,6 +578,7 @@ def add_user(nombre: str, apellido: str, nombre_usuario: str, contrasena: str, r
             apellido=apellido,
             nombre_usuario=nombre_usuario,
             contrasena=contrasena,
+            dni=dni,
             rol=rol
         )
         success, message, user_id = create_user(user_data)
