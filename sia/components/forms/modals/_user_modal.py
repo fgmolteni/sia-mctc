@@ -96,7 +96,9 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
                     required=True,
                     validation_rules=validation_rules.get("nombre"),
                     helper_text=validation_rules.get("nombre", {}).get("helper_text"),
-                    max_length=validation_rules.get("nombre", {}).get("max_length")
+                    max_length=validation_rules.get("nombre", {}).get("max_length"),
+                    error_message=UserState.nombre_error_message,
+                    has_error=UserState.has_nombre_error
                 ),
                 
                 # Campo apellido
@@ -110,7 +112,9 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
                     required=True,
                     validation_rules=validation_rules.get("apellido"),
                     helper_text=validation_rules.get("apellido", {}).get("helper_text"),
-                    max_length=validation_rules.get("apellido", {}).get("max_length")
+                    max_length=validation_rules.get("apellido", {}).get("max_length"),
+                    error_message=UserState.apellido_error_message,
+                    has_error=UserState.has_apellido_error
                 ),
                 
                 # Campo nombre de usuario
@@ -125,7 +129,9 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
                     validation_rules=validation_rules.get("nombre_usuario"),
                     helper_text=validation_rules.get("nombre_usuario", {}).get("helper_text"),
                     show_counter=True,
-                    max_length=validation_rules.get("nombre_usuario", {}).get("max_length")
+                    max_length=validation_rules.get("nombre_usuario", {}).get("max_length"),
+                    error_message=UserState.nombre_usuario_error_message,
+                    has_error=UserState.has_nombre_usuario_error
                 ),
                 
                 # Campo email
@@ -140,7 +146,9 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
                     validation_rules=validation_rules.get("email"),
                     helper_text=validation_rules.get("email", {}).get("helper_text"),
                     show_counter=True,
-                    max_length=validation_rules.get("email", {}).get("max_length")
+                    max_length=validation_rules.get("email", {}).get("max_length"),
+                    error_message=UserState.email_error_message,
+                    has_error=UserState.has_email_error
                 ),
                 
                 # Campo DNI
@@ -155,7 +163,9 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
                     validation_rules=validation_rules.get("dni"),
                     helper_text=validation_rules.get("dni", {}).get("helper_text", "Documento Nacional de Identidad (7-8 dígitos)"),
                     show_counter=True,
-                    max_length=validation_rules.get("dni", {}).get("max_length", 8)
+                    max_length=validation_rules.get("dni", {}).get("max_length", 8),
+                    error_message=UserState.dni_error_message,
+                    has_error=UserState.has_dni_error
                 ),
                 
                 # Campo contraseña - solo en modo crear
@@ -168,7 +178,9 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
                         value=UserState.form_contrasena,
                         on_change=UserState.set_form_contrasena,
                         required=True,
-                        helper_text="Al menos 6 caracteres, una letra y un número"
+                        helper_text="Al menos 6 caracteres, una letra y un número",
+                        error_message=UserState.contrasena_error_message,
+                        has_error=UserState.has_contrasena_error
                     )
                 ),
                 
@@ -181,7 +193,9 @@ def _render_modal_content(role_options: List[Dict[str, str]], UserState, validat
                     value=UserState.form_rol,
                     on_change=UserState.set_form_rol,
                     required=True,
-                    helper_text="Define los permisos del usuario en el sistema"
+                    helper_text="Define los permisos del usuario en el sistema",
+                    error_message=UserState.rol_error_message,
+                    has_error=UserState.has_rol_error
                 ),
                 
                 spacing="6",

@@ -18,7 +18,9 @@ def form_input(
     helper_text: Optional[str] = None,
     show_counter: bool = False,
     max_length: Optional[int] = None,
-    auto_transform: Optional[str] = None  # 'lowercase', 'uppercase', 'title'
+    auto_transform: Optional[str] = None,  # 'lowercase', 'uppercase', 'title'
+    error_message: Any = "",  # Mensaje de error a mostrar
+    has_error: Any = False    # Si el campo tiene error
 ) -> rx.Component:
     """
     Componente de entrada mejorado con validación en tiempo real.
@@ -36,6 +38,8 @@ def form_input(
         show_counter: Mostrar contador de caracteres
         max_length: Límite máximo de caracteres
         auto_transform: Transformación automática del texto
+        error_message: Mensaje de error a mostrar (rx.Var)
+        has_error: Si el campo tiene error (rx.Var)
     """
     return rx.vstack(
         # Label con indicador de requerido
@@ -55,24 +59,46 @@ def form_input(
             spacing="1"
         ),
         
-        # Campo de entrada básico
+        # Campo de entrada con estado de error
         rx.input(
             placeholder=placeholder,
             type=type,
             name=name,
             value=value,
             on_change=on_change,
-            border_color=Color.border_light.value,
-            _focus={"border_color": Color.primary.value},
+            border_color=rx.cond(
+                has_error,
+                Color.error.value,
+                Color.border_light.value
+            ),
+            _focus={
+                "border_color": rx.cond(
+                    has_error,
+                    Color.error.value,
+                    Color.primary.value
+                )
+            },
             padding_x=SizeSpace.SMALL.value,
             padding_y=SizeSpace.SMALL.value,
             border_radius="6px",
             width="100%"
         ),
         
-        # Texto de ayuda
+        # Mensaje de error (prioridad sobre texto de ayuda)
         rx.cond(
-            helper_text is not None,
+            has_error,
+            rx.text(
+                error_message,
+                color=Color.error.value,
+                font_size=SizeText.X_SMALL.value,
+                margin_top="1",
+                font_weight=FontWeight.MEDIUM.value
+            )
+        ),
+        
+        # Texto de ayuda (solo si no hay error)
+        rx.cond(
+            (helper_text is not None) & (~has_error),
             rx.text(
                 helper_text or "",
                 color=ColorText.GRAY_500.value,
@@ -106,7 +132,9 @@ def password_input_with_strength(
     on_change=None,
     value: Any = "",
     required: bool = False,
-    helper_text: str = "Al menos 6 caracteres, una letra y un número"
+    helper_text: str = "Al menos 6 caracteres, una letra y un número",
+    error_message: Any = "",  # Mensaje de error a mostrar
+    has_error: Any = False    # Si el campo tiene error
 ) -> rx.Component:
     """
     Componente de contraseña con indicador de fortaleza visual.
@@ -129,15 +157,25 @@ def password_input_with_strength(
             spacing="1"
         ),
         
-        # Campo de contraseña
+        # Campo de contraseña con estado de error
         rx.input(
             placeholder=placeholder,
             type="password",
             name=name,
             value=value,
             on_change=on_change,
-            border_color=Color.border_light.value,
-            _focus={"border_color": Color.primary.value},
+            border_color=rx.cond(
+                has_error,
+                Color.error.value,
+                Color.border_light.value
+            ),
+            _focus={
+                "border_color": rx.cond(
+                    has_error,
+                    Color.error.value,
+                    Color.primary.value
+                )
+            },
             padding_x=SizeSpace.SMALL.value,
             padding_y=SizeSpace.SMALL.value,
             border_radius="6px",
@@ -163,9 +201,21 @@ def password_input_with_strength(
             )
         ),
         
-        # Texto de ayuda
+        # Mensaje de error (prioridad sobre texto de ayuda)
         rx.cond(
-            helper_text is not None,
+            has_error,
+            rx.text(
+                error_message,
+                color=Color.error.value,
+                font_size=SizeText.X_SMALL.value,
+                margin_top="1",
+                font_weight=FontWeight.MEDIUM.value
+            )
+        ),
+        
+        # Texto de ayuda (solo si no hay error)
+        rx.cond(
+            (helper_text is not None) & (~has_error),
             rx.text(
                 helper_text,
                 color=ColorText.GRAY_500.value,
@@ -188,10 +238,24 @@ def select_input(
     on_change=None,
     value: Any = "",
     required: bool = False,
-    helper_text: Optional[str] = None
+    helper_text: Optional[str] = None,
+    error_message: Any = "",
+    has_error: Any = False
 ) -> rx.Component:
     """
-    Componente de selección mejorado.
+    Componente de selección mejorado con soporte de errores.
+    
+    Args:
+        label: Etiqueta del campo
+        placeholder: Texto de placeholder
+        options: Lista de opciones para el select
+        name: Nombre del campo
+        on_change: Función de callback para cambios
+        value: Valor actual del select
+        required: Si el campo es requerido
+        helper_text: Texto de ayuda
+        error_message: Mensaje de error a mostrar
+        has_error: Si el campo tiene error
     """
     return rx.vstack(
         # Label con indicador de requerido
@@ -211,7 +275,7 @@ def select_input(
             spacing="1"
         ),
         
-        # Campo de selección
+        # Campo de selección con estado de error
         rx.select(
             options,
             placeholder=placeholder,
@@ -220,9 +284,21 @@ def select_input(
             width="100%",
         ),
         
-        # Texto de ayuda
+        # Mensaje de error (prioridad sobre texto de ayuda)
         rx.cond(
-            helper_text is not None,
+            has_error,
+            rx.text(
+                error_message,
+                color=Color.error.value,
+                font_size=SizeText.X_SMALL.value,
+                margin_top="1",
+                font_weight=FontWeight.MEDIUM.value
+            )
+        ),
+        
+        # Texto de ayuda (solo si no hay error)
+        rx.cond(
+            (helper_text is not None) & (~has_error),
             rx.text(
                 helper_text or "",
                 color=ColorText.GRAY_500.value,

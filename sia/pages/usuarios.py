@@ -1,4 +1,3 @@
-
 from typing import Any, Optional
 
 import reflex as rx
@@ -13,24 +12,29 @@ from components.db_users import (
     search_users,
     update_user,
 )
-from sia.components.data_display.avatars import avatar_circle
 from sia.components.data_display.badges import role_badge, status_badge
 from sia.components.data_display.cards import stat_card
 from sia.components.data_display.tables import data_table
 from sia.components.forms.modals import user_modal
 from sia.components.forms.selects import select_component
 from sia.components.layout.headers import new_user_button, page_header
+from sia.components.feedback.toasts import toast_container, ToastState
 from sia.models.validation import User, UserCreate, UserUpdate
 from sia.components.forms.inputs import apply_auto_transform
+from sia.components.forms.inputs._validation import (
+    validate_field_value,
+    get_user_validation_rules,
+)
 from sia.styles.border import CommonBorders
 from sia.styles.colors import Color, ColorText
 from sia.styles.fonts import FontWeight
-from sia.styles.sizes import BorderRadius, SizeAvatar, SizeIcon, SizeText
+from sia.styles.sizes import BorderRadius, SizeIcon, SizeText
 from sia.views.sidebar import sidebar_main
 
 
 # Logger fuera del estado (no serializable)
-logger = get_sia_logger('pages.usuarios')
+logger = get_sia_logger("pages.usuarios")
+
 
 class UserState(rx.State):
     """Estado para manejar la página de usuarios con integración a PostgreSQL."""
@@ -71,9 +75,126 @@ class UserState(rx.State):
     form_rol: str = "usuario"
     form_is_editing: bool = False
 
-    def _convert_user_to_display_format(self, user: User) -> dict[str, Any]:
-        """Convierte un modelo User de Pydantic al formato esperado por la UI.
+    # Estados de error de validación
+    form_errors: dict[str, str] = {}
+    has_validation_errors: bool = False
+
+    # Estados de error específicos por campo
+    has_nombre_error: bool = False
+    has_apellido_error: bool = False
+    has_nombre_usuario_error: bool = False
+    has_email_error: bool = False
+    has_dni_error: bool = False
+    has_contrasena_error: bool = False
+    has_rol_error: bool = False
+
+    # Propiedades de mensaje de error específicas
+    nombre_error_message: str = ""
+    apellido_error_message: str = ""
+    nombre_usuario_error_message: str = ""
+    email_error_message: str = ""
+    dni_error_message: str = ""
+    contrasena_error_message: str = ""
+    rol_error_message: str = ""
+
+    def validate_field(self, field_name: str, value: str):
         """
+        Valida un campo específico usando las reglas de _validation.py
+        y actualiza el estado de errores en tiempo real.
+
+        Args:
+            field_name: Nombre del campo a validar
+            value: Valor a validar
+        """
+        # Validar el campo usando las funciones existentes
+        is_valid, error_message = validate_field_value(
+            field_name, value, get_user_validation_rules()
+        )
+
+        # Actualizar propiedades específicas según el campo
+        if field_name == "nombre":
+            self.has_nombre_error = not is_valid
+            self.nombre_error_message = error_message if not is_valid else ""
+        elif field_name == "apellido":
+            self.has_apellido_error = not is_valid
+            self.apellido_error_message = error_message if not is_valid else ""
+        elif field_name == "nombre_usuario":
+            self.has_nombre_usuario_error = not is_valid
+            self.nombre_usuario_error_message = error_message if not is_valid else ""
+        elif field_name == "email":
+            self.has_email_error = not is_valid
+            self.email_error_message = error_message if not is_valid else ""
+        elif field_name == "dni":
+            self.has_dni_error = not is_valid
+            self.dni_error_message = error_message if not is_valid else ""
+        elif field_name == "contrasena":
+            self.has_contrasena_error = not is_valid
+            self.contrasena_error_message = error_message if not is_valid else ""
+        elif field_name == "rol":
+            self.has_rol_error = not is_valid
+            self.rol_error_message = error_message if not is_valid else ""
+
+        # Actualizar el diccionario de errores para compatibilidad
+        if is_valid:
+            # Si es válido, remover cualquier error previo para este campo
+            if field_name in self.form_errors:
+                new_errors = self.form_errors.copy()
+                del new_errors[field_name]
+                self.form_errors = new_errors
+        else:
+            # Si no es válido, agregar o actualizar el error
+            new_errors = self.form_errors.copy()
+            new_errors[field_name] = error_message
+            self.form_errors = new_errors
+
+        # Actualizar el estado general de validación
+        self.has_validation_errors = len(self.form_errors) > 0
+
+    def get_field_error(self, field_name: str) -> str:
+        """
+        Obtiene el mensaje de error para un campo específico.
+
+        Args:
+            field_name: Nombre del campo
+
+        Returns:
+            Mensaje de error o cadena vacía si no hay error
+        """
+        return self.form_errors.get(field_name, "")
+
+    def has_field_error(self, field_name: str) -> bool:
+        """
+        Verifica si un campo tiene error de validación.
+
+        Args:
+            field_name: Nombre del campo
+
+        Returns:
+            True si el campo tiene error, False en caso contrario
+        """
+        return field_name in self.form_errors
+
+    def validate_all_fields(self):
+        """
+        Valida todos los campos del formulario de una vez.
+        Útil antes de enviar el formulario.
+        """
+        # Validar campos requeridos
+        self.validate_field("nombre", self.form_nombre)
+        self.validate_field("apellido", self.form_apellido)
+        self.validate_field("nombre_usuario", self.form_nombre_usuario)
+        self.validate_field("email", self.form_email)
+
+        # DNI es opcional
+        if self.form_dni.strip():
+            self.validate_field("dni", self.form_dni)
+
+        # Contraseña solo es requerida para crear usuario
+        if not self.form_is_editing and self.form_contrasena:
+            self.validate_field("contrasena", self.form_contrasena)
+
+    def _convert_user_to_display_format(self, user: User) -> dict[str, Any]:
+        """Convierte un modelo User de Pydantic al formato esperado por la UI."""
         # Mapear roles para display
         role_display_map = {
             "admin": "Administrador",
@@ -91,7 +212,9 @@ class UserState(rx.State):
             "status": "Activo",  # Por ahora todos activos
             "permissions": "Sistema completo",  # Por ahora permisos genéricos
             "attributes": f"Rol: {user.rol}",
-            "last_access": user.fecha_creacion.strftime("%d/%m/%Y") if user.fecha_creacion else "N/A",
+            "last_access": user.fecha_creacion.strftime("%d/%m/%Y")
+            if user.fecha_creacion
+            else "N/A",
             "avatar": user.nombre[0].upper() if user.nombre else "U",
             "actions": "",
         }
@@ -108,8 +231,7 @@ class UserState(rx.State):
             if success:
                 # Convertir usuarios al formato de display
                 self.users_data = [
-                    self._convert_user_to_display_format(user)
-                    for user in users
+                    self._convert_user_to_display_format(user) for user in users
                 ]
                 self.success_message = f"Se cargaron {len(users)} usuarios exitosamente"
                 self.error_message = ""
@@ -172,7 +294,9 @@ class UserState(rx.State):
         logger.info(f"Estado actual de user_statistics: {self.user_statistics}")
         try:
             success, message, stats = get_user_statistics()
-            logger.info(f"Resultado directo de get_user_statistics(): success={success}, stats={stats}")
+            logger.info(
+                f"Resultado directo de get_user_statistics(): success={success}, stats={stats}"
+            )
         except Exception as e:
             logger.error(f"Error en debug_statistics: {e}")
         return []
@@ -211,8 +335,7 @@ class UserState(rx.State):
 
             if success:
                 self.users_data = [
-                    self._convert_user_to_display_format(user)
-                    for user in users
+                    self._convert_user_to_display_format(user) for user in users
                 ]
                 self.success_message = f"Se encontraron {len(users)} usuarios"
                 self.error_message = ""
@@ -273,7 +396,7 @@ class UserState(rx.State):
         self._clear_form()
 
     def _clear_form(self):
-        """Limpiar formulario."""
+        """Limpiar formulario y errores de validación."""
         self.form_nombre = ""
         self.form_apellido = ""
         self.form_nombre_usuario = ""
@@ -282,12 +405,32 @@ class UserState(rx.State):
         self.form_contrasena = ""
         self.form_rol = "usuario"
 
+        # Limpiar errores de validación (diccionario para compatibilidad)
+        self.form_errors = {}
+        self.has_validation_errors = False
+
+        # Limpiar errores específicos por campo
+        self.has_nombre_error = False
+        self.nombre_error_message = ""
+        self.has_apellido_error = False
+        self.apellido_error_message = ""
+        self.has_nombre_usuario_error = False
+        self.nombre_usuario_error_message = ""
+        self.has_email_error = False
+        self.email_error_message = ""
+        self.has_dni_error = False
+        self.dni_error_message = ""
+        self.has_contrasena_error = False
+        self.contrasena_error_message = ""
+        self.has_rol_error = False
+        self.rol_error_message = ""
+
     def _load_user_to_form(self, user_id: int):
         """Cargar datos del usuario al formulario para edición."""
         try:
             # Obtener usuario directamente de la base de datos para tener datos precisos
             success, message, user = get_user_by_id(user_id)
-            
+
             if success and user:
                 self.form_nombre = user.nombre
                 self.form_apellido = user.apellido
@@ -300,13 +443,23 @@ class UserState(rx.State):
             else:
                 logger.error(f"Error al cargar usuario para edición: {message}")
                 self.error_message = f"Error al cargar usuario: {message}"
-                
+
         except Exception as e:
             logger.error(f"Error inesperado al cargar usuario {user_id}: {e}")
             self.error_message = f"Error inesperado: {e}"
 
     def create_user_submit(self):
         """Crear nuevo usuario."""
+        # Validar todos los campos antes de proceder
+        self.validate_all_fields()
+
+        # Si hay errores de validación, no proceder
+        if self.has_validation_errors:
+            self.error_message = (
+                "Por favor corrige los errores de validación antes de continuar"
+            )
+            return
+
         self.is_loading = True
         self.error_message = ""
         self.success_message = ""
@@ -322,7 +475,7 @@ class UserState(rx.State):
                     self.error_message = "El DNI debe ser un número válido"
                     self.is_loading = False
                     return
-                    
+
             user_data = UserCreate(
                 nombre=self.form_nombre,
                 apellido=self.form_apellido,
@@ -338,6 +491,10 @@ class UserState(rx.State):
             if success:
                 self.success_message = message
                 self.error_message = ""
+                # Mostrar toast de éxito
+                yield ToastState.show_success(
+                    f"Usuario creado exitosamente: {self.form_nombre} {self.form_apellido}"
+                )
                 self.show_user_modal = False
                 self._clear_form()
                 # Recargar usuarios y estadísticas
@@ -346,10 +503,14 @@ class UserState(rx.State):
             else:
                 self.error_message = message
                 self.success_message = ""
+                # Mostrar toast de error
+                yield ToastState.show_error(f"Error al crear usuario: {message}")
 
         except Exception as e:
             self.error_message = f"Error inesperado: {e!s}"
             self.success_message = ""
+            # Mostrar toast de error para excepciones
+            yield ToastState.show_error(f"Error inesperado al crear usuario: {str(e)}")
 
         finally:
             self.is_loading = False
@@ -357,6 +518,16 @@ class UserState(rx.State):
     def update_user_submit(self):
         """Actualizar usuario existente."""
         if not self.selected_user_id:
+            return
+
+        # Validar todos los campos antes de proceder
+        self.validate_all_fields()
+
+        # Si hay errores de validación, no proceder
+        if self.has_validation_errors:
+            self.error_message = (
+                "Por favor corrige los errores de validación antes de continuar"
+            )
             return
 
         self.is_loading = True
@@ -386,11 +557,17 @@ class UserState(rx.State):
 
             user_data = UserUpdate(**update_data)
 
-            success, message, updated_user = update_user(self.selected_user_id, user_data)
+            success, message, updated_user = update_user(
+                self.selected_user_id, user_data
+            )
 
             if success:
                 self.success_message = message
                 self.error_message = ""
+                # Mostrar toast de éxito para actualización
+                yield ToastState.show_success(
+                    f"Usuario actualizado exitosamente: {self.form_nombre} {self.form_apellido}"
+                )
                 self.show_user_modal = False
                 self._clear_form()
                 self.selected_user_id = None
@@ -400,10 +577,16 @@ class UserState(rx.State):
             else:
                 self.error_message = message
                 self.success_message = ""
+                # Mostrar toast de error
+                yield ToastState.show_error(f"Error al actualizar usuario: {message}")
 
         except Exception as e:
             self.error_message = f"Error inesperado: {e!s}"
             self.success_message = ""
+            # Mostrar toast de error para excepciones
+            yield ToastState.show_error(
+                f"Error inesperado al actualizar usuario: {str(e)}"
+            )
 
         finally:
             self.is_loading = False
@@ -420,16 +603,24 @@ class UserState(rx.State):
             if success:
                 self.success_message = message
                 self.error_message = ""
+                # Mostrar toast de éxito para eliminación
+                yield ToastState.show_success("Usuario eliminado exitosamente")
                 # Recargar usuarios y estadísticas
                 self.load_users()
                 self.load_statistics()
             else:
                 self.error_message = message
                 self.success_message = ""
+                # Mostrar toast de error
+                yield ToastState.show_error(f"Error al eliminar usuario: {message}")
 
         except Exception as e:
             self.error_message = f"Error inesperado: {e!s}"
             self.success_message = ""
+            # Mostrar toast de error para excepciones
+            yield ToastState.show_error(
+                f"Error inesperado al eliminar usuario: {str(e)}"
+            )
 
         finally:
             self.is_loading = False
@@ -445,36 +636,50 @@ class UserState(rx.State):
 
     # Métodos setter para los campos del formulario
     def set_form_nombre(self, nombre: str):
-        """Establecer nombre en el formulario."""
+        """Establecer nombre en el formulario con validación en tiempo real."""
         # Aplicar transformación automática (capitalizar)
-        self.form_nombre = apply_auto_transform(nombre, 'title')
+        self.form_nombre = apply_auto_transform(nombre, "title")
+        # Validar el campo en tiempo real
+        self.validate_field("nombre", self.form_nombre)
 
     def set_form_apellido(self, apellido: str):
-        """Establecer apellido en el formulario."""
+        """Establecer apellido en el formulario con validación en tiempo real."""
         # Aplicar transformación automática (capitalizar)
-        self.form_apellido = apply_auto_transform(apellido, 'title')
+        self.form_apellido = apply_auto_transform(apellido, "title")
+        # Validar el campo en tiempo real
+        self.validate_field("apellido", self.form_apellido)
 
     def set_form_nombre_usuario(self, nombre_usuario: str):
-        """Establecer nombre de usuario en el formulario."""
+        """Establecer nombre de usuario en el formulario con validación en tiempo real."""
         # Aplicar transformación automática (minúsculas)
-        self.form_nombre_usuario = apply_auto_transform(nombre_usuario, 'lowercase')
+        self.form_nombre_usuario = apply_auto_transform(nombre_usuario, "lowercase")
+        # Validar el campo en tiempo real
+        self.validate_field("nombre_usuario", self.form_nombre_usuario)
 
     def set_form_email(self, email: str):
-        """Establecer email en el formulario."""
+        """Establecer email en el formulario con validación en tiempo real."""
         # Aplicar transformación automática (minúsculas)
-        self.form_email = apply_auto_transform(email, 'lowercase')
+        self.form_email = apply_auto_transform(email, "lowercase")
+        # Validar el campo en tiempo real
+        self.validate_field("email", self.form_email)
 
     def set_form_dni(self, dni: str):
-        """Establecer DNI en el formulario."""
+        """Establecer DNI en el formulario con validación en tiempo real."""
         # Solo permitir números y limpiar espacios/puntos
         import re
-        dni_clean = re.sub(r'[^\d]', '', dni)
+
+        dni_clean = re.sub(r"[^\d]", "", dni)
         self.form_dni = dni_clean
+        # Validar el campo en tiempo real
+        self.validate_field("dni", self.form_dni)
 
     def set_form_contrasena(self, contrasena: str):
-        """Establecer contraseña en el formulario."""
+        """Establecer contraseña en el formulario con validación en tiempo real."""
         # No aplicar transformación para contraseñas (mantener original)
         self.form_contrasena = contrasena
+        # Validar el campo en tiempo real (solo para crear usuario, no para editar)
+        if not self.form_is_editing:
+            self.validate_field("contrasena", self.form_contrasena)
 
     def set_form_rol(self, rol: str):
         """Establecer rol en el formulario."""
@@ -492,25 +697,26 @@ class UserState(rx.State):
                 "status": "Activo",
                 "permissions": "Sistema completo",
                 "attributes": "Rol: admin",
-                "avatar": "J"
+                "avatar": "J",
             },
             {
                 "id": 2,
                 "name": "María García",
-                "email": "maria@mctc.gov.py", 
+                "email": "maria@mctc.gov.py",
                 "role": "Usuario",
                 "area": "Ministerio C&T",
                 "status": "Activo",
                 "permissions": "Solo lectura",
                 "attributes": "Rol: usuario",
-                "avatar": "M"
-            }
+                "avatar": "M",
+            },
         ]
 
     def on_load(self):
         """Ejecutar al cargar la página."""
         yield self.load_users()
         yield self.load_statistics()
+
 
 from sia.styles.sizes import SizeSpace
 
@@ -538,7 +744,6 @@ def search_filters() -> rx.Component:
                 width="100%",
                 align="center",
             ),
-            
             # Controles de filtro
             rx.grid(
                 # Campo de búsqueda
@@ -557,7 +762,12 @@ def search_filters() -> rx.Component:
                 ),
                 # Filtro de rol
                 select_component(
-                    options=["Todos los roles", "Administrador", "Supervisor", "Usuario"],
+                    options=[
+                        "Todos los roles",
+                        "Administrador",
+                        "Supervisor",
+                        "Usuario",
+                    ],
                     value=UserState.role_filter,
                     placeholder="Todos los roles",
                     on_change=UserState.set_role_filter,
@@ -573,7 +783,6 @@ def search_filters() -> rx.Component:
                 spacing="4",
                 width="100%",
             ),
-            
             width="100%",
             spacing="4",
         ),
@@ -585,9 +794,10 @@ def search_filters() -> rx.Component:
         mb="4",
     )
 
+
 def user_table() -> rx.Component:
     """Tabla de usuarios usando el componente data_table reutilizable."""
-    
+
     # Funciones de renderizado para columnas personalizadas
     def render_user_column(value, row_data):
         """Renderiza la columna de usuario con avatar y info."""
@@ -596,8 +806,16 @@ def user_table() -> rx.Component:
             return rx.hstack(
                 # avatar_circle(user=row_data.get("avatar", "U"), size="2"),
                 rx.vstack(
-                    rx.text(value, font_size=SizeText.MEDIUM.value, font_weight=FontWeight.MEDIUM.value),
-                    rx.text(row_data.get("email", ""), font_size=SizeText.SMALL.value, color=ColorText.GRAY_500.value),
+                    rx.text(
+                        value,
+                        font_size=SizeText.MEDIUM.value,
+                        font_weight=FontWeight.MEDIUM.value,
+                    ),
+                    rx.text(
+                        row_data.get("email", ""),
+                        font_size=SizeText.SMALL.value,
+                        color=ColorText.GRAY_500.value,
+                    ),
                     spacing="1",
                     align="start",
                     justify="center",
@@ -610,8 +828,16 @@ def user_table() -> rx.Component:
             return rx.hstack(
                 # avatar_circle(user=row_data.avatar, size="6"),
                 rx.vstack(
-                    rx.text(value, font_size=SizeText.MEDIUM.value, font_weight=FontWeight.MEDIUM.value),
-                    rx.text(row_data.email, font_size=SizeText.SMALL.value, color=ColorText.GRAY_500.value),
+                    rx.text(
+                        value,
+                        font_size=SizeText.MEDIUM.value,
+                        font_weight=FontWeight.MEDIUM.value,
+                    ),
+                    rx.text(
+                        row_data.email,
+                        font_size=SizeText.SMALL.value,
+                        color=ColorText.GRAY_500.value,
+                    ),
                     spacing="1",
                     align="start",
                     justify="center",
@@ -624,10 +850,10 @@ def user_table() -> rx.Component:
         """Renderiza la columna de rol con badge."""
         role_map = {
             "Administrador": "admin",
-            "Supervisor": "supervisor", 
-            "Usuario": "usuario"
+            "Supervisor": "supervisor",
+            "Usuario": "usuario",
         }
-        
+
         if isinstance(value, str):
             # Para listas Python
             role_key = role_map.get(value, "default")
@@ -639,17 +865,14 @@ def user_table() -> rx.Component:
                 ("Administrador", role_badge(text="Administrador", role="admin")),
                 ("Supervisor", role_badge(text="Supervisor", role="supervisor")),
                 ("Usuario", role_badge(text="Usuario", role="usuario")),
-                role_badge(text=value, role="default")  # fallback
+                role_badge(text=value, role="default"),  # fallback
             )
 
     def render_status_column(value, row_data):
         """Renderiza la columna de estado con badge."""
         if isinstance(value, str):
             # Para listas Python
-            status_map = {
-                "Activo": "active",
-                "Inactivo": "inactive"
-            }
+            status_map = {"Activo": "active", "Inactivo": "inactive"}
             status_key = status_map.get(value, "inactive")
             return status_badge(text=value, status=status_key, show_dot=True)
         else:
@@ -657,7 +880,7 @@ def user_table() -> rx.Component:
             return rx.match(
                 value,
                 ("Activo", status_badge(text="Activo", status="active", show_dot=True)),
-                status_badge(text=value, status="inactive", show_dot=True)  # fallback
+                status_badge(text=value, status="inactive", show_dot=True),  # fallback
             )
 
     def render_actions_column(value, row_data):
@@ -675,7 +898,7 @@ def user_table() -> rx.Component:
                     color_scheme="blue",
                 ),
                 rx.button(
-                    rx.icon(tag="trash", size=SizeIcon.SMALL.value), 
+                    rx.icon(tag="trash", size=SizeIcon.SMALL.value),
                     on_click=UserState.delete_user_action(user_id),
                     variant="solid",
                     size="2",
@@ -694,7 +917,7 @@ def user_table() -> rx.Component:
                     color_scheme="blue",
                 ),
                 rx.button(
-                    rx.icon(tag="trash", size=SizeIcon.SMALL.value), 
+                    rx.icon(tag="trash", size=SizeIcon.SMALL.value),
                     on_click=lambda: UserState.delete_user_action(row_data.id),
                     variant="ghost",
                     size="2",
@@ -705,7 +928,7 @@ def user_table() -> rx.Component:
 
     # Headers para la tabla
     headers = ["Usuario", "Rol", "Estado", "Acciones"]
-    
+
     # Funciones de renderizado
     render_functions = {
         "name": render_user_column,
@@ -721,8 +944,9 @@ def user_table() -> rx.Component:
         render_functions=render_functions,
         show_counter=True,
         counter_text="usuarios",
-        actions_column=True
+        actions_column=True,
     )
+
 
 def statistics_cards_users() -> rx.Component:
     """Returns a horizontal stack of statistics cards showing user metrics."""
@@ -787,6 +1011,7 @@ def statistics_cards_users() -> rx.Component:
         spacing="4",
         width="100%",
     )
+
 
 def notification_messages() -> rx.Component:
     """Componente mejorado para mostrar mensajes de éxito y error."""
@@ -859,7 +1084,6 @@ def users_page() -> rx.Component:
         rx.hstack(
             # Sidebar
             sidebar_main(),
-            
             # Contenido principal
             rx.box(
                 rx.vstack(
@@ -876,22 +1100,17 @@ def users_page() -> rx.Component:
                         border_bottom=f"1px solid {Color.border_light.value}",
                         bg="white",
                     ),
-                    
                     # Contenido principal con scroll
                     rx.box(
                         rx.vstack(
                             # Mensajes de notificación
                             notification_messages(),
-                            
                             # Estadísticas de usuarios
                             statistics_cards_users(),
-                            
                             # Filtros de búsqueda
                             search_filters(),
-                            
                             # Tabla de usuarios
                             user_table(),
-                            
                             spacing="0",
                             width="100%",
                             max_width="1400px",
@@ -902,7 +1121,6 @@ def users_page() -> rx.Component:
                         flex="1",
                         overflow_y="auto",
                     ),
-                    
                     spacing="0",
                     width="100%",
                     height="100vh",
@@ -911,17 +1129,16 @@ def users_page() -> rx.Component:
                 bg=Color.background.value,
                 flex="1",
             ),
-            
             width="100%",
             height="100vh",
             overflow="hidden",
             align="start",
             spacing="0",
         ),
-        
         # Modal de usuario
         user_modal(),
-        
+        # Contenedor de toasts
+        toast_container(),
         width="100%",
         height="100vh",
         on_mount=UserState.on_load,

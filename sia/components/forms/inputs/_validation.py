@@ -240,6 +240,131 @@ def apply_auto_transform(value: str, transform_type: str) -> str:
     return value
 
 
+def validate_field_value(field_name: str, value: str, validation_rules: Dict[str, Dict[str, Any]] = None) -> tuple[bool, str]:
+    """
+    Valida un campo específico usando las reglas definidas.
+    
+    Args:
+        field_name: Nombre del campo a validar
+        value: Valor a validar (puede ser None o str)
+        validation_rules: Reglas de validación (usa las de usuario por defecto)
+        
+    Returns:
+        Tupla con (es_válido, mensaje_error)
+    """
+    if validation_rules is None:
+        validation_rules = get_user_validation_rules()
+    
+    if field_name not in validation_rules:
+        return True, ""
+    
+    # Manejar valores None o vacíos
+    if value is None:
+        value = ""
+    
+    value_str = str(value).strip()
+    rules = validation_rules[field_name]
+    
+    # Si el campo es opcional y está vacío, es válido
+    if rules.get('optional', False) and not value_str:
+        return True, ""
+    
+    # Si el campo es requerido y está vacío
+    if not rules.get('optional', False) and not value_str:
+        field_display = _get_field_display_name(field_name)
+        return False, f"El {field_display} es obligatorio"
+    
+    # Validación de longitud mínima
+    if 'min_length' in rules:
+        if len(value_str) < rules['min_length']:
+            field_display = _get_field_display_name(field_name)
+            return False, f"El {field_display} debe tener al menos {rules['min_length']} caracteres"
+    
+    # Validación de longitud máxima
+    if 'max_length' in rules:
+        if len(value_str) > rules['max_length']:
+            field_display = _get_field_display_name(field_name)
+            return False, f"El {field_display} no puede exceder {rules['max_length']} caracteres"
+    
+    # Validación de patrón regex (antes de validaciones específicas)
+    if 'pattern' in rules:
+        if not re.match(rules['pattern'], value_str):
+            return False, _get_pattern_error_message(field_name, rules)
+    
+    # Validación de email
+    if rules.get('email', False):
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, value_str):
+            return False, "El email no tiene un formato válido"
+    
+    # Validación de password
+    if rules.get('password', False):
+        return _validate_password(value, rules)
+    
+    # Validaciones personalizadas
+    if 'custom_validation' in rules:
+        custom_type = rules['custom_validation']
+        if custom_type == 'dni_argentino':
+            # Para DNI opcional, si está vacío ya pasó la validación anterior
+            if value_str:
+                return validate_dni_argentino(value_str)
+        elif custom_type == 'patente_argentina':
+            return validate_patente_argentina(value_str)
+    
+    return True, ""
+
+
+def _get_field_display_name(field_name: str) -> str:
+    """Obtiene el nombre de display del campo en español."""
+    display_names = {
+        'nombre': 'nombre',
+        'apellido': 'apellido', 
+        'nombre_usuario': 'nombre de usuario',
+        'email': 'email',
+        'dni': 'DNI',
+        'contrasena': 'contraseña',
+        'cargo': 'cargo',
+        'categoria': 'categoría',
+        'marca': 'marca',
+        'modelo': 'modelo',
+        'patente': 'patente',
+        'consumo': 'consumo'
+    }
+    return display_names.get(field_name, field_name)
+
+
+def _get_pattern_error_message(field_name: str, rules: Dict[str, Any]) -> str:
+    """Obtiene el mensaje de error específico para cada campo."""
+    error_messages = {
+        'nombre': 'El nombre debe contener solo letras y espacios',
+        'apellido': 'El apellido debe contener solo letras y espacios',
+        'nombre_usuario': 'El nombre de usuario solo puede contener letras, números, guiones y puntos',
+        'dni': 'El DNI debe tener entre 7 y 8 dígitos',
+        'marca': 'La marca solo puede contener letras, números, espacios, guiones y puntos',
+        'modelo': 'El modelo solo puede contener letras, números, espacios, guiones y puntos'
+    }
+    
+    return error_messages.get(field_name, f"Formato de {_get_field_display_name(field_name)} inválido")
+
+
+def _validate_password(password: str, rules: Dict[str, Any]) -> tuple[bool, str]:
+    """Valida una contraseña según las reglas definidas."""
+    min_length = rules.get('min_length', 6)
+    
+    if len(password) < min_length:
+        return False, f"La contraseña debe tener al menos {min_length} caracteres"
+    
+    # Verificar que tenga al menos una letra
+    if not re.search(r'[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]', password):
+        return False, "La contraseña debe contener al menos una letra"
+    
+    # Verificar que tenga al menos un número
+    if not re.search(r'\d', password):
+        return False, "La contraseña debe contener al menos un número"
+    
+    return True, ""
+
+
 def get_placeholder_by_field(field_name: str) -> str:
     """
     Obtiene placeholder descriptivo para cada campo.
