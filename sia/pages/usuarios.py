@@ -28,7 +28,7 @@ from sia.components.forms.inputs._validation import (
 from sia.styles.border import CommonBorders
 from sia.styles.colors import Color, ColorText
 from sia.styles.fonts import FontWeight
-from sia.styles.sizes import BorderRadius, SizeIcon, SizeText
+from sia.styles.sizes import BorderRadius, SizeIcon, SizeSpace, SizeText
 from sia.views.sidebar import sidebar_main
 
 
@@ -718,7 +718,6 @@ class UserState(rx.State):
         yield self.load_statistics()
 
 
-from sia.styles.sizes import SizeSpace
 
 
 def search_filters() -> rx.Component:
@@ -803,13 +802,24 @@ def user_table() -> rx.Component:
         """Renderiza la columna de usuario con avatar y info."""
         if isinstance(row_data, dict):
             # Para listas Python
+            user_id = row_data.get("id")
             return rx.hstack(
                 # avatar_circle(user=row_data.get("avatar", "U"), size="2"),
                 rx.vstack(
-                    rx.text(
-                        value,
-                        font_size=SizeText.MEDIUM.value,
-                        font_weight=FontWeight.MEDIUM.value,
+                    rx.link(
+                        rx.text(
+                            value,
+                            font_size=SizeText.MEDIUM.value,
+                            font_weight=FontWeight.MEDIUM.value,
+                            color=ColorText.GRAY_800.value,
+                            _hover={
+                                "color": Color.primary.value,
+                                "text_decoration": "underline",
+                                "cursor": "pointer",
+                            },
+                        ),
+                        href=f"/users/profile/{user_id}",
+                        text_decoration="none",
                     ),
                     rx.text(
                         row_data.get("email", ""),
@@ -828,10 +838,20 @@ def user_table() -> rx.Component:
             return rx.hstack(
                 # avatar_circle(user=row_data.avatar, size="6"),
                 rx.vstack(
-                    rx.text(
-                        value,
-                        font_size=SizeText.MEDIUM.value,
-                        font_weight=FontWeight.MEDIUM.value,
+                    rx.link(
+                        rx.text(
+                            value,
+                            font_size=SizeText.MEDIUM.value,
+                            font_weight=FontWeight.MEDIUM.value,
+                            color=ColorText.GRAY_800.value,
+                            _hover={
+                                "color": Color.primary.value,
+                                "text_decoration": "underline",
+                                "cursor": "pointer",
+                            },
+                        ),
+                        href=f"/users/profile/{row_data.id}",
+                        text_decoration="none",
                     ),
                     rx.text(
                         row_data.email,
@@ -890,6 +910,16 @@ def user_table() -> rx.Component:
         if isinstance(row_data, dict):
             user_id = row_data.get("id")
             return rx.hstack(
+                rx.link(
+                    rx.button(
+                        rx.icon(tag="user", size=SizeIcon.SMALL.value),
+                        variant="ghost",
+                        size="2",
+                        color_scheme="gray",
+                    ),
+                    href=f"/users/profile/{user_id}",
+                    text_decoration="none",
+                ),
                 rx.button(
                     rx.icon(tag="pencil", size=SizeIcon.SMALL.value),
                     on_click=UserState.show_edit_user_modal(user_id),
@@ -904,11 +934,21 @@ def user_table() -> rx.Component:
                     size="2",
                     color_scheme="red",
                 ),
-                spacing="4",
+                spacing="2",
             )
         else:
             # Para variables Reflex
             return rx.hstack(
+                rx.link(
+                    rx.button(
+                        rx.icon(tag="user", size=SizeIcon.SMALL.value),
+                        variant="ghost",
+                        size="2",
+                        color_scheme="gray",
+                    ),
+                    href=f"/users/profile/{row_data.id}",
+                    text_decoration="none",
+                ),
                 rx.button(
                     rx.icon(tag="pencil", size=SizeIcon.SMALL.value),
                     on_click=lambda: UserState.show_edit_user_modal(row_data.id),
