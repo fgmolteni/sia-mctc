@@ -640,7 +640,7 @@ def dynamic_permission_card(
                         font_weight=FontWeight.BOLD.value,
                         color=ColorText.GRAY_800.value,
                     ),
-                    rx.icon("info", size=SizeIcon.MEDIUM.value, color=ColorText.GRAY_400.value),
+                    rx.icon("info", size=SizeIcon.MEDIUM.value, color=ColorText.GRAY_500.value),
                     align="center",
                     spacing="1",
                     margin_bottom="0.25rem",
@@ -711,7 +711,7 @@ def dynamic_permissions_section(state: DynamicProfileState) -> rx.Component:
                             f"Permisos para rol: {state.user_role}",
                             "Rol no definido - usando permisos mínimos"
                         ),
-                        color=ColorText.GRAY_600.value,
+                        color=ColorText.GRAY_500.value,
                         size="2",
                         font_weight=FontWeight.MEDIUM.value
                     ),

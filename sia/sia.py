@@ -7,7 +7,8 @@ from sia.pages.index import index
 from sia.pages.agentes import agentes_pages
 from sia.pages.usuarios import users_page, UserState
 from sia.pages.profiles import profiles_page, dynamic_user_profile_page, DynamicProfileState
-from sia.pages.gallery import gallery_page
+#from sia.pages.debug_profile import debug_profile_page
+#from sia.pages.gallery import gallery_page
 from sia.pages.test_toast import test_toast_page
 from sia.pages.toast_demo import toast_demo
 
@@ -39,7 +40,8 @@ app.add_page(users_page, route="/users", on_load=UserState.load_users)
 app.add_page(user_control, route="/register")
 app.add_page(profiles_page, route="/users/profiles", on_load=UserState.load_profiles)
 app.add_page(dynamic_user_profile_page, route="/users/profile/[user_id]", on_load=DynamicProfileState.on_load)
-app.add_page(gallery_page, route="/gallery")
+#app.add_page(debug_profile_page, route="/debug/profile")
+#app.add_page(gallery_page, route="/gallery")
 app.add_page(toast_demo, route="/toast-demo")
 app.add_page(test_toast_page, route="/test-toasts")
 # app.add_page(users_page, route="/usuarios", on_load=UserState.load_users)

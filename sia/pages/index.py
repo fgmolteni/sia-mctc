@@ -6,7 +6,11 @@ def index() -> rx.Component:
     return rx.hstack(
         sidebar_main(),
         rx.box(
-            #users_page(),
+
+            rx.heading("Bienvenidos al Sistema Interno de Administración", size="8"),
+            rx.text("Ministerio de Ciencia y Tecnología"),
+            align="center",
+            justify="center",
             width="100%",
             padding="2rem",
         ),

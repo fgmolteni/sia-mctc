@@ -86,6 +86,18 @@ class FormState(rx.State):
     @rx.var
     def formatted_total_expenses(self) -> str:
         return number_to_currency(self.total_expenses)
+    
+    @rx.var
+    def distance_and_duration_text(self) -> str:
+        """Formatted distance and duration text."""
+        if self.distance > 0 and self.duration > 0:
+            return f"{(self.distance / 2):.2f} km, {self.duration:.2f} horas"
+        return "No calculado"
+    
+    @rx.var
+    def days_travel_expenses_text(self) -> str:
+        """Formatted days travel expenses text."""
+        return str(self.days_travel_expenses) if self.days_travel_expenses > 0 else "No calculado"
 
     @rx.event
     async def handle_submit(self, form_data: dict):
@@ -385,15 +397,15 @@ def forms_views() -> rx.Component:
         rx.divider(),
         rx.heading("results"),
         rx.text(FormState.form_data_str),
-        rx.text(f"Agente Seleccionado: {FormState.selected_agent_last_name}"),
-        rx.text(f"Vehículo Seleccionado: {FormState.selected_car_display_name}"),
+        rx.text("Agente Seleccionado: ", FormState.selected_agent_last_name),
+        rx.text("Vehículo Seleccionado: ", FormState.selected_car_display_name),
         rx.cond(
             FormState.calculation_done,
             rx.vstack(
-                rx.text(f"Distancia y duración: {(FormState.distance / 2):.2f} km, {FormState.duration:.2f} horas"),
-                rx.text(f"Días calculados para viáticos: {FormState.days_travel_expenses}"),
-                rx.text(f"Monto por día: {FormState.formatted_amount_per_day}"),
-                rx.text(f"Total de viáticos: {FormState.formatted_total_expenses}"),
+                rx.text("Distancia y duración: ", FormState.distance_and_duration_text),
+                rx.text("Días calculados para viáticos: ", FormState.days_travel_expenses_text),
+                rx.text("Monto por día: ", FormState.formatted_amount_per_day),
+                rx.text("Total de viáticos: ", FormState.formatted_total_expenses),
             )
         ),
         rx.cond(

@@ -12,15 +12,16 @@ from sia.components.forms.buttons import (
 from sia.components.data_display.cards import card_profile, info_card_profile
 from sia.components.data_display.avatars import avatar, avatar_circle
 from sia.components.data_display.badges import role_badge, status_badge
-from sia.components.data_display.cards import stat_card
-from sia.components.data_display.menus import menu_user
-from sia.components.data_display.timelines import timeline
+from sia.components.layout.cards import stat_card
+# Imports temporalmente comentados hasta implementar componentes faltantes
+# from sia.components.data_display.menus import menu_user
+# from sia.components.data_display.timelines import timeline
 from sia.components.data_display.tables import data_table
-from sia.components.navigation.steps import steps_example
-from sia.components.navigation.breadcrumbs import breadcrumb
-from sia.components.forms.inputs import form_input, form_date_input, form_time_input
-from sia.components.forms.selects import form_select, select_component
-from sia.components.feedback.banners import top_banner_gradient
+# from sia.components.navigation.steps import steps_example
+# from sia.components.navigation.breadcrumbs import breadcrumb
+# from sia.components.forms.inputs import form_input, form_date_input, form_time_input
+# from sia.components.forms.selects import form_select, select_component
+# from sia.components.feedback.banners import top_banner_gradient
 from sia.styles.colors import Color, ColorText
 from sia.styles.sizes import SizeSpace, BorderRadius
 

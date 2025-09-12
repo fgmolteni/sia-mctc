@@ -1,33 +1,18 @@
+"""
+Template de sidebar que utiliza el organismo de navegación.
+Mantiene compatibilidad con la implementación anterior.
+"""
 import reflex as rx
-from sia.components.layout.sidebars import sidebar_header, sidebar_section, sidebar_item, sidebar_footer
+from sia.components.layout.organisms import sidebar_navigation
+
 
 def sidebar_main() -> rx.Component:
-    return rx.box(
-        rx.vstack(
-            sidebar_header(),
-            rx.vstack(
-                sidebar_section("Navegación Principal"),
-                sidebar_item("Dashboard", "home", "/", is_active=True),
-                sidebar_item("Anticipos", "dollar-sign", "/anticipos"),
-                sidebar_item("Caja", "box", "/viaticos"),
-                sidebar_item("Agentes", "users", "/agentes"),
-                sidebar_item("Vehiculos", "car", "/vehiculos"),
-                sidebar_item("Usuarios", "user", "/users"),
-                sidebar_item("Componentes", "gem", "/gallery"),
-                spacing="2",
-                width="100%",
-                padding="0 1rem",
-            ),
-            rx.spacer(),
-            sidebar_footer(),
-            height="100%",
-        ),
-        width="250px",
-        height="100vh",
-        position="sticky",
-        left="0",
-        top="0",
-        bg="white",
-        border_right=f"1px solid {rx.color('gray', 4)}",
-        flex_shrink="0",
-    )
+    """
+    Template principal del sidebar utilizando el organismo de navegación.
+    Mantiene la misma interfaz que la implementación anterior para 
+    compatibilidad con páginas existentes.
+    
+    Returns:
+        rx.Component: Sidebar de navegación principal
+    """
+    return sidebar_navigation()

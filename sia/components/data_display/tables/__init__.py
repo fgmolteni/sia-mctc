@@ -1,7 +1,6 @@
-from ._data_table import data_table
-from ._table_actions import table_actions_menu
+"""
+Módulo de componentes de tabla para visualización de datos.
+"""
+from .data_table import data_table
 
-__all__ = [
-    "data_table",
-    "table_actions_menu",
-]
+__all__ = ["data_table"]

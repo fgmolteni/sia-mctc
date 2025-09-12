@@ -14,14 +14,14 @@ class AntBreadcrumb(rx.Component):
             "background_color": Color.GRAY_100.value,
             "padding": "8px 12px",
             "border_radius": "6px",
-            "color": ColorText.GRAY_600.value,
+            "color": ColorText.GRAY_500.value,
             ".ant-breadcrumb-separator": {
                  "color": "black",
                  "font_weight": "700",
                  "font_size": "14px"
              },
             ".ant-breadcrumb-link": {
-                "color": ColorText.GRAY_600.value,
+                "color": ColorText.GRAY_500.value,
                 "&:hover": {
                     "color": Color.BLUE_500.value
                 }
@@ -38,7 +38,7 @@ class AntBreadcrumbItem(rx.Component):
     
     def get_default_style(self):
         return {
-            "color": ColorText.GRAY_600.value,
+            "color": ColorText.GRAY_500.value,
             "&:hover": {
                 "color": Color.BLUE_500.value
             }

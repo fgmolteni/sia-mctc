@@ -1,193 +1,180 @@
-# Testing Suite para SIA-MCTC
+# Tests del Sistema SIA
 
-## Descripción
+Esta carpeta contiene todas las pruebas del sistema organizadas por funcionalidad para facilitar el mantenimiento y la ejecución de tests específicos.
 
-Esta suite de pruebas sigue **metodología TDD estricta** para los componentes de la página de usuarios de SIA-MCTC. Las pruebas están diseñadas para **FALLAR INICIALMENTE** (Red phase) y guiar el desarrollo hacia la implementación correcta.
+## 📁 Estructura de Tests
 
-## Estructura de Testing
+### 🔍 `/validation/`
+Tests relacionados con validación de datos y formularios:
+- `quick_validation_test.py` - Prueba rápida del sistema de validaciones
+- `test_dni_implementation.py` - Test de implementación del campo DNI
+- `test_dni_modal_integration.py` - Test de integración del modal DNI
+- `test_manual_validation.py` - Test manual de validaciones de formulario
+- `test_validation_function.py` - Test de funciones específicas de validación
 
-```
-tests/
-├── __init__.py                     # Paquete de tests
-├── conftest.py                     # Configuración global pytest + fixtures base
-├── models.py                       # Modelos Pydantic para datos de prueba
-├── fixtures.py                     # Fixtures de datos validados
-├── components/                     # Tests de componentes UI
-│   ├── __init__.py
-│   ├── test_stat_card.py          # Pruebas para tarjetas de estadísticas  
-│   ├── test_role_badge.py         # Pruebas para badges de roles
-│   ├── test_status_badge.py       # Pruebas para badges de estado
-│   ├── test_data_table.py         # Pruebas para tabla de datos
-│   └── test_search_filters.py     # Pruebas para filtros de búsqueda
-├── pages/                          # Tests de páginas y estado
-│   ├── __init__.py
-│   └── test_user_state.py         # Pruebas para UserState class
-└── README.md                       # Esta documentación
-```
+### 🎨 `/ui/`
+Tests de componentes de interfaz de usuario:
+- `test_toast_colors.py` - Test de esquemas de colores para toasts
+- `test_toast_components.py` - Test de componentes de notificación toast
+- `test_toast_rendering.py` - Test de renderizado de toasts
+- `test_modal_quick.py` - Test rápido de funcionalidad de modales
+- `test_user_modal_fix.py` - Test de correcciones del modal de usuario
+- `test_user_modal_validation.py` - Test de validaciones en modal de usuario
 
-## Componentes Probados
+### 👥 `/users/`
+Tests relacionados con funcionalidad de usuarios y perfiles:
+- `test_create_user.py` - Test de creación de nuevos usuarios
+- `test_get_user.py` - Test de obtención de datos de usuario
+- `test_user_statistics.py` - Test de estadísticas de usuarios
+- `test_profiles_layout.py` - Test de layout y diseño de perfiles
 
-### 1. **stat_card** (`test_stat_card.py`)
-- ✅ Renderizado con props básicos (título, valor, ícono)
-- ✅ Manejo de `icon_color` personalizado y por defecto
-- ✅ Múltiples configuraciones y casos edge
-- ✅ Estructura de componente y estilos correctos
-- ✅ Validación de parámetros obligatorios
+### ⚙️ `/system/`
+Tests del sistema, componentes generales e integración:
+- `test_components.py` - Test de componentes generales del sistema
+- `test_data_table_refactor.py` - Test de refactorización de tablas de datos
+- `test_dynamic_state.py` - Test de manejo de estado dinámico
+- `test_fase3_imports.py` - Test de imports de implementación fase 3
+- `test_import_fix.py` - Test de correcciones de importaciones
+- `test_logging.py` - Test del sistema de logging
 
-### 2. **role_badge** (`test_role_badge.py`)
-- ✅ Esquemas de colores por rol (admin, manager, employee, default)
-- ✅ Valores por defecto y roles inexistentes
-- ✅ Propiedades de estilo y **kwargs adicionales
-- ✅ Validación de tipos Literal y manejo de texto especial
+## 🚀 Cómo Ejecutar Tests
 
-### 3. **status_badge** (`test_status_badge.py`)
-- ✅ Estados con dots opcionales (`show_dot=True/False`)
-- ✅ Esquemas de colores para todos los estados
-- ✅ Renderizado condicional (hstack vs badge)
-- ✅ Propiedades del dot y casos edge
-
-### 4. **data_table** (`test_data_table.py`)
-- ✅ Estructura básica de tabla con headers
-- ✅ Funciones de renderizado personalizadas por columna
-- ✅ Contador de elementos y columna de acciones
-- ✅ Mapeo automático de headers con datos
-- ✅ Casos edge (datos vacíos, headers faltantes)
-
-### 5. **search_filters** (`test_search_filters.py`)
-- ✅ Estructura responsive (input 60% + selects 40%)
-- ✅ Opciones correctas para roles y estados
-- ✅ Propiedades de estilo y espaciado
-- ✅ Componente autónomo sin parámetros externos
-
-### 6. **UserState** (`test_user_state.py`)
-- ✅ Herencia de `rx.State` y inicialización correcta
-- ✅ Carga de datos estáticos con `load_users()`
-- ✅ Validación con modelos Pydantic
-- ✅ Consistencia de datos y tipos correctos
-- ✅ Preparación para integración futura con BD
-
-## Modelos Pydantic
-
-### `User`
-```python
-class User(BaseModel):
-    name: str                    # Formato: "Nombre Apellido"
-    email: EmailStr              # Email válido
-    role: Literal["Administrador", "Manager", "Empleado"]
-    area: str                    # Área de trabajo
-    status: Literal["Activo", "Inactivo"]
-    permissions: str             # Formato: "N permisos"
-    attributes: str              # Formato: "N atributos"  
-    last_access: str            # Formato: "dd/mm/yyyy"
-```
-
-### `UserStatistics`
-```python
-class UserStatistics(BaseModel):
-    total_users: int
-    active_users: int
-    administrators: int
-    managers: int
-    employees: int
-```
-
-## Fixtures Principales
-
-- **`valid_user_data`**: Datos válidos para pruebas exitosas
-- **`invalid_user_data`**: Datos inválidos para probar validaciones
-- **`sample_users_list`**: Lista de 4 usuarios para pruebas de tabla
-- **`validated_users`**: Usuarios validados con Pydantic
-- **`stat_card_test_cases`**: Casos de prueba para tarjetas estadísticas
-- **`role_badge_test_cases`**: Esquemas de colores por rol
-- **`status_badge_test_cases`**: Estados con dots opcionales
-
-## Ejecutar Pruebas
-
-### Todas las pruebas
+### Tests Individuales
 ```bash
-pytest
+# Ejecutar un test específico
+python tests/validation/quick_validation_test.py
+python tests/ui/test_toast_colors.py
+python tests/system/test_logging.py
 ```
 
-### Por categoría (usando marcadores)
+### Tests por Categoría
 ```bash
-pytest -m component        # Solo componentes UI
-pytest -m state           # Solo pruebas de estado
-pytest -m unit            # Solo pruebas unitarias
-pytest -m integration     # Solo pruebas de integración
+# Ejecutar todos los tests de validación
+python -m pytest tests/validation/ -v
+
+# Ejecutar todos los tests de UI
+python -m pytest tests/ui/ -v
+
+# Ejecutar todos los tests de usuarios
+python -m pytest tests/users/ -v
+
+# Ejecutar todos los tests de sistema
+python -m pytest tests/system/ -v
 ```
 
-### Componente específico
+### Todos los Tests
 ```bash
-pytest tests/components/test_stat_card.py
-pytest tests/pages/test_user_state.py
+# Ejecutar toda la suite de tests
+python -m pytest tests/ -v
 ```
 
-### Con output detallado
+### Con Filtros Específicos
 ```bash
-pytest -v --tb=short
+# Solo tests que contengan "validation" en el nombre
+pytest -k "validation" tests/
+
+# Solo tests de toast
+pytest -k "toast" tests/ui/
+
+# Tests con salida detallada
+pytest -v --tb=short tests/
 ```
 
-## Metodología TDD
+## 🔧 Configuración y Requisitos
 
-### Fase Actual: RED 🔴
-**Todas las pruebas FALLARÁN inicialmente** porque:
+### Prerequisitos
+Antes de ejecutar los tests, asegúrate de:
 
-1. **Componentes pueden no existir** o tener implementación incompleta
-2. **Funcionalidad no implementada** según especificaciones de las pruebas  
-3. **Integración con Pydantic** no completada
-4. **Validaciones** no implementadas
-5. **Estructura de datos** no conforme con modelos
+1. **Entorno Virtual Activado:**
+   ```bash
+   source .venv/bin/activate  # Linux/Mac
+   .venv\Scripts\activate     # Windows
+   ```
 
-### Próximos Pasos: GREEN 🟢
-1. **Implementar funcionalidad mínima** para que cada prueba pase
-2. **Ajustar componentes** según los assertions de las pruebas
-3. **Validar con Pydantic** los datos de UserState  
-4. **Aplicar estilos** según propiedades esperadas en las pruebas
-5. **Manejar casos edge** definidos en las pruebas
+2. **Dependencias Instaladas:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Fase Final: REFACTOR 🔵
-1. **Optimizar código** manteniendo pruebas verdes
-2. **Eliminar duplicación** entre componentes
-3. **Mejorar performance** si es necesario
-4. **Documentar** funcionalidades implementadas
+3. **Base de Datos (si es necesario):**
+   ```bash
+   docker compose up -d  # Para tests que requieren BD
+   ```
 
-## Configuración Pytest
+4. **Variables de Entorno:**
+   Configurar archivo `.env` con las variables necesarias para testing.
 
-El archivo `pytest.ini` define:
-- **Marcadores personalizados**: `unit`, `integration`, `component`, `state`, `slow`
-- **Configuración de output**: verbose, colores, formato de traceback
-- **Filtros de warnings**: ignora deprecation warnings de dependencias
+### Estructura del Proyecto
+Esta organización sigue las mejores prácticas:
+- **Separación por funcionalidad** - Cada subcarpeta agrupa tests relacionados
+- **Naming convention** - Prefijo `test_` para todos los archivos de test
+- **Modularidad** - Tests independientes que pueden ejecutarse por separado
+- **Escalabilidad** - Fácil adición de nuevas categorías de tests
 
-## Mocks y Fixtures
+## 📋 Tipos de Tests
 
-- **`mock_reflex_imports`**: Auto-fixture que mockea componentes Reflex
-- **`mock_reflex_state`**: Mock para estados de Reflex
-- **`sample_database_connection`**: Mock para conexión a BD
-- **Fixtures de datos**: Proporcionan datos estructurados y validados
+### Tests de Validación (`/validation/`)
+Verifican que las reglas de negocio y validaciones de entrada funcionen correctamente:
+- Validación de formularios
+- Reglas de DNI
+- Integración de modales de validación
 
-## Casos de Prueba Especiales
+### Tests de UI (`/ui/`)
+Aseguran que los componentes de interfaz se rendericen y funcionen correctamente:
+- Sistema de notificaciones toast
+- Modales y componentes interactivos
+- Consistencia visual y funcional
 
-### Edge Cases Cubiertos
-- ✅ Datos vacíos y listas vacías
-- ✅ Texto con caracteres especiales y acentos
-- ✅ Valores muy largos que podrían romper layout  
-- ✅ Parámetros faltantes y tipos incorrectos
-- ✅ Estados inexistentes con fallback a defaults
+### Tests de Usuarios (`/users/`)
+Verifican la funcionalidad relacionada con gestión de usuarios:
+- Operaciones CRUD de usuarios
+- Estadísticas y métricas
+- Layout y presentación de perfiles
 
-### Integración con Pydantic
-- ✅ Validación automática de estructura de datos
-- ✅ Manejo de errores de validación  
-- ✅ Conversión de tipos automática
-- ✅ Schemas de ejemplo para documentación
+### Tests de Sistema (`/system/`)
+Pruebas de integración y componentes del núcleo del sistema:
+- Componentes base y utilidades
+- Sistema de logging
+- Estado dinámico de la aplicación
+- Correcciones e imports
 
-## Contribuir
+## 🎯 Mejores Prácticas
 
-Al agregar nuevas pruebas:
+1. **Ejecuta tests antes de hacer commit** para asegurar que no hay regresiones
+2. **Agrupa tests relacionados** en la subcarpeta apropiada
+3. **Usa nombres descriptivos** que expliquen qué se está probando
+4. **Incluye tests tanto positivos como negativos** (casos de éxito y error)
+5. **Mantén tests independientes** - cada test debe poder ejecutarse por separado
 
-1. **Sigue TDD estricto**: Escribe prueba → Falla → Implementa → Pasa
-2. **Usa marcadores apropiados**: `@pytest.mark.component`, `@pytest.mark.state`
-3. **Incluye documentación**: Explica qué debe fallar y por qué
-4. **Valida con Pydantic**: Usa modelos para datos estructurados
-5. **Cubre edge cases**: Incluye casos límite y manejo de errores
+## 🔍 Debugging
 
-La suite de pruebas es la **especificación viva** del comportamiento esperado. Cada prueba representa un requisito específico que debe cumplir la implementación.
+Para debuggear tests que fallan:
+
+```bash
+# Ejecutar un test específico con máximo detalle
+pytest tests/validation/test_dni_implementation.py -v -s --tb=long
+
+# Parar en el primer error
+pytest tests/ -x
+
+# Mostrar todas las salidas print()
+pytest tests/ -s
+```
+
+## 📈 Cobertura
+
+Para generar reportes de cobertura de código:
+
+```bash
+# Instalar coverage si no está instalado
+pip install coverage
+
+# Ejecutar tests con cobertura
+coverage run -m pytest tests/
+
+# Generar reporte
+coverage report -m
+coverage html  # Genera reporte HTML en htmlcov/
+```
+
+Esta estructura de tests organizada facilita el mantenimiento, la ejecución selectiva de pruebas y el desarrollo colaborativo del sistema SIA.
