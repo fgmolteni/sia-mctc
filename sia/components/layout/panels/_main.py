@@ -1,7 +1,7 @@
 import reflex as rx
 from typing import Optional, List, Tuple
 from sia.styles.colors import Color, ColorText
-from sia.styles.sizes import SizeSpace, SizeIcon, SizeText
+from sia.styles.sizes import SizeSpace, SizeIcon
 from sia.styles.fonts import FontWeight
 from sia.styles.border import BorderRadius, CommonBorders
 from sia.components.data_display.badges import enhanced_role_badge, enhanced_status_badge
