@@ -1,4 +1,4 @@
-from datetime import datetime as dt, date, time
+from datetime import datetime as dt, time
 import numpy as np
 
 from components.constants import LimitesViaje

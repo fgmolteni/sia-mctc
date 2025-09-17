@@ -3,6 +3,10 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import cm
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph
+from components.logging import get_sia_logger
+
+# Logger para este módulo
+logger = get_sia_logger('pdf')
 
 def generar_anticipo_viatico(file_path: str, data: dict):
     """
@@ -154,7 +158,7 @@ def generar_anticipo_viatico(file_path: str, data: dict):
         c.setFont(font_normal_bold, font_size_normal)
         c.drawString(left_margin, y_pos, "RENDICIÓN DE CUENTAS:")
         c.setFont(font_normal, font_size_normal)
-        p_text = f"INFORMA que el agente comisionado si no adeuda suma alguna en concepto de viático y movilidad y que el importe del básico es correcto."
+        p_text = "INFORMA que el agente comisionado si no adeuda suma alguna en concepto de viático y movilidad y que el importe del básico es correcto."
         p = Paragraph(p_text, styleN)
         p.wrapOn(c, right_margin - left_margin, 2*cm)
         y_pos -= 0.2*cm
@@ -190,7 +194,7 @@ def generar_anticipo_viatico(file_path: str, data: dict):
         c.drawString(x_text, y_text, "A TESORERIA:")
         c.setFont(font_normal, font_size_small)
         y_text -= 0.5 * cm
-        p = Paragraph(f"Con Libramiento de Entrega .................... donde se cumplimenta la liquidación para su pago.", styleN)
+        p = Paragraph("Con Libramiento de Entrega .................... donde se cumplimenta la liquidación para su pago.", styleN)
         p.wrapOn(c, right_margin - center_x_b1 - 1*cm, 2*cm)
         p.drawOn(c, x_text, y_text - p.height)
 
@@ -246,10 +250,14 @@ def generar_anticipo_viatico(file_path: str, data: dict):
         c.drawCentredString(right_margin - 2.5*cm, y_pos - 0.3*cm, "Firma Autorizada")
 
         c.save()
-        print(f"Formulario de viático creado exitosamente en: {file_path}")
+        logger.info("Formulario de viático creado exitosamente", extra={
+            'action': 'form_pdf_created', 'file_path': file_path, 'form_type': 'anticipo_viatico'
+        })
         return True
     except Exception as e:
-        print(f"Error al crear el PDF del formulario: {e}")
+        logger.error(f"Error al crear formulario PDF: {str(e)}", extra={
+            'action': 'form_pdf_creation_failed', 'file_path': file_path, 'form_type': 'anticipo_viatico'
+        })
         return False
 
 if __name__ == '__main__':

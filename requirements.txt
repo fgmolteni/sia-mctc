@@ -9,3 +9,9 @@ num2words
 psycopg2-binary
 python-dotenv
 SQLAlchemy
+reflex==0.8.1
+pillow
+reflex-antd
+bcrypt
+pydantic
+email-validator

@@ -1,0 +1,1 @@
+# Tests para páginas de la aplicación SIA-MCTC
