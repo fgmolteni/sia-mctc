@@ -193,27 +193,48 @@ def sidebar_collapsible_item(
 
 def sidebar_footer() -> rx.Component:
     """
-    Molécula del footer del sidebar con información de usuario.
+    Molécula del footer del sidebar con información de usuario loggeado.
+    Muestra información dinámica del usuario autenticado.
     
     Returns:
-        rx.Component: Footer del sidebar con perfil de usuario
+        rx.Component: Footer del sidebar con perfil de usuario dinámico
     """
+    from sia.views.login_views import LoginState
+    
     return rx.box(
         rx.hstack(
             rx.avatar(
-                fallback="U",
+                fallback=rx.cond(
+                    LoginState.is_logged_in,
+                    LoginState.avatar_initial,
+                    "U"
+                ),
                 size="2",
                 radius="full",
             ),
             rx.vstack(
                 rx.text(
-                    "Usuario SIA",
+                    rx.cond(
+                        LoginState.is_logged_in,
+                        LoginState.user_name,
+                        "Usuario SIA"
+                    ),
                     font_weight=FontWeight.MEDIUM.value,
                     size="2",
                     color=ColorText.GRAY_700.value,
                 ),
                 rx.text(
-                    "Ministerio C&T",
+                    rx.cond(
+                        LoginState.is_logged_in,
+                        rx.match(
+                            LoginState.user_role,
+                            ("admin", "Administrador - MCYT"),
+                            ("supervisor", "Supervisor - MCYT"),
+                            ("usuario", "Usuario - MCYT"),
+                            "Usuario - MCYT",  # fallback por defecto
+                        ),
+                        "Ministerio C&T"
+                    ),
                     size="1",
                     color=ColorText.GRAY_500.value,
                 ),
