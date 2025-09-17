@@ -52,7 +52,7 @@ class LoginState(rx.State):
                 self.error_message = message or "Usuario o contraseña incorrectos"
                 self.is_logged_in = False
                 
-        except Exception as e:
+        except Exception:
             # Error inesperado
             self.error_message = "Error de conexión. Inténtelo nuevamente."
             self.is_logged_in = False
