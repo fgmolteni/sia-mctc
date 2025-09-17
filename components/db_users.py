@@ -503,12 +503,12 @@ def get_user_statistics() -> tuple[bool, str, dict]:
             engine.dispose()
 
 
-def verify_user(nombre_usuario: str, contrasena: str) -> tuple[bool, str, Optional[User]]:
+def verify_user(user_credential: str, contrasena: str) -> tuple[bool, str, Optional[User]]:
     """
-    Verifica las credenciales de un usuario y retorna el usuario completo.
+    Verifica las credenciales de un usuario usando email O nombre de usuario.
     
     Args:
-        nombre_usuario: Nombre de usuario
+        user_credential: Email o nombre de usuario
         contrasena: Contraseña en texto plano
         
     Returns:
@@ -520,13 +520,14 @@ def verify_user(nombre_usuario: str, contrasena: str) -> tuple[bool, str, Option
 
     try:
         with engine.connect() as connection:
+            # Buscar por email O por nombre_usuario
             query = text("""
                 SELECT id, nombre, apellido, nombre_usuario, email, dni, hash_contrasena, 
                        rol, fecha_creacion 
                 FROM usuarios 
-                WHERE nombre_usuario = :nombre_usuario
+                WHERE email = :credential OR nombre_usuario = :credential
             """)
-            result = connection.execute(query, {"nombre_usuario": nombre_usuario}).fetchone()
+            result = connection.execute(query, {"credential": user_credential.strip().lower()}).fetchone()
 
             if result:
                 stored_hash = result[6]
@@ -543,12 +544,25 @@ def verify_user(nombre_usuario: str, contrasena: str) -> tuple[bool, str, Option
                         fecha_creacion=result[8]
                     )
                     
-                    log_security_event(logger, 'login_success', 'Autenticación exitosa', f'user_id:{user.id}')
+                    # Determinar tipo de credencial para logging
+                    credential_type = "email" if "@" in user_credential else "username"
+                    log_security_event(
+                        logger, 
+                        'login_success', 
+                        f'Autenticación exitosa con {credential_type}', 
+                        f'user_id:{user.id};credential_type:{credential_type}'
+                    )
                     return True, "Autenticación exitosa", user
             
             # Log de intento de autenticación fallido (evento de seguridad)
-            log_security_event(logger, 'login_failed', 'Credenciales incorrectas', f'username_len:{len(nombre_usuario)}')
-            return False, "Credenciales incorrectas", None
+            credential_type = "email" if "@" in user_credential else "username"
+            log_security_event(
+                logger, 
+                'login_failed', 
+                f'Credenciales incorrectas ({credential_type})', 
+                f'credential_len:{len(user_credential)};credential_type:{credential_type}'
+            )
+            return False, "Usuario o contraseña incorrectos", None
             
     except ValidationError as ve:
         logger.error(f"Error de validación en autenticación: {ve}")
@@ -556,7 +570,7 @@ def verify_user(nombre_usuario: str, contrasena: str) -> tuple[bool, str, Option
         
     except Exception as error:
         logger.error(f"Error en verificación de usuario: {str(error)}", extra={
-            'action': 'auth_error', 'username_len': len(nombre_usuario)
+            'action': 'auth_error', 'credential_len': len(user_credential)
         })
         return False, "Error interno de autenticación", None
         
